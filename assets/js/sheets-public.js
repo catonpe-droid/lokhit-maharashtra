@@ -97,19 +97,32 @@
    originalLoaded=true;return knownPosts;
   }).catch(()=>{originalLoaded=true;return knownPosts;});
  let feedPosts=[];
+ let feedReady=false, lastArticleSignature='';
+
  const combinedPosts=()=>{
   const bySlug=new Map();
   for(const p of knownPosts)if(!deleted.has(p.slug))bySlug.set(p.slug,p);
   for(const p of feedPosts)if(!deleted.has(p.slug))bySlug.set(p.slug,p);
   return [...bySlug.values()].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
  };
- function shareBar(){
+ function shareBar(p){
+  // Real anchors work in mobile, WhatsApp Web and browsers that block pop-ups.
   const wrap=make('div','share-bar');
   wrap.append(make('strong','','ही बातमी शेअर करा :'));
-  const buttons=[['wa','WhatsApp'],['fb','Facebook'],['x','X'],['tg','Telegram'],['copy','लिंक कॉपी'],['native','इतर']];
-  for(const [type,label] of buttons){
-   const b=make('button','share-btn share-'+type,label);
-   b.type='button';b.dataset.share=type;wrap.append(b);
+  const link=urlFor(p),txt=String(p.title||'बातमी')+'\n'+location.origin+link;
+  const destinations=[
+   ['wa','WhatsApp','https://api.whatsapp.com/send?text='+encodeURIComponent(txt)],
+   ['fb','Facebook','https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.origin+link)],
+   ['x','X','https://twitter.com/intent/tweet?text='+encodeURIComponent(p.title||'बातमी')+'&url='+encodeURIComponent(location.origin+link)],
+   ['tg','Telegram','https://t.me/share/url?url='+encodeURIComponent(location.origin+link)+'&text='+encodeURIComponent(p.title||'बातमी')]
+  ];
+  for(const [kind,label,url] of destinations){
+   const a=make('a','share-btn share-'+kind,label);
+   a.href=url;a.target='_blank';a.rel='noopener noreferrer';wrap.append(a);
+  }
+  for(const [kind,label] of [['copy','लिंक कॉपी'],['native','इतर']]){
+   const b=make('button','share-btn share-'+kind,label);
+   b.type='button';b.dataset.share=kind;wrap.append(b);
   }
   return wrap;
  }
@@ -155,7 +168,7 @@
    if(/^assets\/img\//.test(p.image)){fig.append(make('figcaption','','प्रतीकात्मक, संगणकनिर्मित चित्र'))}
    article.append(fig);
   }
-  article.append(shareBar());
+  article.append(shareBar(p));
   const body=make('div','article-body');
   for(const block of String(p.body||'').split(/\n\s*\n/).filter(Boolean)){
    const line=block.trim();
@@ -179,7 +192,7 @@
     wrap.append(frame);body.append(wrap);
    }
   }
-  article.append(body,shareBar());
+  article.append(body,shareBar(p));
   showRelated(p,all||[]);
   document.title=String(p.title||'बातमी')+' | लोकहित महाराष्ट्र';
   // Public article metadata is completed by the static build; this ensures
@@ -288,16 +301,23 @@
   if(latest)latest.replaceChildren(...all.map(card));
   updateSidebar(all);
   if(article){
-   const slug=currentStorySlug();
-   const qs=new URLSearchParams(location.search);
+   // Never display "बातमी सापडली नाही" while the live feed is still loading.
+   // The GitHub 404 fallback starts with the neutral loading message.
+   if(!feedReady)return;
+   const slug=currentStorySlug(),qs=new URLSearchParams(location.search);
    const id=qs.get('id');
-   if(!deleted.has(slug)){
+   if(deleted.has(slug))return;
+   const post=feedPosts.find(p=>p.slug===slug)||(id?feedPosts.find(p=>p.id===id):null);
+   // Avoid destroying the story, its images and share controls on every poll.
+   const signature=post ? [post.slug,post.updated,post.title,post.description,post.image,post.body,post.video].join('|') : 'notfound:'+slug;
+   if(signature!==lastArticleSignature){
+    lastArticleSignature=signature;
     article.dataset.removed='false';
-    renderArticle(feedPosts.find(p=>p.slug===slug)||(id?feedPosts.find(p=>p.id===id):null),all);
+    renderArticle(post,all);
    }
   }
  }
- originalsPromise.then(()=>{if(feedPosts.length||article||home||latest)awaitOriginalsForRendering()});
+ originalsPromise.then(()=>{if(feedReady||home||latest)awaitOriginalsForRendering()});
 
  function scheduleNext(wait){
   clearTimeout(refreshTimer);
@@ -321,6 +341,7 @@
     const items=Array.isArray(data?.posts)?data.posts.filter(p=>p&&p.status==='published'):[];
     refreshDeleted(data?.deletedSlugs);
     feedPosts=items.filter(p=>!deleted.has(p.slug));
+    feedReady=true;
     awaitOriginalsForRendering();
     const clean=feedPosts;
     updateCategory(clean);
@@ -348,7 +369,9 @@
    finally{finish();}
   };
   ref.onerror=()=>{
-   if(article&&article.dataset.removed!=='true'&&!article.querySelector('h1'))article.textContent='सध्या बातमी लोड होत नाही. नंतर पुन्हा प्रयत्न करा.';
+   if(article&&article.dataset.removed!=='true'&&!feedReady){
+    article.replaceChildren(make('p','article-summary','बातमी सर्व्हरशी जोडली जात आहे. कृपया थोड्यावेळाने Refresh करा.'));
+   }
    finish();
   };
   requestTimeout=setTimeout(()=>{ref.onerror();},45000);
