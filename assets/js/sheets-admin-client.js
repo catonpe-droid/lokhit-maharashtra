@@ -203,7 +203,7 @@ function renderList(){
  }
 }
  function newPost(){current=null;$('published-link').hidden=true;$('post-form').reset();$('author').value=selectedEditor?.name||'Editor';$('category').value='दुष्काळ विशेष';$('post-status').value='published';$('editor-heading').textContent='नवीन बातमी';$('edit-state').textContent='नवीन';$('slug').disabled=false;$('delete').hidden=true;$('image-preview').innerHTML='';$('live-preview').hidden=true;status('');renderList()}
- function openPost(p){current=p;$('title').value=p.title||'';$('description').value=p.description||'';$('category').value=p.category||'महाराष्ट्र';$('body').value=p.body||'';$('video').value=p.video||'';$('author').value=p.author||'';$('slug').value=p.slug||'';$('slug').disabled=true;$('post-status').value=p.status||'published';$('featured').checked=!!p.featured;$('editor-heading').textContent='बातमी संपादित करा';$('edit-state').textContent='अद्ययावत';$('delete').hidden=false;$('image-preview').innerHTML='';if(p.image){let im=document.createElement('img');im.src=String(p.image||'').startsWith('https://')?p.image:'https://catonpe-droid.github.io/lokhit-maharashtra/'+p.image;im.alt='सध्याचा फोटो';$('image-preview').appendChild(im)}$('live-preview').hidden=true;status('');publishLink(p);renderList();window.scrollTo({top:0,behavior:'smooth'})}
+ function openPost(p){current=p;$('photo').value='';$('title').value=p.title||'';$('description').value=p.description||'';$('category').value=p.category||'महाराष्ट्र';$('body').value=p.body||'';$('video').value=p.video||'';$('author').value=p.author||'';$('slug').value=p.slug||'';$('slug').disabled=true;$('post-status').value=p.status||'published';$('featured').checked=!!p.featured;$('editor-heading').textContent='बातमी संपादित करा';$('edit-state').textContent='अद्ययावत';$('delete').hidden=false;$('image-preview').innerHTML='';if(p.image){let im=document.createElement('img');im.src=String(p.image||'').startsWith('https://')?p.image:'https://catonpe-droid.github.io/lokhit-maharashtra/'+p.image;im.alt='सध्याचा फोटो';$('image-preview').appendChild(im)}$('live-preview').hidden=true;status('');publishLink(p);renderList();window.scrollTo({top:0,behavior:'smooth'})}
  function makeSlug(){const supplied=$('slug').value.trim();if(supplied)return supplied;let time=new Date().toISOString().replace(/\D/g,'').slice(0,14);return 'news-'+time+'-'+Math.random().toString(36).slice(2,6)}
  async function imageData(file){
   if(file.size>8*1024*1024)throw Error('फोटो ८ MB पेक्षा लहान हवा.');
@@ -236,15 +236,29 @@ function renderList(){
    const article={slug,title:$('title').value.trim(),description:$('description').value.trim(),
     body:$('body').value.trim(),category:$('category').value,
     author:$('author').value.trim(),video:$('video').value.trim(),
-    origin:current?.origin||null,featured:$('featured').checked,status:$('post-status').value};
+    origin:current?.origin||null,image:current?.image||'',
+    featured:$('featured').checked,status:$('post-status').value};
    const result=await api('/post','PUT',{article,image});
    unmarkDeletedOnBrowser(result.slug);
-   const saved={...current,...article,slug:result.slug,date:current?.date||new Date().toISOString(),status:result.status,origin:'drive'};
+   const saved={...current,...article,
+    image:result.image||current?.image||'',
+    slug:result.slug,date:current?.date||new Date().toISOString(),
+    status:result.status,origin:'drive'};
+   // Clear the upload picker so the same file is NOT automatically uploaded
+   // again when the editor changes only text or category later.
+   $('photo').value='';
+   $('image-preview').replaceChildren();
+   if(saved.image){
+    const oldImage=document.createElement('img');
+    oldImage.src=/^https:\/\//i.test(saved.image)?saved.image:ROOT+saved.image;
+    oldImage.alt='जतन केलेला फोटो (नवीन फोटो निवडला नाही तर हाच राहील)';
+    $('image-preview').append(oldImage);
+   }
    mergeNews([saved]);current=saved;
    $('slug').value=result.slug;$('slug').disabled=true;$('delete').hidden=false;
    $('editor-heading').textContent='बातमी संपादित करा';
    publishLink(saved);
-   status(result.status==='draft'?'✅ मसुदा जतन झाला.':'✅ बातमी प्रकाशित झाली! खाली लगेच उघडण्याची लिंक दिली आहे.');
+   status(result.status==='draft'?'✅ मसुदा जतन झाला.':(result.imagePreserved?'✅ बातमी अपडेट झाली. आधीचा फोटो सुरक्षित ठेवला आहे.':'✅ बातमी प्रकाशित झाली! खाली लगेच उघडण्याची लिंक दिली आहे.'));
    // Refresh remote list in the background, never wait here after Save.
    api('/posts').then(data=>{if(Array.isArray(data?.posts))mergeNews(data.posts)}).catch(()=>{});
   }catch(e){status('जतन अयशस्वी: '+e.message,true)}
