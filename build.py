@@ -218,6 +218,8 @@ for slug,(title,intro,sections) in legal.items():
 # category listing, post index, sitemap and RSS
 index=[{k:p.get(k) for k in ['slug','title','description','category','image','date']} for p in POSTS]
 write('posts-index.json',json.dumps(index,ensure_ascii=False,indent=2))
+# Public copy of already-published articles; lets the unchanged GitHub Editor edit older news.
+write('cms-export.json',json.dumps(POSTS,ensure_ascii=False,indent=2))
 write('manifest.webmanifest',json.dumps({'name':CFG['name'],'short_name':'लोकहित','start_url':BASE,'display':'standalone','background_color':'#ffffff','theme_color':'#b60013','icons':[{'src':U('assets/img/favicon.png'),'sizes':'192x192','type':'image/png'}]},ensure_ascii=False))
 allpaths=['','tajya-batmya/','shodh/','video/','live-tv/'] + [x+'/' for x in legal] + [x for x in CATEGORY_PATH.values() if x!='vibhag/video/'] + [article_path(p) for p in POSTS]
 sitemap='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{E(A(path))}</loc></url>\n' for path in allpaths)+'</urlset>\n'
