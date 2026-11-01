@@ -6,6 +6,7 @@
 const REPOSITORY="catonpe-droid/lokhit-maharashtra";
 const REPO_API="https://api.github.com/repos/"+REPOSITORY;
 const GOOGLE_CERTS="https://www.googleapis.com/oauth2/v3/certs";
+const APPROVED_EMAIL_SHA256="b79b4e70be6ad43ac640aec6c8c97fb04713e7ddcb24ded424331dbee9867dd9";
 const TXT="application/json; charset=utf-8";
 let certCache={expires:0,keys:[]};
 const enc=new TextEncoder();
@@ -46,8 +47,11 @@ async function googleUser(token,env){
     typeof claims.exp!=="number"||claims.exp<=now||
     typeof claims.iat!=="number"||claims.iat>now+60||
     claims.email_verified!==true)fail("Google login expired or invalid",401);
- const emails=String(env.ADMIN_EMAILS||"").split(",").map(e=>e.trim().toLowerCase()).filter(Boolean);
- if(!emails.length||!emails.includes(String(claims.email||"").toLowerCase()))fail("या Gmail खात्याला Admin परवानगी नाही.",403);
+ const verifiedEmail=String(claims.email||"").trim().toLowerCase();
+ const digest=await crypto.subtle.digest("SHA-256",enc.encode(verifiedEmail));
+ const digestHex=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,"0")).join("");
+ const approvedHash=String(env.ADMIN_EMAIL_SHA256||APPROVED_EMAIL_SHA256).trim().toLowerCase();
+ if(digestHex!==approvedHash)fail("या Gmail खात्याला Admin परवानगी नाही.",403);
  return {sub:claims.sub,email:claims.email,name:claims.name||""};
 }
 async function github(env,path,method="GET",payload){
@@ -184,7 +188,7 @@ export default {
   if(origin&&!allowed.includes(origin))return response({error:"This website origin is not authorized."},403);
   if(request.method==="OPTIONS")return new Response(null,{status:204,headers:cors});
   try{
-   const route=new URL(request.url),configured=!!(env.GOOGLE_CLIENT_ID&&env.ADMIN_EMAILS&&env.GITHUB_TOKEN);
+   const route=new URL(request.url),configured=!!(env.GOOGLE_CLIENT_ID&&env.GITHUB_TOKEN);
    if(route.pathname==="/status"&&request.method==="GET")return response({configured,google_client_id:env.GOOGLE_CLIENT_ID||""},200,cors);
    if(!configured)fail("Admin Server अजून जोडलेला नाही. एकदाच Cloudflare सेटअप आवश्यक आहे.",503);
    const auth=request.headers.get("Authorization")||"";
