@@ -1,29 +1,40 @@
 'use strict';
 (() => {
- const $=(id)=>document.getElementById(id);let token='',repository='',branch='main',current=null,records=[],loggedIn=false;
+ const $=(id)=>document.getElementById(id);let token='',repository='',branch='main',current=null,records=[],loggedIn=false,demoMode=false;
  const apiBase='https://api.github.com/repos/';
  const status=(message,error=false,target='editor-status')=>{const node=$(target);node.textContent=message;node.className=error?'status error':'status'};
  const escapeHTML=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&quot;'}[c]));
  async function github(path,method='GET',body=null){
-  const r=await fetch(apiBase+repository+'/'+path,{method,headers:{'Accept':'application/vnd.github+json','Authorization':'Bearer '+token,'X-GitHub-Api-Version':'2022-11-28',...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
+  const r=await fetch(apiBase+repository+'/'+path,{method,headers:{'Accept':'application/vnd.github+json',...(token?{'Authorization':'Bearer '+token}:{}),'X-GitHub-Api-Version':'2022-11-28',...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
   if(!r.ok){const message=await r.json().catch(()=>({message:r.statusText}));throw Error('GitHub '+r.status+': '+(message.message||'अज्ञात त्रुटी'))}
   return r.status===204?{}:r.json();
  }
  function base64UTF8(text){let bytes=new TextEncoder().encode(text),str='';for(const b of bytes)str+=String.fromCharCode(b);return btoa(str)}
  function decodeUTF8(content){const bin=atob(content.replace(/\s/g,'')),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
  async function login(ev){
-  ev.preventDefault();if($('username').value.trim()!=='admin'||$('password').value!=='1234'){status('वापरकर्ता नाव किंवा डेमो संकेतशब्द चुकीचा आहे.',true,'login-status');return;}
-  token=$('token').value.trim();repository=$('repo').value.trim();
-  if(!/^[\w.-]+\/[\w.-]+$/.test(repository)){status('GitHub Repository owner/repo या स्वरूपात द्या.',true,'login-status');return;}
-  status('GitHub अधिकार तपासत आहे…',false,'login-status');
+  ev.preventDefault();
+  const id=$('username').value.trim(),password=$('password').value.trim();
+  repository='catonpe-droid/lokhit-maharashtra';branch='main';demoMode=(id==='admin'&&password==='1234');
+  token=demoMode?'':password;
+  $('login-status').textContent=demoMode?'डेमो पूर्वावलोकन उघडत आहे…':'GitHub अधिकार तपासत आहे…';
   try{
-   const info=await github('');branch=info.default_branch||'main';
-   const user=await fetch('https://api.github.com/user',{headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json'}}).then(r=>r.json());
-   if(!user.login)throw Error('टोकन सत्यापित झाले नाही.');
-   await github('contents/content/posts?ref='+encodeURIComponent(branch)); // verify accessible project; write permission is enforced on save
-   loggedIn=true; $('password').value='';$('token').value='';$('login').hidden=true;$('dashboard').hidden=false;
-   status('GitHub शी सुरक्षित जोडणी झाली.'); await loadPosts();
-  }catch(e){status(e.message,true,'login-status');token='';}
+   if(!demoMode){
+    const userResp=await fetch('https://api.github.com/user',{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token}});
+    if(!userResp.ok)throw Error('प्रकाशनासाठी GitHub access token आवश्यक आहे. साधा GitHub पासवर्ड येथे वापरू नका.');
+    const user=await userResp.json();
+    if(!user.login||user.login.toLowerCase()!==id.toLowerCase())throw Error('Login ID हा GitHub username असणे आवश्यक आहे.');
+    const info=await github('');
+    branch=info.default_branch||'main';
+   }
+   const files=await github('contents/content/posts?ref='+encodeURIComponent(branch));
+   if(!Array.isArray(files))throw Error('बातम्यांचा डेटा सापडला नाही.');
+   loggedIn=!demoMode;
+   $('password').value='';
+   $('login').hidden=true;$('dashboard').hidden=false;
+   $('publish').disabled=demoMode;
+   status(demoMode?'डेमो मोड : बातम्या वाचा आणि पूर्वावलोकन करा. प्रकाशित करण्यासाठी GitHub username आणि fine-grained token वापरून पुन्हा प्रवेश करा.':'✅ GitHub ची ओळख तपासली. तुम्ही बातम्या जतन करू शकता.',demoMode);
+   await loadPosts();
+  }catch(e){status(e.message,true,'login-status');token='';demoMode=false;loggedIn=false;}
  }
  async function loadPosts(){
   $('post-list').textContent='बातम्या वाचत आहे…';
@@ -41,7 +52,7 @@
   for(const p of list){const b=document.createElement('button');b.type='button';b.className='admin-post'+(current?._path===p._path?' active':'');const strong=document.createElement('strong');strong.textContent=p.title;const small=document.createElement('small');small.textContent=p.category+' · '+(p.status==='draft'?'मसुदा':'प्रकाशित');b.append(strong,small);b.onclick=()=>openPost(p);$('post-list').appendChild(b)}
  }
  function newPost(){current=null;$('post-form').reset();$('author').value='लोकहित महाराष्ट्र डिजिटल डेस्क';$('category').value='दुष्काळ विशेष';$('post-status').value='published';$('editor-heading').textContent='नवीन बातमी';$('edit-state').textContent='नवीन';$('slug').disabled=false;$('delete').hidden=true;$('image-preview').innerHTML='';$('live-preview').hidden=true;status('');renderList()}
- function openPost(p){current=p;$('title').value=p.title||'';$('description').value=p.description||'';$('category').value=p.category||'महाराष्ट्र';$('body').value=p.body||'';$('video').value=p.video||'';$('author').value=p.author||'';$('slug').value=p.slug||'';$('slug').disabled=true;$('post-status').value=p.status||'published';$('featured').checked=!!p.featured;$('editor-heading').textContent='बातमी संपादित करा';$('edit-state').textContent='अद्ययावत';$('delete').hidden=false;$('image-preview').innerHTML='';if(p.image){let im=document.createElement('img');im.src='../'+p.image;im.alt='सध्याचा फोटो';$('image-preview').appendChild(im)}$('live-preview').hidden=true;status('');renderList();window.scrollTo({top:0,behavior:'smooth'})}
+ function openPost(p){current=p;$('title').value=p.title||'';$('description').value=p.description||'';$('category').value=p.category||'महाराष्ट्र';$('body').value=p.body||'';$('video').value=p.video||'';$('author').value=p.author||'';$('slug').value=p.slug||'';$('slug').disabled=true;$('post-status').value=p.status||'published';$('featured').checked=!!p.featured;$('editor-heading').textContent='बातमी संपादित करा';$('edit-state').textContent='अद्ययावत';$('delete').hidden=demoMode;$('image-preview').innerHTML='';if(p.image){let im=document.createElement('img');im.src='../'+p.image;im.alt='सध्याचा फोटो';$('image-preview').appendChild(im)}$('live-preview').hidden=true;status('');renderList();window.scrollTo({top:0,behavior:'smooth'})}
  function makeSlug(){const supplied=$('slug').value.trim();if(supplied)return supplied;let time=new Date().toISOString().replace(/\D/g,'').slice(0,14);return 'news-'+time+'-'+Math.random().toString(36).slice(2,6)}
  async function imageData(file,slug){
   if(file.size>8*1024*1024)throw Error('फोटो ८ MB पेक्षा कमी असावा.');
@@ -68,6 +79,6 @@
   try{await github('contents/'+current._path,'DELETE',{message:'Remove article '+current.slug,sha:current._sha,branch});status('बातमी काढली.');newPost();await loadPosts()}catch(e){status(e.message,true)}
  }
  function preview(){const box=$('live-preview');box.replaceChildren();let note=document.createElement('p');note.className='preview-note';note.textContent='पूर्वावलोकन — ही माहिती अजून प्रकाशित केलेली नाही.';let h=document.createElement('h2');h.textContent=$('title').value;let desc=document.createElement('strong');desc.textContent=$('description').value;box.append(note,h,desc);for(const para of $('body').value.split(/\n\s*\n/).filter(Boolean)){const p=document.createElement('p');p.textContent=para;box.appendChild(p)}box.hidden=false;box.scrollIntoView({behavior:'smooth',block:'start'})}
- $('login-form').addEventListener('submit',login);$('post-form').addEventListener('submit',submit);$('new-post').addEventListener('click',newPost);$('filter-posts').addEventListener('input',renderList);$('preview').addEventListener('click',preview);$('delete').addEventListener('click',remove);$('logout').addEventListener('click',()=>{token='';repository='';loggedIn=false;records=[];current=null;$('dashboard').hidden=true;$('login').hidden=false;$('login-form').reset();$('repo').value='catonpe-droid/lokhit-maharashtra';status('');status('','', 'login-status')});
+ $('login-form').addEventListener('submit',login);$('post-form').addEventListener('submit',submit);$('new-post').addEventListener('click',newPost);$('filter-posts').addEventListener('input',renderList);$('preview').addEventListener('click',preview);$('delete').addEventListener('click',remove);$('logout').addEventListener('click',()=>{token='';repository='';loggedIn=false;demoMode=false;records=[];current=null;$('dashboard').hidden=true;$('login').hidden=false;$('login-form').reset();status('');status('','', 'login-status')});
  $('photo').addEventListener('change',()=>{const file=$('photo').files[0];if(!file)return;const im=document.createElement('img');im.alt='नवीन फोटो पूर्वावलोकन';im.src=URL.createObjectURL(file);$('image-preview').replaceChildren(im)});
 })();
