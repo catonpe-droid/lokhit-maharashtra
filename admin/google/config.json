@@ -1,0 +1,4 @@
+{
+  "worker_url": "",
+  "note": "Once your Cloudflare Worker is deployed, put its https://...workers.dev URL in worker_url. No passwords or access tokens belong in this public file."
+}
