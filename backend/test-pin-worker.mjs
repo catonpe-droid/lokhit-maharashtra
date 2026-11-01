@@ -7,11 +7,17 @@ const source=fs.readFileSync(new URL("./pin-worker.js",import.meta.url),"utf8");
 const handler=(await import("data:text/javascript;base64,"+Buffer.from(source).toString("base64"))).default;
 const origin="https://catonpe-droid.github.io";
 const editorPin="123456"; // TEST ONLY, not the production PIN.
-let quota=5;
+const loginAttempts=new Map();
 const env={
  EDITOR_PIN:editorPin,SESSION_SECRET:"sample-tests-only-very-long-session-secret",
  GITHUB_TOKEN:"test-secret",SITE_ORIGINS:origin,
- LOGIN_LIMITER:{limit:async()=>({success:quota-- >0})}
+ LOGIN_KV:{
+  get:async key=>loginAttempts.get(key)||null,
+  put:async(key,value,opts)=>{
+   assert.equal(opts.expirationTtl,60);
+   loginAttempts.set(key,value);
+  }
+ }
 };
 const objects=new Map(),encode=obj=>Buffer.from(JSON.stringify(obj)).toString("base64");
 let rev=1;
@@ -67,8 +73,9 @@ try{
  assert.equal(badOrigin.status,403);
  const malformed=await handler.fetch(req("/posts","GET",undefined,"not-a-session"),env);
  assert.equal(malformed.status,401);
- quota=0;
- const limited=await handler.fetch(req("/login","POST",{pin:editorPin,editor:2}),env);
+ // Four additional attempts after the earlier two should exhaust the five-attempt throttle.
+ let limited;
+ for(let i=0;i<4;i++)limited=await handler.fetch(req("/login","POST",{pin:"000000",editor:2}),env);
  assert.equal(limited.status,429);
  const unfinished=await handler.fetch(req("/status"),{...env,EDITOR_PIN:""});
  assert.equal((await unfinished.json()).configured,false);
