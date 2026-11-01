@@ -1,0 +1,76 @@
+<!doctype html><html lang="mr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#092045"><title>प्रशासन पॅनल | लोकहित महाराष्ट्र</title><link rel="stylesheet" href="../../assets/css/style.css"><link rel="stylesheet" href="../../assets/css/admin.css"></head><body data-root-prefix="../../">
+<header class="admin-header"><div class="container admin-header-inner"><a href="../../"><img alt="" src="../../assets/img/logo.webp" class="admin-logo"> <strong>लोकहित महाराष्ट्र</strong></a><span>संपादकीय प्रशासन</span></div></header>
+<main class="container"><section id="login" class="login-card">
+<div class="login-symbol">🔐</div><h1>लोकहित महाराष्ट्र — Admin</h1>
+<p>सुरुवातीला फक्त ६ अंकी PIN टाका, त्यानंतर तुमचे Editor नाव निवडा.</p>
+<form id="pin-form" autocomplete="off">
+<label>Admin PIN
+<input id="pin-code" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="off" placeholder="••••••" required></label>
+<button type="submit" class="btn btn-primary login-submit">पुढे जा →</button>
+</form>
+<form id="editor-form" hidden>
+<label>तुमचे Editor नाव
+<select id="editor-choice" required></select></label>
+<button type="submit" class="btn btn-primary login-submit">Editor म्हणून प्रवेश करा →</button>
+<button id="pin-back" type="button" class="btn btn-light">← PIN बदला</button>
+</form>
+<div id="login-status" class="status" role="status"></div>
+<div id="setup-needed" class="cms-demo-banner" hidden><strong>एकदाच मोफत Server जोडणी आवश्यक आहे.</strong><p>सुरक्षित PIN Login आणि बातमी Publish करण्याची जोडणी अजून सक्रिय नाही. तोपर्यंत तुमच्या बातम्या पूर्वीप्रमाणे GitHub वर सुरक्षित राहतील.</p></div>
+</section>
+<section id="dashboard" hidden>
+<div class="dash-title"><div><h1>लोकहित महाराष्ट्र <span class="cms-heading-accent">Mini CMS</span></h1><p>बातम्या, मेनू, स्लायडर आणि वेबसाइटचे व्यवस्थापन एकाच ठिकाणी.</p></div><div class="dash-buttons"><a href="../../" target="_blank" rel="noopener" class="btn btn-light">🌐 वेबसाइट पाहा</a><button id="toggle-editor-names" type="button" class="btn btn-light">✍️ Editor नावे बदला</button><button id="logout" type="button" class="btn btn-light">बाहेर पडा</button></div></div>
+
+<section id="editor-names-panel" class="cms-card" hidden style="padding:20px;margin:18px 0">
+<h2>Editor 1 ते 10 — नावे बदला</h2>
+<p>तुम्हाला हवे तसे नाव टाका आणि जतन करा. पुढील Login मध्ये बदललेले नाव दिसेल.</p>
+<form id="editor-names-form"><div id="editor-name-fields" class="form-two"></div>
+<button type="submit" id="save-editor-names" class="btn btn-primary">💾 Editor नावे जतन करा</button>
+<p id="editor-names-status" class="status" role="status"></p></form></section>
+<nav class="cms-tabs" aria-label="व्यवस्थापन विभाग">
+<button type="button" data-cms-tab="news" class="cms-tab is-active">📰 बातम्या</button>
+<button type="button" data-cms-tab="menu" class="cms-tab">☰ मेनू व्यवस्थापन</button>
+<button type="button" data-cms-tab="slider" class="cms-tab">▣ मुख्य स्लायडर</button>
+<button type="button" data-cms-tab="breaking" class="cms-tab">⚡ ब्रेकिंग न्यूज</button>
+<button type="button" data-cms-tab="settings" class="cms-tab">⚙️ साइट सेटिंग्ज</button>
+</nav>
+<section id="cms-news" class="cms-tab-panel"><div class="dashboard-grid"><aside class="dash-list"><div class="dash-list-head"><strong>सर्व बातम्या</strong><button class="btn btn-small" id="new-post" type="button">+ नवीन</button></div><input id="filter-posts" class="admin-input" placeholder="बातमी शोधा..."><div id="post-list" class="admin-post-list"><p>लोड होत आहे...</p></div></aside><section class="editor-panel"><form id="post-form"><div class="edit-top"><h2 id="editor-heading">नवीन बातमी</h2><span id="edit-state" class="edit-state">नवीन</span></div><label>बातमीचे शीर्षक *<input id="title" required maxlength="180" placeholder="मराठी बातमीचे संपूर्ण शीर्षक..."></label><div class="form-two"><label>विभाग<select id="category"><option>दुष्काळ विशेष</option><option>महाराष्ट्र</option><option>मराठवाडा</option><option>विदर्भ</option><option>पश्चिम महाराष्ट्र</option><option>कोकण</option><option>शेती</option><option>शासन योजना</option><option>पशुसंवर्धन</option><option>पाणी</option><option>रोजगार</option><option>अर्थकारण</option><option>ग्रामविकास</option><option>महिला व विकास</option><option>राजकारण</option><option>समाज</option><option>शिक्षण</option><option>आरोग्य</option><option>विश्लेषण</option></select></label><label>स्थिती<select id="post-status"><option value="published">प्रकाशित करा</option><option value="draft">मसुदा ठेवा</option></select></label></div><label>थोडक्यात सारांश (SEO) *<textarea id="description" required rows="2" maxlength="300" placeholder="बातमीचा 1-2 वाक्यांतील सारांश..."></textarea></label><label>पूर्ण बातमी *<textarea id="body" rows="15" required placeholder="प्रत्येक परिच्छेदानंतर एक रिकामी ओळ द्या. शीर्षकासाठी ## वापरू शकता. YouTube लिंक मजकुरात दिली तरी व्हिडिओ ओळखला जाईल."></textarea></label><label>YouTube व्हिडिओ लिंक (ऐच्छिक)<input id="video" type="url" placeholder="https://www.youtube.com/watch?v=..."></label><div class="form-two"><label>लेखक<input id="author" value="लोकहित महाराष्ट्र डिजिटल डेस्क"></label><label>URL / Slug (नवीन लेखासाठी)<input id="slug" spellcheck="false" placeholder="news-2026-..."></label></div><label>बातमीचा फोटो <input id="photo" type="file" accept="image/jpeg,image/png,image/webp"><small>फोटो निवडल्यास प्रकाशनावेळी योग्य आकाराचा फोटो Server मध्ये जोडला जाईल. ८ MB पेक्षा लहान फोटो वापरा.</small></label><div id="image-preview" class="photo-preview"></div><label class="check-row"><input type="checkbox" id="featured"> मुख्य बातमी म्हणून दाखवा</label><div class="editor-actions"><button class="btn btn-light" id="preview" type="button">👁 पूर्वावलोकन</button><button class="btn btn-primary" type="submit" id="publish">💾 Server वर जतन करा</button><button class="btn btn-danger" id="delete" type="button" hidden>बातमी काढा</button></div><p id="editor-status" class="status" role="status"></p></form><div id="live-preview" class="live-preview" hidden></div></section></div></section>
+<section id="cms-menu" class="cms-tab-panel" hidden>
+<div class="cms-section-header"><div><h2>☰ मेनू व्यवस्थापन</h2><p>मेनूचे नाव, लिंक, क्रम आणि दिसण्याची स्थिती ठरवा.</p></div><a href="../../" class="btn btn-light" target="_blank" rel="noopener">वेबसाइट ↗</a></div>
+<div class="cms-card"><h3>मुख्य मेनू <span id="menu-count" class="cms-count"></span></h3><div id="cms-menu-list" class="cms-manage-list"></div>
+<form id="menu-add-form" class="cms-add-form">
+<label>नाव<input id="menu-add-title" maxlength="65" required placeholder="उदा. रोजगार"></label>
+<label>लिंक (साइटमधील पाथ)<input id="menu-add-href" list="cms-link-options" required placeholder="उदा. vibhag/rojgar/"></label>
+<datalist id="cms-link-options"><option value="tajya-batmya/"></option><option value="vibhag/maharashtra/"></option><option value="vibhag/marathwada/"></option><option value="vibhag/dushkal/"></option><option value="vibhag/sheti/"></option><option value="vibhag/shasan-yojana/"></option><option value="vibhag/pani/"></option><option value="vibhag/mahila-vikas/"></option><option value="vibhag/rojgar/"></option><option value="video/"></option><option value="live-tv/"></option><option value="about/"></option><option value="contact/"></option></datalist>
+<button type="submit" class="btn btn-light">+ मेनू जोडा</button></form>
+<div class="cms-actions"><button type="button" id="menu-save" class="btn btn-primary">💾 मेनू प्रकाशित करा</button><span id="menu-status" class="status" role="status"></span></div>
+<p class="cms-hint">↑ ↓ बटणांनी क्रम बदला. बंद केलेले मेनू वेबसाइटवर दिसणार नाहीत. बाहेरील URL ऐवजी साइटमधील पाथ वापरा.</p></div></section>
+<section id="cms-slider" class="cms-tab-panel" hidden>
+<div class="cms-section-header"><div><h2>▣ मुख्यपृष्ठ स्लायडर</h2><p>फोटोसह बातम्या जोडा आणि स्लायडचा क्रम बदला.</p></div><a href="../../" class="btn btn-light" target="_blank" rel="noopener">मुख्यपृष्ठ ↗</a></div>
+<div class="cms-card"><h3>स्लायडरमध्ये निवडलेल्या बातम्या <span id="slider-count" class="cms-count"></span></h3>
+<div id="cms-slider-list" class="cms-manage-list"></div>
+<form id="slider-add-form" class="cms-add-form"><label>बातमी निवडा<select id="slider-add-post" required><option value="">बातमी निवडा…</option></select></label><button type="submit" class="btn btn-light">+ स्लायडरमध्ये जोडा</button></form>
+<label class="cms-inline-field">स्लायड किती सेकंदांनी बदलेल? <select id="slider-seconds"><option value="4">४ सेकंद</option><option value="5">५ सेकंद</option><option value="6">६ सेकंद</option><option value="8">८ सेकंद</option><option value="10">१० सेकंद</option><option value="12">१२ सेकंद</option></select></label>
+<div class="cms-actions"><button type="button" id="slider-save" class="btn btn-primary">💾 स्लायडर प्रकाशित करा</button><span id="slider-status" class="status" role="status"></span></div><p class="cms-hint">फोटो हा संबंधित बातमीतील फोटो आहे. फोटो बदलण्यासाठी बातमी संपादित करा. १० स्लायडपर्यंत निवडू शकता.</p></div></section>
+<section id="cms-breaking" class="cms-tab-panel" hidden>
+<div class="cms-section-header"><div><h2>⚡ चालणारी ब्रेकिंग न्यूज पट्टी</h2><p>स्क्रीनवर सतत उजवीकडून डावीकडे सरकणारे मथळे.</p></div></div>
+<form id="breaking-form" class="cms-card">
+<label class="cms-check"><input type="checkbox" id="breaking-enabled"> ब्रेकिंग न्यूज पट्टी सुरू ठेवा</label>
+<label>बातम्यांचे मथळे<select id="breaking-mode"><option value="latest">नवीन बातम्यांचे मथळे आपोआप</option><option value="custom">स्वतः लिहिलेले मथळे</option></select></label>
+<label>सानुकूल मथळे (प्रत्येक ओळीत एक)<textarea id="breaking-custom" rows="7" placeholder="पहिली महत्त्वाची बातमी…&#10;दुसरी महत्त्वाची बातमी…"></textarea></label>
+<p class="cms-hint">ब्रेकिंग पट्टी सर्व पानांवर सतत स्क्रोल होईल; वाचक माऊस ठेवल्यावर ती थांबेल.</p>
+<div class="cms-actions"><button type="submit" id="breaking-save" class="btn btn-primary">💾 ब्रेकिंग न्यूज प्रकाशित करा</button><span id="breaking-status" class="status" role="status"></span></div></form></section>
+<section id="cms-settings" class="cms-tab-panel" hidden>
+<div class="cms-section-header"><div><h2>⚙️ वेबसाइट सेटिंग्ज</h2><p>ब्रँडिंग, संपर्क, सोशल मीडिया आणि Live TV माहिती.</p></div></div>
+<form id="settings-form" class="cms-card">
+<div class="form-two"><label>वेबसाइट नाव<input id="setting-name" maxlength="90" required></label><label>टॅगलाइन<input id="setting-tagline" maxlength="180"></label></div>
+<label>SEO वर्णन<textarea id="setting-description" rows="3" maxlength="300"></textarea></label>
+<div class="form-two"><label>संपादकाचे नाव<input id="setting-editor_name" maxlength="120"></label><label>संपर्क ईमेल<input id="setting-contact_email" type="email"></label></div>
+<h3>🔴 YouTube Live TV</h3>
+<div class="form-two"><label>YouTube व्हिडिओ / Live URL<input id="setting-youtube_live_url" type="url" placeholder="https://www.youtube.com/watch?v=..."></label><label>चॅनेलचे नाव<input id="setting-youtube_live_provider"></label></div>
+<div class="form-two"><label>YouTube चॅनेल ID<input id="setting-youtube_live_channel_id" placeholder="UC..."></label><label>चॅनेल लिंक<input id="setting-youtube_live_channel_url" type="url"></label></div>
+<h3>सोशल मीडिया</h3>
+<div class="form-two"><label>YouTube<input id="setting-youtube_url" type="url"></label><label>Facebook<input id="setting-facebook_url" type="url"></label><label>Instagram<input id="setting-instagram_url" type="url"></label><label>X / Twitter<input id="setting-twitter_url" type="url"></label></div>
+<p class="cms-hint">Server configuration आणि live वेबसाइट URL सुरक्षिततेसाठी या फॉर्ममध्ये बदलता येत नाहीत.</p>
+<div class="cms-actions"><button type="submit" id="settings-save" class="btn btn-primary">💾 सेटिंग्ज प्रकाशित करा</button><span id="settings-status" class="status" role="status"></span></div></form></section>
+</section></main>
+<script src="../../assets/js/pin-admin.js" defer></script><script src="../../assets/js/cms.js" defer></script></body></html>
