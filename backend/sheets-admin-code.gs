@@ -210,7 +210,15 @@ function saveNews(token,raw,image){
   const saved=jsonCmsRead_("post-"+slug+".json",false);
   const original=saved?null:(raw.origin==="github"?githubPublished_().find(x=>x.slug===slug):null);
   const before=saved||original||{};
-  let imageUrl=String(before.image||"").trim();
+  // When no NEW photo is uploaded, keep the existing saved photo.
+  // GitHub originals can come from the editor's current article rather than
+  // the public GitHub export (which may be delayed or unavailable).
+  const existingImage=String(before.image||"").trim();
+  const editorImage=String(raw.image||"").trim();
+  let imageUrl=existingImage||(
+    /^https:\/\//i.test(editorImage)||/^assets\/img\/[a-z0-9._/-]+$/i.test(editorImage)
+      ?editorImage.slice(0,1300):""
+  );
   if(image){
    if(image.type!=="image/jpeg"||typeof image.data!=="string"||image.data.length>1100000||!/^[A-Za-z0-9+/=]+$/.test(image.data))throw Error("JPEG फोटो ७५० KB पेक्षा लहान निवडा.");
    const blob=Utilities.newBlob(Utilities.base64Decode(image.data),"image/jpeg","lokhit-"+slug+"-"+Date.now()+".jpg");
@@ -229,7 +237,8 @@ function saveNews(token,raw,image){
   };
   jsonCmsWrite_("post-"+slug+".json",data);
   CacheService.getScriptCache().remove("LOKHIT_LIVE_FEED_V2");
-  return {saved:true,slug,status:validStatus,
+  return {saved:true,slug,status:validStatus,image:imageUrl,
+   imagePreserved:!image&&!!imageUrl,
    message:validStatus==="draft"?"✅ मसुदा जतन झाला.":"✅ बातमी Save झाली. वेबसाइटवर Feed मधून दिसेल."};
  }finally{lock.releaseLock();}
 }
