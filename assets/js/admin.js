@@ -34,6 +34,7 @@
    $('publish').disabled=demoMode;
    status(demoMode?'डेमो मोड : बातम्या वाचा आणि पूर्वावलोकन करा. प्रकाशित करण्यासाठी GitHub username आणि fine-grained token वापरून पुन्हा प्रवेश करा.':'✅ GitHub ची ओळख तपासली. तुम्ही बातम्या जतन करू शकता.',demoMode);
    await loadPosts();
+   document.dispatchEvent(new Event('lokhitcms:ready'));
   }catch(e){status(e.message,true,'login-status');token='';demoMode=false;loggedIn=false;}
  }
  async function loadPosts(){
@@ -79,6 +80,24 @@
   try{await github('contents/'+current._path,'DELETE',{message:'Remove article '+current.slug,sha:current._sha,branch});status('बातमी काढली.');newPost();await loadPosts()}catch(e){status(e.message,true)}
  }
  function preview(){const box=$('live-preview');box.replaceChildren();let note=document.createElement('p');note.className='preview-note';note.textContent='पूर्वावलोकन — ही माहिती अजून प्रकाशित केलेली नाही.';let h=document.createElement('h2');h.textContent=$('title').value;let desc=document.createElement('strong');desc.textContent=$('description').value;box.append(note,h,desc);for(const para of $('body').value.split(/\n\s*\n/).filter(Boolean)){const p=document.createElement('p');p.textContent=para;box.appendChild(p)}box.hidden=false;box.scrollIntoView({behavior:'smooth',block:'start'})}
- $('login-form').addEventListener('submit',login);$('post-form').addEventListener('submit',submit);$('new-post').addEventListener('click',newPost);$('filter-posts').addEventListener('input',renderList);$('preview').addEventListener('click',preview);$('delete').addEventListener('click',remove);$('logout').addEventListener('click',()=>{token='';repository='';loggedIn=false;demoMode=false;records=[];current=null;$('dashboard').hidden=true;$('login').hidden=false;$('login-form').reset();status('');status('','', 'login-status')});
+ // Controlled publishing bridge for the CMS tabs; credentials remain private in this closure.
+ window.LokhitCMS={
+  isDemo:()=>demoMode,
+  canPublish:()=>loggedIn&&!demoMode,
+  posts:()=>records.map(({slug,title,description,category,image,status})=>({slug,title,description,category,image,status})),
+  async readJson(path){
+   if(!['content/layout.json','site.json'].includes(path))throw Error('अमान्य सेटिंग्ज पाथ');
+   if(!repository)throw Error('कृपया आधी लॉगिन करा.');
+   const file=await github('contents/'+path+'?ref='+encodeURIComponent(branch));
+   return {data:JSON.parse(decodeUTF8(file.content)),sha:file.sha};
+  },
+  async writeJson(path,data,message){
+   if(!['content/layout.json','site.json'].includes(path))throw Error('अमान्य सेटिंग्ज पाथ');
+   if(!loggedIn||demoMode)throw Error('हा डेमो मोड आहे. प्रकाशनासाठी GitHub username आणि मर्यादित-अधिकार token वापरून पुन्हा प्रवेश करा.');
+   const existing=await github('contents/'+path+'?ref='+encodeURIComponent(branch));
+   return github('contents/'+path,'PUT',{message:String(message||'Update CMS settings').slice(0,120),sha:existing.sha,branch,content:base64UTF8(JSON.stringify(data,null,2)+'\n')});
+  }
+ };
+ $('login-form').addEventListener('submit',login);$('post-form').addEventListener('submit',submit);$('new-post').addEventListener('click',newPost);$('filter-posts').addEventListener('input',renderList);$('preview').addEventListener('click',preview);$('delete').addEventListener('click',remove);$('logout').addEventListener('click',()=>{token='';repository='';loggedIn=false;demoMode=false;records=[];current=null;$('dashboard').hidden=true;$('login').hidden=false;$('login-form').reset();document.dispatchEvent(new Event('lokhitcms:logout'));status('');status('','', 'login-status')});
  $('photo').addEventListener('change',()=>{const file=$('photo').files[0];if(!file)return;const im=document.createElement('img');im.alt='नवीन फोटो पूर्वावलोकन';im.src=URL.createObjectURL(file);$('image-preview').replaceChildren(im)});
 })();
