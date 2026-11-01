@@ -225,7 +225,7 @@ public static class StudioEndpoints
                 };
                 var saved=await Put(client,token,"content/posts/"+slug+".json",Encoding.UTF8.GetBytes(article.ToJsonString(new JsonSerializerOptions{WriteIndented=true})),oldSha);
                 if(!saved.Ok)return Results.Json(new{error="News save failed: "+saved.Error},statusCode:502);
-                return Results.Ok(new{saved=true,status=status=="draft"?"draft":"building",slug,title,url=PublicUrl+"batmi/"+slug+"/"});
+                return Results.Ok(new{saved=true,status=status=="draft"?"draft":"building",slug,title,url=PublicUrl+"batmi/"+slug+"/",updated=now});
             }
             catch(InvalidDataException err){return Results.BadRequest(new{error=err.Message});}
             catch{return Results.Json(new{error="Could not save the article."},statusCode:502);}
