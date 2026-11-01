@@ -208,7 +208,7 @@ function saveNews(token,raw,image){
  const lock=LockService.getScriptLock();lock.waitLock(30000);
  try{
   const saved=jsonCmsRead_("post-"+slug+".json",false);
-  const original=saved?null:githubPublished_().find(x=>x.slug===slug);
+  const original=saved?null:(raw.origin==="github"?githubPublished_().find(x=>x.slug===slug):null);
   const before=saved||original||{};
   let imageUrl=String(before.image||"").trim();
   if(image){
@@ -228,6 +228,7 @@ function saveNews(token,raw,image){
    date:before.date||now,updated:now
   };
   jsonCmsWrite_("post-"+slug+".json",data);
+  CacheService.getScriptCache().remove("LOKHIT_LIVE_FEED_V2");
   return {saved:true,slug,status:validStatus,
    message:validStatus==="draft"?"✅ मसुदा जतन झाला.":"✅ बातमी Save झाली. वेबसाइटवर Feed मधून दिसेल."};
  }finally{lock.releaseLock();}
@@ -242,19 +243,23 @@ function deleteNews(token,slug){
  if(!file&&!inGithub)throw Error("बातमी उपलब्ध नाही.");
  if(file)file.setTrashed(true);
  if(inGithub)jsonCmsWrite_(name,{id:safeSlug,slug:safeSlug,status:"deleted",date:new Date().toISOString()});
+ CacheService.getScriptCache().remove("LOKHIT_LIVE_FEED_V2");
  return {deleted:true,slug:safeSlug};
 }
 function publicFeed_(){
- // Reads only the published Drive changes. Old articles/menu are already in GitHub HTML,
- // avoiding external requests and slow work on every reader's page visit.
- const all=driveNews_(true);
- return {
+ const cache=CacheService.getScriptCache(),key="LOKHIT_LIVE_FEED_V2";
+ const hit=cache.get(key);
+ if(hit){try{return JSON.parse(hit)}catch(e){}}
+ const all=driveNews_(true),data={
   ok:true,
   posts:all.filter(x=>x.status==="published").slice(0,100),
   deletedSlugs:all.filter(x=>x.status==="deleted").map(x=>x.slug).filter(Boolean),
   layout:jsonCmsRead_("layout.json",false),
   site:jsonCmsRead_("site.json",false)
  };
+ const serialized=JSON.stringify(data);
+ if(serialized.length<80000)cache.put(key,serialized,120);
+ return data;
 }
 function readCmsJson(token,path){
  session_(token);
@@ -283,6 +288,7 @@ function writeCmsJson(token,path,data){
   if(safe.menu.some(x=>!x.title||!(/^[a-z0-9_/-]*$/i.test(x.href))||x.href.includes("..")||x.href.startsWith("/")))throw Error("मेनू लिंक तपासा.");
  }
  jsonCmsWrite_(name,safe);
+ CacheService.getScriptCache().remove("LOKHIT_LIVE_FEED_V2");
  return {saved:true};
 }
 function updateEditorNames(token,editors){
