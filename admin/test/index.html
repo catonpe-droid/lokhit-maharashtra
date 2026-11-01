@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="mr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><title>लोकहित महाराष्ट्र — Login-Free Test Editor</title>
+<meta name="robots" content="noindex,nofollow"><title>लोकहित महाराष्ट्र — News Admin (Login-Free)</title>
 <link rel="stylesheet" href="../../assets/css/style.css">
 <style>
 *{box-sizing:border-box}body{background:#f3f5f9;color:#19263b;font-family:system-ui,-apple-system,"Noto Sans Devanagari",sans-serif}
@@ -35,9 +35,9 @@ small{font-weight:400}
 <main class="test-shell">
 <header class="test-head">
 <img src="../../assets/img/logo.webp" alt="">
-<div><h1>लोकहित महाराष्ट्र — Test Editor</h1><p>🔓 Login नाही • Google Sheet नाही • फक्त चाचणी</p></div>
+<div><h1>लोकहित महाराष्ट्र — News Admin</h1><p>🔓 Login नाही • Google Sheet नाही • GitHub वर थेट बातमी</p></div>
 </header>
-<div class="note"><strong>TEST MODE:</strong> इथे बातमी लिहिणे, फोटो पाहणे व WhatsApp-शैलीचा Preview तपासणे शक्य आहे. या पानातून प्रत्यक्ष वेबसाइटवर बातमी Publish होत नाही. Live वेबसाइटचे संरक्षण करण्यासाठी सार्वजनिक लेखन बंद आहे.</div>
+<div class="note" id="publisher-note"><strong>News Editor:</strong> बातमी लिहा, फोटो जोडा आणि Preview पाहा. <strong>ANIK Server API जोडल्यावर</strong> Publish बटणाने GitHub वर बातमी जाईल. <span id="api-health">प्रकाशन सर्व्हरची जोडणी तपासत आहे…</span></div>
 <div class="test-layout">
 <section class="panel">
 <h2>📝 नवीन बातमी</h2>
@@ -47,7 +47,7 @@ small{font-weight:400}
 <label>थोडक्यात सारांश <textarea id="summary" required maxlength="300" placeholder="WhatsApp आणि बातमीसाठी सारांश"></textarea></label>
 <label>पूर्ण बातमी <textarea id="body" required rows="12" placeholder="बातमीचा पूर्ण मजकूर"></textarea></label>
 <label>बातमीचा फोटो <input type="file" id="photo" accept="image/png,image/jpeg,image/webp"><small>फोटो तुमच्याच ब्राउझरमध्ये दाखवला जातो; Server वर Upload होत नाही.</small></label>
-<div class="btns"><button class="primary" type="submit">👁 बातमी Preview</button><button type="button" id="save">💾 Test Draft जतन करा</button><button type="button" id="copy">📋 बातमी कॉपी करा</button><button type="button" id="clear">नवीन सुरू करा</button></div>
+<div class="btns"><button class="primary" type="submit">👁 बातमी Preview</button><button class="primary" type="button" id="publish-live">🚀 Publish to GitHub</button><button type="button" id="save">💾 Test Draft जतन करा</button><button type="button" id="copy">📋 बातमी कॉपी करा</button><button type="button" id="clear">नवीन सुरू करा</button></div>
 <p id="notice" aria-live="polite"></p>
 </form>
 </section>
@@ -65,10 +65,10 @@ small{font-weight:400}
 <img id="share-photo" alt="">
 <div class="copy"><strong id="share-title">बातमीचा मथळा</strong><small id="share-summary">सारांश</small><small>catonpe-droid.github.io · फक्त नमुना</small></div>
 </div>
-<p><small>हा Preview नमुना आहे. प्रत्यक्ष WhatsApp Thumbnail तपासण्यासाठी बातमीचे Live HTML पान प्रकाशित असणे गरजेचे आहे.</small></p>
+<p><small>हा Preview नमुना आहे. प्रत्यक्ष WhatsApp Thumbnail बातमीचे Live HTML पान तयार झाल्यावरच शेअर करावा.</small></p><div id="live-published" class="note hidden"><strong>✅ बातमी Live झाली!</strong><p><a id="live-link" rel="noopener noreferrer" target="_blank"></a></p><div class="btns"><button id="live-copy" type="button">📋 लिंक कॉपी करा</button></div></div>
 </section>
 </div>
-<div class="btns"><a href="../direct/">🔐 सुरक्षित Live Publishing (GitHub)</a><a href="https://app.pagescms.org/" rel="noopener noreferrer">GitHub Sign-in सह Pages CMS</a><a href="../../">🌐 वेबसाइट</a></div>
+<div class="btns"><a href="../../">🌐 वेबसाइट</a><a href="../direct/">⚙️ GitHub Advanced Admin</a></div>
 </main>
 <script>
 'use strict';
@@ -118,4 +118,5 @@ small{font-weight:400}
  render();
 })();
 </script>
+<script src="./publisher.js" defer></script>
 </body></html>
