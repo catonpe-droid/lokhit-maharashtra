@@ -61,10 +61,20 @@ async function saveEditors(env,input){
  return {saved:true,editors};
 }
 async function validatePin(env,request,pin){
- if(!env.LOGIN_LIMITER?.limit)fail("सुरक्षित PIN Login अजून जोडलेला नाही.",503);
+ // A free Workers KV binding can be created and attached through the Cloudflare dashboard.
+ // This is an approximate throttle, not a globally atomic security boundary.
+ if(!env.LOGIN_KV?.get||!env.LOGIN_KV?.put)fail("सुरक्षित PIN Login साठी मोफत KV जोडणी बाकी आहे.",503);
  const ip=request.headers.get("CF-Connecting-IP")||"unknown";
- const budget=await env.LOGIN_LIMITER.limit({key:"pin:"+ip});
- if(!budget.success)fail("खूप PIN प्रयत्न झाले. एक मिनिटानंतर पुन्हा प्रयत्न करा.",429);
+ const digest=await hash("login-attempts|"+env.SESSION_SECRET+"|"+ip);
+ const key="pin:"+Array.from(digest,b=>b.toString(16).padStart(2,"0")).join("");
+ const attempts=Number(await env.LOGIN_KV.get(key))||0;
+ if(attempts>=5)fail("खूप PIN प्रयत्न झाले. एक मिनिटानंतर पुन्हा प्रयत्न करा.",429);
+ try{
+  await env.LOGIN_KV.put(key,String(attempts+1),{expirationTtl:60});
+ }catch{
+  // Fail closed if the storage quota is exceeded or a rapid write is rejected.
+  fail("PIN प्रयत्न मर्यादा चालू आहे. एक मिनिटानंतर पुन्हा प्रयत्न करा.",429);
+ }
  if(typeof pin!=="string"||!/^\d{6}$/.test(pin))fail("सहा अंकी PIN टाका.",401);
  if(!(await sameSecret(pin,env.EDITOR_PIN)))fail("PIN चुकीचा आहे.",401);
 }
@@ -208,7 +218,7 @@ export default {
   if(request.method==="OPTIONS")return new Response(null,{status:204,headers:cors});
   try{
    const url=new URL(request.url),path=url.pathname;
-   const configured=!!(env.EDITOR_PIN&&env.SESSION_SECRET&&env.GITHUB_TOKEN&&env.LOGIN_LIMITER);
+   const configured=!!(env.EDITOR_PIN&&env.SESSION_SECRET&&env.GITHUB_TOKEN&&env.LOGIN_KV);
    if(path==="/status"&&request.method==="GET")return response({configured,editorCount:10},200,cors);
    if(!configured)fail("PIN Server ची एकदाची जोडणी अजून बाकी आहे.",503);
    if(path==="/editors"&&request.method==="GET")return response({editors:await getEditors(env)},200,cors);
