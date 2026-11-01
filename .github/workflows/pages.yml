@@ -40,6 +40,7 @@ jobs:
           node --check --input-type=commonjs < backend/sheets-admin-code.gs
           node --check assets/js/google-admin.js
           node --check assets/js/pin-admin.js
+          node --check assets/js/sheets-admin-client.js
           node --check --input-type=module < backend/pin-worker.js
           node backend/test-pin-worker.mjs
           node --check --input-type=module < backend/worker.js
