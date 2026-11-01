@@ -134,8 +134,7 @@ async function saveEditorNames(ev){
 }
 const ROOT=new URL('../../',location.href).href;
 function storyUrl(p){
- if(p.origin==='github'&&p.slug)return ROOT+'batmi/'+encodeURIComponent(p.slug)+'/';
- return ROOT+'batmi/sheet/?slug='+encodeURIComponent(String(p.slug||''));
+ return ROOT+'batmi/'+encodeURIComponent(String(p.slug||''))+'/';
 }
 function publishLink(p){
  const panel=$('published-link');
