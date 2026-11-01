@@ -293,9 +293,9 @@ const BRIDGE_HTML_ = '<!doctype html><html lang="mr"><head><meta charset="utf-8"
 'if(m.topic!=="lokhit-sheet-bridge"||m.nonce!==nonce)return;'+
 'if(m.type==="ack"){acknowledged=true;clearInterval(interval);return;}'+
 'if(m.type!=="rpc"||!Number.isSafeInteger(m.id)||m.id<1||!permitted.has(m.name)||!Array.isArray(m.args)||m.args.length>4)return;'+
-'const id=m.id;try{google.script.run.withSuccessHandler(function(value){send({type:"result",id:id,ok:true,value:value})})'+
-'.withFailureHandler(function(err){send({type:"result",id:id,ok:false,error:String(err&&err.message||"Server error").slice(0,400)})})'+
-'[m.name].apply(google.script.run,m.args);}catch(err){send({type:"result",id:id,ok:false,error:String(err&&err.message||"Error").slice(0,400)})}'+
+'const id=m.id;try{const runner=google.script.run.withSuccessHandler(function(value){send({type:"result",id:id,ok:true,value:value})})'+
+'.withFailureHandler(function(err){send({type:"result",id:id,ok:false,error:String(err&&err.message||"Server error").slice(0,400)})});'+
+'runner[m.name].apply(runner,m.args);}catch(err){send({type:"result",id:id,ok:false,error:String(err&&err.message||"Error").slice(0,400)})}'+
 '}); ready();'+
 '})();'+
 '<\/script></body></html>';
