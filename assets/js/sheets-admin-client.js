@@ -132,48 +132,71 @@ async function saveEditorNames(ev){
  }catch(e){status(e.message,true,'editor-names-status')}
  finally{button.disabled=false}
 }
- async function loadPosts(){
-  $('post-list').textContent='मूळ GitHub बातम्या आणि नवीन बातम्या वाचत आहे…';
-  try{
-   // GitHub Pages remains the source of all originally published stories.
-   // The Apps Script back end may not be able to fetch Github's original
-   // export; fetch it directly from this same-origin site instead.
-   const [saved,original]=await Promise.allSettled([
-    api('/posts'),
-    fetch('../../cms-export.json',{cache:'no-store'})
-      .then(r=>{if(!r.ok)throw Error('मूळ बातम्यांची फाइल उघडली नाही.');return r.json()})
-   ]);
-   const fromDrive=saved.status==='fulfilled'&&Array.isArray(saved.value?.posts)?saved.value.posts:[];
-   const fromGithub=original.status==='fulfilled'&&Array.isArray(original.value)?original.value:[];
-   if(saved.status==='rejected'&&original.status==='rejected'){
-    throw Error('Google Sheet: '+saved.reason.message+' | GitHub: '+original.reason.message);
-   }
-   const bySlug=new Map();
-   for(const p of fromGithub){
-    if(p&&p.slug&&p.status!=='draft'){
-     bySlug.set(p.slug,{...p,id:p.id||p.slug,origin:'github'});
-    }
-   }
-   // New stories and edits saved through the editor always win.
-   for(const p of fromDrive){
-    if(p&&p.slug)bySlug.set(p.slug,p);
-   }
-   records=Array.from(bySlug.values()).filter(p=>p.status!=='deleted')
-    .sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-   renderList();
-   if(saved.status==='rejected'){
-    status('मूळ GitHub बातम्या दिसत आहेत; नवीन बातम्या लोड होऊ शकल्या नाहीत: '+saved.reason.message,true);
-   }else if(original.status==='rejected'){
-    status('Google Sheet बातम्या दिसत आहेत; जुन्या GitHub बातम्या लोड होऊ शकल्या नाहीत: '+original.reason.message,true);
-   }
-  }catch(e){$('post-list').textContent='बातम्या लोड होत नाहीत: '+e.message;throw e}
+const ROOT=new URL('../../',location.href).href;
+function storyUrl(p){
+ if(p.origin==='github'&&p.slug)return ROOT+'batmi/'+encodeURIComponent(p.slug)+'/';
+ return ROOT+'batmi/sheet/?slug='+encodeURIComponent(String(p.slug||''));
+}
+function publishLink(p){
+ const panel=$('published-link');
+ if(!p?.slug||p.status==='draft'||p.status==='deleted'){panel.hidden=true;return;}
+ const url=storyUrl(p);
+ $('published-open').href=url;
+ $('published-url').textContent=url;
+ panel.hidden=false;
+}
+function mergeNews(next){
+ const bySlug=new Map(records.filter(x=>x&&x.slug).map(x=>[x.slug,x]));
+ for(const post of next)if(post?.slug){
+  const old=bySlug.get(post.slug);
+  if(post.origin==='github'&&old&&old.origin!=='github')continue;
+  bySlug.set(post.slug,post);
  }
- function renderList(){const q=$('filter-posts').value.trim().toLowerCase(), list=records.filter(p=>(p.title+' '+p.category).toLowerCase().includes(q));
-  $('post-list').innerHTML='';if(!list.length){$('post-list').textContent='बातम्या आढळल्या नाहीत.';return}
-  for(const p of list){const b=document.createElement('button');b.type='button';b.className='admin-post'+(current?.slug===p.slug?' active':'');const strong=document.createElement('strong');strong.textContent=p.title;const small=document.createElement('small');small.textContent=p.category+' · '+(p.status==='draft'?'मसुदा':'प्रकाशित');b.append(strong,small);b.onclick=()=>openPost(p);$('post-list').appendChild(b)}
+ records=Array.from(bySlug.values()).filter(p=>p.status!=='deleted')
+  .sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+ renderList();
+}
+async function loadPosts(){
+ $('post-list').textContent='जुन्या बातम्या उघडत आहेत…';
+ // Make the original news visible immediately. The Google Apps Script may be
+ // slow to wake up, so never block the old list on its server response.
+ const savedPromise=api('/posts');
+ try{
+  const old=await fetch('../../cms-export.json',{cache:'no-store'})
+   .then(r=>{if(!r.ok)throw Error('जुन्या बातम्यांची यादी मिळाली नाही.');return r.json()});
+  if(Array.isArray(old))mergeNews(old.filter(p=>p&&p.slug).map(p=>({...p,id:p.id||p.slug,origin:'github'})));
+ }catch(err){
+  if(!records.length)$('post-list').textContent='जुन्या बातम्या लोड झाल्या नाहीत: '+err.message;
  }
- function newPost(){current=null;$('post-form').reset();$('author').value=selectedEditor?.name||'Editor';$('category').value='दुष्काळ विशेष';$('post-status').value='published';$('editor-heading').textContent='नवीन बातमी';$('edit-state').textContent='नवीन';$('slug').disabled=false;$('delete').hidden=true;$('image-preview').innerHTML='';$('live-preview').hidden=true;status('');renderList()}
- function openPost(p){current=p;$('title').value=p.title||'';$('description').value=p.description||'';$('category').value=p.category||'महाराष्ट्र';$('body').value=p.body||'';$('video').value=p.video||'';$('author').value=p.author||'';$('slug').value=p.slug||'';$('slug').disabled=true;$('post-status').value=p.status||'published';$('featured').checked=!!p.featured;$('editor-heading').textContent='बातमी संपादित करा';$('edit-state').textContent='अद्ययावत';$('delete').hidden=false;$('image-preview').innerHTML='';if(p.image){let im=document.createElement('img');im.src=String(p.image||'').startsWith('https://')?p.image:'https://catonpe-droid.github.io/lokhit-maharashtra/'+p.image;im.alt='सध्याचा फोटो';$('image-preview').appendChild(im)}$('live-preview').hidden=true;status('');renderList();window.scrollTo({top:0,behavior:'smooth'})}
+ savedPromise.then(data=>{
+  if(Array.isArray(data?.posts))mergeNews(data.posts);
+  if(!records.length)$('post-list').textContent='अद्याप बातम्या उपलब्ध नाहीत.';
+ }).catch(err=>{
+  if(!records.length)$('post-list').textContent='Google Sheet बातम्या वाचता आल्या नाहीत: '+err.message;
+ });
+ // Return now: original articles are visible without waiting for Drive.
+}
+function renderList(){
+ const q=$('filter-posts').value.trim().toLowerCase(),
+  list=records.filter(p=>(p.title+' '+p.category).toLowerCase().includes(q));
+ $('post-list').replaceChildren();
+ if(!list.length){$('post-list').textContent='बातम्या आढळल्या नाहीत.';return}
+ for(const p of list){
+  const entry=document.createElement('div');entry.className='admin-post-entry';
+  const b=document.createElement('button');b.type='button';b.className='admin-post'+(current?.slug===p.slug?' active':'');
+  const strong=document.createElement('strong');strong.textContent=p.title||'बातमी';
+  const small=document.createElement('small');small.textContent=(p.category||'महाराष्ट्र')+' · '+(p.status==='draft'?'मसुदा':'प्रकाशित');
+  b.append(strong,small);b.onclick=()=>openPost(p);entry.append(b);
+  if(p.status!=='draft'&&p.status!=='deleted'){
+   const link=document.createElement('a');link.className='post-live-link';
+   link.href=storyUrl(p);link.target='_blank';link.rel='noopener noreferrer';link.textContent='🌐 बातमी उघडा ↗';
+   entry.append(link);
+  }
+  $('post-list').append(entry);
+ }
+}
+ function newPost(){current=null;$('published-link').hidden=true;$('post-form').reset();$('author').value=selectedEditor?.name||'Editor';$('category').value='दुष्काळ विशेष';$('post-status').value='published';$('editor-heading').textContent='नवीन बातमी';$('edit-state').textContent='नवीन';$('slug').disabled=false;$('delete').hidden=true;$('image-preview').innerHTML='';$('live-preview').hidden=true;status('');renderList()}
+ function openPost(p){current=p;$('title').value=p.title||'';$('description').value=p.description||'';$('category').value=p.category||'महाराष्ट्र';$('body').value=p.body||'';$('video').value=p.video||'';$('author').value=p.author||'';$('slug').value=p.slug||'';$('slug').disabled=true;$('post-status').value=p.status||'published';$('featured').checked=!!p.featured;$('editor-heading').textContent='बातमी संपादित करा';$('edit-state').textContent='अद्ययावत';$('delete').hidden=false;$('image-preview').innerHTML='';if(p.image){let im=document.createElement('img');im.src=String(p.image||'').startsWith('https://')?p.image:'https://catonpe-droid.github.io/lokhit-maharashtra/'+p.image;im.alt='सध्याचा फोटो';$('image-preview').appendChild(im)}$('live-preview').hidden=true;status('');publishLink(p);renderList();window.scrollTo({top:0,behavior:'smooth'})}
  function makeSlug(){const supplied=$('slug').value.trim();if(supplied)return supplied;let time=new Date().toISOString().replace(/\D/g,'').slice(0,14);return 'news-'+time+'-'+Math.random().toString(36).slice(2,6)}
  async function imageData(file){
   if(file.size>8*1024*1024)throw Error('फोटो ८ MB पेक्षा लहान हवा.');
@@ -208,10 +231,14 @@ async function saveEditorNames(ev){
     author:$('author').value.trim(),video:$('video').value.trim(),
     featured:$('featured').checked,status:$('post-status').value};
    const result=await api('/post','PUT',{article,image});
-   await loadPosts();
-   const found=records.find(p=>p.slug===result.slug);
-   if(found)openPost(found);
-   status(result.status==='draft'?'✅ मसुदा Server वर जतन झाला.':'✅ बातमी Save झाली! Google Drive Feed मधून वेबसाइटवर दिसेल.');
+   const saved={...current,...article,slug:result.slug,date:current?.date||new Date().toISOString(),status:result.status,origin:'drive'};
+   mergeNews([saved]);current=saved;
+   $('slug').value=result.slug;$('slug').disabled=true;$('delete').hidden=false;
+   $('editor-heading').textContent='बातमी संपादित करा';
+   publishLink(saved);
+   status(result.status==='draft'?'✅ मसुदा जतन झाला.':'✅ बातमी प्रकाशित झाली! खाली लगेच उघडण्याची लिंक दिली आहे.');
+   // Refresh remote list in the background, never wait here after Save.
+   api('/posts').then(data=>{if(Array.isArray(data?.posts))mergeNews(data.posts)}).catch(()=>{});
   }catch(e){status('जतन अयशस्वी: '+e.message,true)}
   finally{$('publish').disabled=false}
  }
@@ -238,6 +265,12 @@ $('login-form').addEventListener('submit',login);
 $('post-form').addEventListener('submit',submit);
 $('new-post').addEventListener('click',newPost);
 $('filter-posts').addEventListener('input',renderList);
+$('published-copy').addEventListener('click',async()=>{
+ const url=$('published-url').textContent;
+ if(!url)return;
+ try{await navigator.clipboard.writeText(url);$('published-copy').textContent='✅ लिंक कॉपी झाली';}
+ catch(e){$('published-copy').textContent='कॉपी होत नाही; खालील URL कॉपी करा';}
+});
 $('preview').addEventListener('click',preview);
 $('delete').addEventListener('click',remove);
 $('toggle-editor-names').addEventListener('click',()=>{
