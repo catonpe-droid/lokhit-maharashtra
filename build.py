@@ -2,6 +2,7 @@
 """Lokhit Maharashtra static mini-CMS renderer. No external pip dependencies."""
 import html, json, os, pathlib, re, shutil, datetime, urllib.parse, xml.etree.ElementTree as ET, hashlib, urllib.request
 from email.utils import format_datetime
+from rich_renderer import render_rich
 ROOT=pathlib.Path(__file__).resolve().parent
 OUT=ROOT/'docs'
 CFG=json.loads((ROOT/'site.json').read_text(encoding='utf8'))
@@ -215,26 +216,29 @@ def youtube_id(text):
  return None
 for p in POSTS:
  body=[];body_yts=[]
- for para in re.split(r'\n\s*\n',p.get('body','')):
-  para=para.strip()
-  if not para:continue
-  if para.startswith('### '):body.append('<h3>'+E(para[4:])+'</h3>');continue
-  if para.startswith('## '):body.append('<h2>'+E(para[3:])+'</h2>');continue
-  if para.startswith('# '):body.append('<h2>'+E(para[2:])+'</h2>');continue
-  vid=youtube_id(para)
-  if vid:body_yts.append(vid)
-  if re.match(r'^[-*] ',para):
-   items=[re.sub(r'\*\*([^*]+)\*\*',r'<strong>\1</strong>',E(line[2:])) for line in para.split('\n') if line.startswith(('- ','* '))]
-   body.append('<ul>'+''.join('<li>'+item+'</li>' for item in items)+'</ul>')
-   continue
-  safe=re.sub(r'\*\*([^*\n]+)\*\*',r'<strong>\1</strong>',E(para))
-  safe=re.sub(r'(?<!\*)\*([^*\n]+)\*(?!\*)',r'<em>\1</em>',safe)
-  body.append('<p>'+safe.replace('\n','<br>')+'</p>')
+ if isinstance(p.get('rich_delta'),list):
+  body=render_rich(p['rich_delta'],U)
+ else:
+  for para in re.split(r'\n\s*\n',p.get('body','')):
+   para=para.strip()
+   if not para:continue
+   if para.startswith('### '):body.append('<h3>'+E(para[4:])+'</h3>');continue
+   if para.startswith('## '):body.append('<h2>'+E(para[3:])+'</h2>');continue
+   if para.startswith('# '):body.append('<h2>'+E(para[2:])+'</h2>');continue
+   vid=youtube_id(para)
+   if vid:body_yts.append(vid)
+   if re.match(r'^[-*] ',para):
+    items=[re.sub(r'\*\*([^*]+)\*\*',r'<strong>\1</strong>',E(line[2:])) for line in para.split('\n') if line.startswith(('- ','* '))]
+    body.append('<ul>'+''.join('<li>'+item+'</li>' for item in items)+'</ul>')
+    continue
+   safe=re.sub(r'\*\*([^*\n]+)\*\*',r'<strong>\1</strong>',E(para))
+   safe=re.sub(r'(?<!\*)\*([^*\n]+)\*(?!\*)',r'<em>\1</em>',safe)
+   body.append('<p>'+safe.replace('\n','<br>')+'</p>')
  yvid=youtube_id(p.get('video','')) or (body_yts[0] if body_yts else None)
  video=f'<div class="video-embed"><iframe src="https://www.youtube-nocookie.com/embed/{yvid}" title="संबंधित YouTube व्हिडिओ" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>' if yvid else ''
  bar='<div class="share-bar"><strong>ही बातमी शेअर करा :</strong><button class="share-btn share-wa" data-share="wa">WhatsApp</button><button class="share-btn share-fb" data-share="fb">Facebook</button><button class="share-btn share-x" data-share="x">X</button><button class="share-btn share-tg" data-share="tg">Telegram</button><button class="share-btn share-copy" data-share="copy">लिंक कॉपी</button><button class="share-btn share-native" data-share="native">इतर</button></div>'
  related=[q for q in POSTS if q['slug']!=p['slug'] and q['category']==p['category']][:2] or [q for q in POSTS if q['slug']!=p['slug']][:2]
- content=f'<div class="container">{breadcrumbs([E(p["category"]),E(p["title"])])}<div class="content-layout"><article class="article"><span class="tag">{E(p["category"])}</span><h1>{E(p["title"])}</h1><p class="article-summary">{E(p["description"])}</p><div class="meta"><span>✍ {E(p.get("author",CFG["name"]))}</span><span>📅 {E(time_marathi(p["date"]))}</span></div><figure class="article-figure"><img src="{img(p)}" alt="{E(p["title"])}" width="960" height="540"><figcaption>प्रतीकात्मक, संगणकनिर्मित चित्र</figcaption></figure>{bar}<div class="article-body">{"".join(body)}{video}</div>{bar}<div class="section-head"><h2>संबंधित बातम्या</h2></div><div class="related-grid">{"".join(card(q) for q in related)}</div></article><aside><div class="side-panel sidebar-box"><div class="panel-title">ताज्या बातम्या</div><div class="panel-content">{"".join(latest(q) for q in POSTS[:9])}</div></div><div class="side-panel"><div class="panel-title">लोकहित विशेष</div><div class="panel-content"><p>शेती, पाणी, रोजगार आणि शासन योजनांची माहिती</p><a class="admin-link" href="{U(CATEGORY_PATH["दुष्काळ विशेष"])}">सर्व लेख पहा</a></div></div></aside></div></div>'
+ content=f'<div class="container">{breadcrumbs([E(p["category"]),E(p["title"])])}<div class="content-layout"><article class="article"><span class="tag">{E(p["category"])}</span><h1>{E(p["title"])}</h1><p class="article-summary">{E(p["description"])}</p><div class="meta"><span>✍ {E(p.get("author",CFG["name"]))}</span><span>📅 {E(time_marathi(p["date"]))}</span></div><figure class="article-figure"><img src="{img(p)}" alt="{E(p["title"])}" width="960" height="540">{"" if p.get("rich_delta") else "<figcaption>प्रतीकात्मक, संगणकनिर्मित चित्र</figcaption>"}</figure>{bar}<div class="article-body">{"".join(body)}{video}</div>{bar}<div class="section-head"><h2>संबंधित बातम्या</h2></div><div class="related-grid">{"".join(card(q) for q in related)}</div></article><aside><div class="side-panel sidebar-box"><div class="panel-title">ताज्या बातम्या</div><div class="panel-content">{"".join(latest(q) for q in POSTS[:9])}</div></div><div class="side-panel"><div class="panel-title">लोकहित विशेष</div><div class="panel-content"><p>शेती, पाणी, रोजगार आणि शासन योजनांची माहिती</p><a class="admin-link" href="{U(CATEGORY_PATH["दुष्काळ विशेष"])}">सर्व लेख पहा</a></div></div></aside></div></div>'
  write(article_path(p)+'index.html',shell(content,p['title'],p['description'],article_path(p),share_preview_image(p),'article',p['date'],p.get('updated') or p['date']))
 # Category pages
 for cat,slug in PAGES:
@@ -268,7 +272,7 @@ path='shodh/'
 search_content=f'<div class="container">{breadcrumbs(["बातमी शोधा"])}<div class="section-head"><h2>बातमी शोधा</h2></div><form class="results-toolbar" id="search-form"><input type="search" id="search-input" placeholder="मराठी मथळा, विभाग किंवा विषय शोधा..." aria-label="बातमी शोधा"><button type="submit">शोधा</button></form><div id="search-results" class="news-grid"><div class="empty-state">बातम्या लोड होत आहेत...</div></div></div>'
 write(path+'index.html',shell(search_content,'बातमी शोधा','लोकहित महाराष्ट्रच्या बातम्या शोधा',path))
 # Video page
-videos=[p for p in POSTS if youtube_id(p.get('video','')) or youtube_id(p.get('body',''))]
+videos=[p for p in POSTS if youtube_id(p.get('video','')) or youtube_id(p.get('body','')) or any(isinstance(x,dict) and isinstance(x.get("insert"),dict) and x["insert"].get("video") for x in p.get("rich_delta",[]) if isinstance(p.get("rich_delta"),list))]
 video_content=f'<div class="container">{breadcrumbs(["व्हिडिओ"])}<div class="section-head"><h2>व्हिडिओ बातम्या</h2></div>'+( '<div class="news-grid">'+''.join(card(p) for p in videos)+'</div>' if videos else '<div class="empty-state">अधिकृत व्हिडिओ बातमी उपलब्ध झाल्यावर या विभागात दिसेल. प्रशासनातून बातमीमध्ये YouTube लिंक जोडा.</div>')+'</div>'
 write('video/index.html',shell(video_content,'व्हिडिओ बातम्या','YouTube व्हिडिओसह मराठी बातम्या','video/',active='video/'))
 # Live TV page with the provider explicitly credited
