@@ -6,16 +6,15 @@
 <label>Password<input id="password" autocomplete="current-password" type="password" required placeholder="Password"></label>
 <button class="btn btn-primary login-submit" type="submit">प्रवेश करा →</button></form>
 <div id="login-status" class="status" role="status"></div>
-<details class="login-help"><summary>Login ID आणि Password कसे वापरायचे?</summary>
-<p><strong>Demo:</strong> <code>admin / 1234</code> — बातम्या पाहता व लिहिता येतात; पण Save/Publish होत नाही.</p>
-<p><strong>खऱ्या प्रकाशनासाठी:</strong> Login ID मध्ये अधिकृत GitHub username आणि Password मध्ये त्या खात्याचा <strong>fine-grained Personal Access Token</strong> वापरा. तुमचा नेहमीचा GitHub पासवर्ड येथे टाकू नका. हा token फक्त <code>catonpe-droid/lokhit-maharashtra</code> repository साठी <strong>Contents: Read and write</strong> परवानगी असलेला असावा.</p>
-<p><a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener noreferrer">अधिकृत प्रकाशन Access Key तयार करा ↗</a></p>
-<p>ही GitHub Pages वरची static वेबसाइट आहे. फक्त <code>admin / 1234</code> ने सुरक्षित Server publishing शक्य नाही; त्यासाठी वेगळा authentication backend आवश्यक आहे.</p>
-</details>
+<details class="login-help"><summary>पहिल्यांदा Login करण्यासाठी Access Key कसा मिळवायचा?</summary>
+<p><strong>Login ID:</strong> तुमचा अधिकृत GitHub username (उदा. <code>catonpe-droid</code>).</p>
+<p><strong>Password:</strong> या पोर्टलसाठी तयार केलेला GitHub fine-grained Personal Access Token (Access Key). हा नेहमीचा GitHub पासवर्ड नाही.</p>
+<p><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">सुरक्षित Access Key तयार करा ↗</a> — Repository: <code>catonpe-droid/lokhit-maharashtra</code>, Permission: <strong>Contents → Read and write</strong>.</p>
+<p>Key फक्त तुमच्या ब्राउझरमध्ये वापरला जातो. चॅट किंवा इतर कुणाला पाठवू नका. खऱ्या Username/Access Key शिवाय Admin उघडणार नाही.</p></details>
 </section>
 <section id="dashboard" hidden>
 <div class="dash-title"><div><h1>लोकहित महाराष्ट्र <span class="cms-heading-accent">Mini CMS</span></h1><p>बातम्या, मेनू, स्लायडर आणि वेबसाइटचे व्यवस्थापन एकाच ठिकाणी.</p></div><div class="dash-buttons"><a href="../" target="_blank" rel="noopener" class="btn btn-light">🌐 वेबसाइट पाहा</a><button id="logout" type="button" class="btn btn-light">बाहेर पडा</button></div></div>
-<div id="cms-demo-banner" class="cms-demo-banner" hidden><strong>🔒 डेमो मोड — Save बंद नाही, पण डेमोमधून बातमी प्रत्यक्ष प्रकाशित करता येत नाही.</strong><p>खरे प्रकाशन करण्यासाठी अधिकृत प्रवेश आवश्यक आहे. <button id="cms-real-login" class="btn btn-light" type="button">🔑 प्रकाशनासाठी Login करा</button></p></div>
+
 <nav class="cms-tabs" aria-label="व्यवस्थापन विभाग">
 <button type="button" data-cms-tab="news" class="cms-tab is-active">📰 बातम्या</button>
 <button type="button" data-cms-tab="menu" class="cms-tab">☰ मेनू व्यवस्थापन</button>
