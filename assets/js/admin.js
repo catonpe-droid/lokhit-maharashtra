@@ -31,7 +31,9 @@
    loggedIn=!demoMode;
    $('password').value='';
    $('login').hidden=true;$('dashboard').hidden=false;
-   $('publish').disabled=demoMode;
+   $('publish').disabled=false;
+   $('publish').setAttribute('aria-disabled',String(demoMode));
+   $('publish').title=demoMode?'डेमो मोडमध्ये जतन करता येत नाही. प्रकाशनासाठी अधिकृत Login करा.':'Server वर बातमी जतन करा';
    status(demoMode?'डेमो मोड : बातम्या वाचा आणि पूर्वावलोकन करा. प्रकाशनासाठी अधिकृत Server प्रवेश वापरा.':'✅ Server प्रकाशनाचे अधिकार तपासले. तुम्ही बातम्या जतन करू शकता.',demoMode);
    await loadPosts();
    document.dispatchEvent(new Event('lokhitcms:ready'));
@@ -62,7 +64,7 @@
   return{data,path};
  }
  async function submit(ev){
-  ev.preventDefault();if(!loggedIn){status('सर्वप्रथम Server प्रवेश करा.',true);return}
+  ev.preventDefault();if(!loggedIn){status(demoMode?'🔒 तुम्ही Demo Login (admin / 1234) वापरले आहे. यामधून बातमी Server वर जतन होत नाही. वरच्या पिवळ्या सूचनेतील “प्रकाशनासाठी Login करा” वापरा.':'🔒 सर्वप्रथम प्रकाशनाचा अधिकृत Login करा.',true);$('editor-status').scrollIntoView({behavior:'smooth',block:'center'});return}
   const slug=current?.slug||makeSlug();
   if(!/^[a-zA-Z0-9_-]{3,120}$/.test(slug)){status('URL/Slug साठी फक्त इंग्रजी अक्षरे, अंक, - किंवा _ वापरा.',true);return}
   $('publish').disabled=true;status('बातमी Server वर जतन होत आहे…');
@@ -98,6 +100,27 @@
    return github('contents/'+path,'PUT',{message:String(message||'Update CMS settings').slice(0,120),sha:existing.sha,branch,content:base64UTF8(JSON.stringify(data,null,2)+'\n')});
   }
  };
+
+ // Demo is intentionally read-only. Never leave a dead Save button.
+ function warnDemo(){
+  if(!demoMode)return;
+  status('🔒 Demo Login (admin / 1234) मध्ये Save बंद आहे. खरे प्रकाशन करण्यासाठी अधिकृत Server/Login access वापरा.',true);
+  $('editor-status').scrollIntoView({behavior:'smooth',block:'center'});
+ }
+ $('publish').addEventListener('click',warnDemo);
+ $('post-form').addEventListener('invalid',event=>{
+  if(demoMode){warnDemo();return}
+  const input=event.target;
+  status('आवश्यक माहिती पूर्ण भरा: '+(input.closest('label')?.textContent?.trim().slice(0,55)||'बातमीचे शीर्षक/सारांश/पूर्ण मजकूर')+' .',true);
+ },true);
+ $('cms-real-login')?.addEventListener('click',()=>{
+  $('logout').click();
+  $('username').value='';
+  $('password').value='';
+  $('username').focus();
+  $('login-status').textContent='खऱ्या प्रकाशनासाठी Login ID = अधिकृत GitHub username, Password = मर्यादित-अधिकार access token वापरा. नेहमीचा GitHub पासवर्ड टाकू नका.';
+  const details=document.querySelector('.login-help');if(details)details.open=true;
+ });
  $('login-form').addEventListener('submit',login);$('post-form').addEventListener('submit',submit);$('new-post').addEventListener('click',newPost);$('filter-posts').addEventListener('input',renderList);$('preview').addEventListener('click',preview);$('delete').addEventListener('click',remove);$('logout').addEventListener('click',()=>{token='';repository='';loggedIn=false;demoMode=false;records=[];current=null;$('dashboard').hidden=true;$('login').hidden=false;$('login-form').reset();document.dispatchEvent(new Event('lokhitcms:logout'));status('');status('','', 'login-status')});
  $('photo').addEventListener('change',()=>{const file=$('photo').files[0];if(!file)return;const im=document.createElement('img');im.alt='नवीन फोटो पूर्वावलोकन';im.src=URL.createObjectURL(file);$('image-preview').replaceChildren(im)});
 })();
