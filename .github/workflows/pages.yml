@@ -36,6 +36,8 @@ jobs:
           node --check assets/js/admin.js
           node --check assets/js/cms.js
           node --check assets/js/site.js
+          node --check assets/js/sheets-public.js
+          node --check --input-type=commonjs < backend/sheets-admin-code.gs
           node --check assets/js/google-admin.js
           node --check assets/js/pin-admin.js
           node --check --input-type=module < backend/pin-worker.js
