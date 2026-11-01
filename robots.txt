@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /lokhit-maharashtra/admin/
+Sitemap: https://catonpe-droid.github.io/lokhit-maharashtra/sitemap.xml
