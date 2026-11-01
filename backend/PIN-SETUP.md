@@ -12,7 +12,7 @@
 ## एकदाची मोफत सुरक्षित जोडणी
 - [Cloudflare Workers](https://dash.cloudflare.com/) मध्ये Free प्लॅन वापरा; `backend/wrangler.toml` व `backend/pin-worker.js` वापरून Worker deploy करा.
 - Cloudflare Worker **Secrets** मध्ये `EDITOR_PIN` (फक्त मालकाने निवडलेला सहा-अंकी PIN), `SESSION_SECRET` (मजबूत यादृच्छिक ३२+ अक्षरी गुप्त किल्ली), `GITHUB_TOKEN` (फक्त `catonpe-droid/lokhit-maharashtra` repository चा Contents read/write fine-grained token) जोडा.
-- `LOGIN_LIMITER` binding `backend/wrangler.toml` मधील ५ प्रयत्न प्रति ६० सेकंद प्रमाणे जोडा.
+- Dashboard मध्ये Worker → Settings → Bindings → Add → KV Namespace हे निवडून `LOGIN_KV` variable नावाने `lokhit-login-kv` namespace जोडा. याने PIN चे ५ प्रयत्न प्रति ६० सेकंद अशी अंदाजे मर्यादा ठेवली जाते.
 - Worker URL फक्त `admin/pin/config.json` मधील `worker_url` मध्ये टाका.
 - प्रत्यक्ष PIN Login करून **Draft** बातमी जतन करा; त्यानंतर Published बातमीची पडताळणी करा.
 - चाचणी यशस्वी झाल्यावर मुख्य `/admin/` पेज PIN Editor कडे वळवा.
