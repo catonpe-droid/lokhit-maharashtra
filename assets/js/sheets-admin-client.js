@@ -145,9 +145,16 @@ function publishLink(p){
  $('published-url').textContent=url;
  panel.hidden=false;
 }
+function recentlyDeletedInThisBrowser(slug){
+ try{
+  const t=JSON.parse(localStorage.getItem('lokhit-deleted-slugs-v1')||'{}')[slug];
+  return Number(t)>0&&Date.now()-Number(t)<30*86400000;
+ }catch(e){return false}
+}
 function mergeNews(next){
- const bySlug=new Map(records.filter(x=>x&&x.slug).map(x=>[x.slug,x]));
+ const bySlug=new Map(records.filter(x=>x&&x.slug&&!recentlyDeletedInThisBrowser(x.slug)).map(x=>[x.slug,x]));
  for(const post of next)if(post?.slug){
+  if(recentlyDeletedInThisBrowser(post.slug)){bySlug.delete(post.slug);continue;}
   const old=bySlug.get(post.slug);
   if(post.origin==='github'&&old&&old.origin!=='github')continue;
   bySlug.set(post.slug,post);
