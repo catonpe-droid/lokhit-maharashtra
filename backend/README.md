@@ -7,7 +7,7 @@ Status: Code prepared. **Google login cannot work until Google OAuth and Cloudfl
 2. In [Google Cloud Console](https://console.cloud.google.com/apis/credentials), create an OAuth 2.0 **Web application** client for Google Identity Services. Authorized JavaScript origin: `https://catonpe-droid.github.io`. If you later use a custom domain, add its HTTPS origin as well. Complete OAuth consent branding if required. Copy the **Client ID only**; it is not a secret.
 3. In the Cloudflare Worker's **Variables & Secrets** set:
    - `GOOGLE_CLIENT_ID` (text) = the Google OAuth Web Client ID
-   - `ADMIN_EMAILS` (text) = comma-separated authorized Gmail addresses (site owner ONLY)
+   - Approved Gmail: already fixed in the Worker by its SHA-256 email fingerprint; no Gmail address needs to be entered in the public repository. The optional `ADMIN_EMAIL_SHA256` text variable can override the fingerprint for a future editor change.
    - `SITE_ORIGINS` (text) = `https://catonpe-droid.github.io` (later add custom domain)
    - `GITHUB_TOKEN` (Secret) = one repository-scoped GitHub fine-grained token with Contents: Read/write on `catonpe-droid/lokhit-maharashtra`. This is configured **once in the backend**, never supplied by editors, never exposed to the website and never pasted into chat.
 4. Edit `admin/google/config.json` and supply only the public Worker URL, e.g. `"worker_url":"https://lokhit-admin.<your-subdomain>.workers.dev"`. Do not put secrets in that file.
@@ -24,4 +24,4 @@ The public news website and all articles continue to be generated in the GitHub 
 - GitHub token must stay in Cloudflare secret, never in public code or GitHub Pages.
 - User-requested `admin/1234` is not used: publishing with a publicly visible fixed password on GitHub Pages would not be secure.
 - Google browser token is kept in page memory; re-login may be needed when it expires.
-- Don't set `ADMIN_EMAILS=*`; only actual approved addresses.
+- Only the single pre-approved Gmail may publish, as checked against the verified Google identity. No wildcard Gmail access is allowed.
