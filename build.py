@@ -50,15 +50,17 @@ def shell(content,title,desc,path='',image=None,kind='website',published=None,mo
  lang='en' if path in {name+'/' for name in ['about','contact','privacy-policy','terms','disclaimer','editorial-policy','corrections','advertise','grievance','cookie-policy']} else 'mr'
  nav=''.join(f'<a class="{"active" if active==href else ""}" href="{U(href)}">{E(text)}</a>' for text,href in NAV)
  quick=''.join(L(s,path) for s,path in [('About Us','about/'),('Contact','contact/'),('Advertise','advertise/')])
- footer_lists=[('विभाग',[('महाराष्ट्र',CATEGORY_PATH['महाराष्ट्र']),('मराठवाडा',CATEGORY_PATH['मराठवाडा']),('दुष्काळ विशेष',CATEGORY_PATH['दुष्काळ विशेष']),('शेती',CATEGORY_PATH['शेती']),('शासन योजना',CATEGORY_PATH['शासन योजना'])]),('Information',[('About Us','about/'),('Contact','contact/'),('Editorial Policy','editorial-policy/'),('Corrections Policy','corrections/'),('Advertise','advertise/')]),('Important Pages',[('Privacy Policy','privacy-policy/'),('Terms & Conditions','terms/'),('Disclaimer','disclaimer/'),('Grievance Redressal','grievance/'),('Cookie Policy','cookie-policy/')])]
+ footer_lists=[('विभाग',[('महाराष्ट्र',CATEGORY_PATH['महाराष्ट्र']),('मराठवाडा',CATEGORY_PATH['मराठवाडा']),('दुष्काळ विशेष',CATEGORY_PATH['दुष्काळ विशेष']),('शेती',CATEGORY_PATH['शेती']),('शासन योजना',CATEGORY_PATH['शासन योजना'])]),('Information',[('About Us','about/'),('Contact','contact/'),('Editorial Policy','editorial-policy/'),('Corrections Policy','corrections/'),('Advertise','advertise/')]),('Legal & Policies',[('Privacy Policy','privacy-policy/'),('Terms & Conditions','terms/'),('Disclaimer','disclaimer/'),('Grievance Redressal','grievance/'),('Cookie Policy','cookie-policy/')])]
  footer=''.join('<div><h3>'+E(name)+'</h3>'+''.join(L(n,p) for n,p in group)+'</div>' for name,group in footer_lists)
  ticker_settings=LAYOUT.get('breaking',{})
  custom_headlines=ticker_settings.get('custom',[]) if isinstance(ticker_settings,dict) else []
  if isinstance(custom_headlines,list) and ticker_settings.get('mode')=='custom':
-  ticker=' · '.join(E(str(t)[:170]) for t in custom_headlines[:8] if str(t).strip())
+  items=[E(str(t).strip()[:170]) for t in custom_headlines[:12] if str(t).strip()]
  else:
-  ticker=' · '.join(f'<a href="{U(article_path(p))}">{E(p["title"])}</a>' for p in POSTS[:4])
- breakbar=f'<div class="container"><div class="search-strip"><span class="breaking-label">ठळक बातम्या</span><div class="breaking-text">{ticker}</div><a class="search-btn" href="{U("shodh/")}" aria-label="शोधा">⌕</a></div></div>' if ticker_settings.get('enabled',True) else ''
+  items=[f'<a href="{U(article_path(p))}">{E(p["title"])}</a>' for p in POSTS[:8]]
+ ticker=''.join(f'<span class="ticker-item"><span class="ticker-star" aria-hidden="true">◆</span>{item}</span>' for item in items)
+ ticker_copy=''.join(f'<span class="ticker-item"><span class="ticker-star">◆</span>{item}</span>' for item in items)
+ breakbar=(f'<div class="container"><div class="search-strip live-ticker"><span class="breaking-label"><span class="on-air-dot"></span> BREAKING NEWS</span><div class="ticker-window" aria-label="ब्रेकिंग न्यूज"><div class="ticker-move"><div class="ticker-segment">{ticker}</div><div class="ticker-segment" aria-hidden="true" inert>{ticker_copy}</div></div></div><a class="search-btn" href="{U("shodh/")}" aria-label="शोधा">⌕</a></div></div>' if items and ticker_settings.get('enabled',True) else '')
  meta=ld_head(title,desc,A(path),image,kind,published,modified)
  return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#b60013"><link rel="icon" type="image/png" href="{U('assets/img/favicon.png')}"><link rel="manifest" href="{U('manifest.webmanifest')}"><link rel="alternate" type="application/rss+xml" title="लोकहित महाराष्ट्र बातम्या" href="{U('rss.xml')}"><link rel="stylesheet" href="{U('assets/css/style.css')}">{meta}</head><body data-base="{E(BASE)}">
 <div class="utility"><div class="container"><span><span id="today-date">महाराष्ट्राचा डिजिटल आवाज</span> · स्वतंत्र मराठी न्यूज पोर्टल</span><div class="utility-links">{quick}<a href="{U('privacy-policy/')}">Privacy Policy</a></div></div></div>
