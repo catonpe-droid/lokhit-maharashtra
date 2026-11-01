@@ -5,7 +5,7 @@
  * Main website stays on GitHub Pages; no GitHub token or Cloudflare required.
  */
 const LOKHIT_BOOK_ID = "1vLW3s18KTUACexCHvYx0NjVh4M67_yavzIVAhO_DIrk";
-const LOKHIT_SESSION_SECONDS = 6*60*60;
+const LOKHIT_SESSION_SECONDS = 30*24*60*60;
 const LOKHIT_CATEGORIES = ["महाराष्ट्र","मराठवाडा","विदर्भ","पश्चिम महाराष्ट्र","कोकण","दुष्काळ विशेष","शेती","शासन योजना","पशुसंवर्धन","पाणी","रोजगार","ग्रामविकास","राजकारण","शिक्षण","आरोग्य","विश्लेषण"];
 function sheet_(name){const sh=SpreadsheetApp.openById(LOKHIT_BOOK_ID).getSheetByName(name);if(!sh)throw Error(name+" टॅब उपलब्ध नाही.");return sh;}
 function entries_(name){return sheet_(name).getDataRange().getDisplayValues().slice(1);}
@@ -57,16 +57,34 @@ function menuShowAppUrl(){
  const u=ScriptApp.getService().getUrl();
  SpreadsheetApp.getUi().alert(u?"Admin लिंक: "+u:"Deploy → New deployment → Web app केल्यावर Admin लिंक मिळेल.");
 }
+function sessionsSheet_(){
+ const book=SpreadsheetApp.openById(LOKHIT_BOOK_ID);
+ let sh=book.getSheetByName("SESSIONS");
+ if(!sh){
+  const lock=LockService.getDocumentLock()||LockService.getScriptLock();
+  lock.waitLock(15000);
+  try{
+   sh=book.getSheetByName("SESSIONS");
+   if(!sh){sh=book.insertSheet("SESSIONS");sh.appendRow(["Token Hash","Editor ID","Login Version","Created At","Expires At","Revoked"]);sh.setFrozenRows(1);}
+  }finally{lock.releaseLock()}
+ }
+ return sh;
+}
+function digestToken_(token){
+ return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,String(token),Utilities.Charset.UTF_8)
+  .map(b=>("0"+((b+256)%256).toString(16)).slice(-2)).join("");
+}
 function editorOptions(){
  return entries_("EDITORS").filter(row=>String(row[2]||"YES").toUpperCase()!=="NO").map(row=>({id:Number(row[0]),name:String(row[1]||"").trim()})).filter(x=>x.id>=1&&x.id<=10&&x.name);
 }
 function loginAdmin(pin,id){
  const lock=LockService.getScriptLock();lock.waitLock(10000);
  try{
-  const cache=CacheService.getScriptCache(),failed=Number(cache.get("PIN_FAILS")||"0");
+  const cache=CacheService.getScriptCache();
+  const failed=Number(cache.get("PIN_FAILS")||"0");
   if(failed>=6)throw Error("खूप चुकीचे प्रयत्न झाले. १५ मिनिटांनी पुन्हा प्रयत्न करा.");
   const salt=security_("PIN_SALT"),saved=security_("PIN_HASH");
-  if(!salt||!saved)throw Error("Sheet मध्ये आधी PIN सेट करा: लोकहित Admin → PIN सेट करा.");
+  if(!salt||!saved)throw Error("Sheet मधून आधी PIN सेट करा: लोकहित Admin → PIN सेट करा.");
   if(typeof pin!=="string"||!/^\d{6}$/.test(pin)||hashPin_(pin,salt)!==saved){
    cache.put("PIN_FAILS",String(failed+1),900);
    throw Error("PIN चुकीचा आहे.");
@@ -74,22 +92,34 @@ function loginAdmin(pin,id){
   const editor=editorOptions().find(x=>x.id===Number(id));
   if(!editor)throw Error("Editor निवडा.");
   const token=Utilities.getUuid().replace(/-/g,"")+Utilities.getUuid().replace(/-/g,"");
-  cache.put("sess:"+token,JSON.stringify({id:editor.id,name:editor.name,version:security_("LOGIN_VERSION")}),LOKHIT_SESSION_SECONDS);
+  const expiry=new Date(Date.now()+LOKHIT_SESSION_SECONDS*1000);
+  sessionsSheet_().appendRow([digestToken_(token),editor.id,security_("LOGIN_VERSION"),new Date().toISOString(),expiry.toISOString(),"NO"]);
   cache.remove("PIN_FAILS");
-  return {ok:true,token,editor};
+  return {ok:true,token,editor,expiresAt:expiry.toISOString()};
  }finally{lock.releaseLock();}
 }
 function session_(token){
  if(!/^[a-f0-9]{64}$/i.test(String(token||"")))throw Error("PIN ने पुन्हा Login करा.");
- const raw=CacheService.getScriptCache().get("sess:"+token);
- if(!raw)throw Error("Login संपला आहे. PIN पुन्हा टाका.");
- const value=JSON.parse(raw);
- if(value.version!==security_("LOGIN_VERSION"))throw Error("PIN बदलल्यामुळे पुन्हा Login करा.");
- const ed=editorOptions().find(x=>x.id===value.id);
- if(!ed)throw Error("Editor उपलब्ध नाही.");
- return ed;
+ const hash=digestToken_(token);
+ const sessions=sessionsSheet_().getDataRange().getDisplayValues().slice(1);
+ const item=sessions.find(r=>r[0]===hash);
+ if(!item||item[5]==="YES")throw Error("Login संपला आहे. PIN पुन्हा टाका.");
+ const exp=Date.parse(item[4]);
+ if(!Number.isFinite(exp)||exp<Date.now())throw Error("Login ची ३० दिवसांची मुदत संपली आहे.");
+ if(item[2]!==security_("LOGIN_VERSION"))throw Error("PIN बदलल्यामुळे पुन्हा Login करा.");
+ const editor=editorOptions().find(x=>x.id===Number(item[1]));
+ if(!editor)throw Error("Editor उपलब्ध नाही.");
+ return editor;
 }
-function verifySession(token){const ed=session_(token);return {ok:true,editor:ed};}
+function verifySession(token){const editor=session_(token);return {ok:true,editor};}
+function logoutAdmin(token){
+ if(!token||!/^[a-f0-9]{64}$/i.test(String(token)))return {ok:true};
+ const key=digestToken_(token),sheet=sessionsSheet_();
+ const rows=sheet.getDataRange().getDisplayValues();
+ const idx=rows.findIndex((r,i)=>i>0&&r[0]===key);
+ if(idx>=1)sheet.getRange(idx+1,6).setValue("YES");
+ return {ok:true};
+}
 function listNews(token){
  session_(token);
  return entries_("NEWS").filter(x=>x[0]).map((x,i)=>({
