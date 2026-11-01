@@ -229,7 +229,7 @@ function renderList(){
    const article={slug,title:$('title').value.trim(),description:$('description').value.trim(),
     body:$('body').value.trim(),category:$('category').value,
     author:$('author').value.trim(),video:$('video').value.trim(),
-    featured:$('featured').checked,status:$('post-status').value};
+    origin:current?.origin||null,featured:$('featured').checked,status:$('post-status').value};
    const result=await api('/post','PUT',{article,image});
    const saved={...current,...article,slug:result.slug,date:current?.date||new Date().toISOString(),status:result.status,origin:'drive'};
    mergeNews([saved]);current=saved;
