@@ -237,14 +237,20 @@ function deleteNews(token,slug){
  session_(token);
  const safeSlug=String(slug||"").toLowerCase();
  if(!/^[a-z0-9][a-z0-9_-]{2,110}$/.test(safeSlug))throw Error("बातमीची लिंक अवैध.");
- const name="post-"+safeSlug+".json";
- const file=cmsFile_(name);
- const inGithub=githubPublished_().some(x=>x.slug===safeSlug);
- if(!file&&!inGithub)throw Error("बातमी उपलब्ध नाही.");
- if(file)file.setTrashed(true);
- if(inGithub)jsonCmsWrite_(name,{id:safeSlug,slug:safeSlug,status:"deleted",date:new Date().toISOString()});
- CacheService.getScriptCache().remove("LOKHIT_LIVE_FEED_V2");
- return {deleted:true,slug:safeSlug};
+ // Always publish a deletion tombstone, even for stories previously synced to GitHub.
+ // Never require a slow GitHub lookup or trash this record: the public feed must
+ // know what was deleted before GitHub's next static rebuild.
+ const lock=LockService.getScriptLock();lock.waitLock(30000);
+ try{
+  const name="post-"+safeSlug+".json";
+  jsonCmsWrite_(name,{
+   id:safeSlug,slug:safeSlug,status:"deleted",
+   deletedAt:new Date().toISOString()
+  });
+  CacheService.getScriptCache().remove("LOKHIT_LIVE_FEED_V2");
+  return {deleted:true,slug:safeSlug,
+   message:"✅ बातमी हटवली. वेबसाइटचा नवीन Feed ती दाखवणार नाही."};
+ }finally{lock.releaseLock();}
 }
 function publicFeed_(){
  const cache=CacheService.getScriptCache(),key="LOKHIT_LIVE_FEED_V2";
