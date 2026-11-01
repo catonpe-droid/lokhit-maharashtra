@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: lokhit-sheets-sync
@@ -41,7 +42,8 @@ jobs:
           for n in 1 2 3 4; do
             git pull --rebase origin main
             if git push origin HEAD:main; then
-              echo "Updated GitHub news content, website builder will run."
+              echo "News content synced. Dispatching website rebuild."
+              GH_TOKEN="${{ github.token }}" gh api -X POST "repos/${GITHUB_REPOSITORY}/actions/workflows/pages.yml/dispatches" -f ref=main
               exit 0
             fi
             sleep 3
