@@ -57,3 +57,134 @@ body{background:#f5f6f8;color:#17273b}
 @media(max-width:760px){.brand-actions{gap:6px}.live-nav-cta{font-size:12px;padding:7px 8px}.tv-layout{border-radius:10px}.tv-info{padding:18px}.nav-links{align-items:stretch}.nav-links a{border-bottom:1px solid #ffffff24}.page-section{margin-block:18px}.article-body{font-size:19px}}
 @media(max-width:420px){.brand-actions{flex-wrap:nowrap}.live-nav-cta{font-size:11px}.tv-offline{min-height:220px}.tv-info h3{font-size:24px}}
 @media(prefers-reduced-motion:reduce){.news-card,.stack-card,.hero-main,.news-card img,.live-nav-cta,.tv-watch-link{transition:none!important}}
+
+
+
+/* Mobile newsroom v4 — compact, side-by-side news cards and horizontal categories */
+@media (max-width: 768px) {
+  html,body {width:100%;max-width:100%;overflow-x:clip}
+  .container {width:calc(100% - 22px);max-width:100%}
+  .utility {font-size:12px}
+  .utility .container {min-height:27px;padding:3px 0}
+  .utility-links {display:none}
+  .brand-header {border-bottom:0}
+  .brand-inner {padding:8px 0;min-height:72px;gap:7px}
+  .identity {min-width:0;flex:1;gap:8px}
+  .identity>div {min-width:0}
+  .site-logo {width:58px;height:58px;flex-shrink:0}
+  .brand-title {font-size:clamp(22px,6vw,31px);line-height:1.12;letter-spacing:-.4px}
+  .brand-tagline {font-size:11px;line-height:1.22;font-weight:600;margin-top:4px;padding-top:0}
+  .brand-actions {display:flex;flex-wrap:nowrap;gap:5px}
+  .brand-actions .icon-btn {display:none}
+  .live-nav-cta {font-size:0!important;width:37px;height:37px;padding:0;flex:0 0 37px;border-radius:8px}
+  .live-nav-cta::before {content:"▶";font-size:16px;line-height:1}
+  .brand-actions .admin-link {font-size:0!important;width:37px;height:37px;padding:0;display:grid;place-items:center;border-radius:8px}
+  .brand-actions .admin-link::before {content:"🔒";font-size:16px}
+  .nav {position:sticky;top:0;z-index:40;box-shadow:0 3px 12px #45040a2d}
+  .nav-inner {min-height:44px;overflow:hidden;display:block;padding:0}
+  .hamburger {display:none!important}
+  .nav-links,.nav-links.open {display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;gap:0;width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-inline:contain}
+  .nav-links::-webkit-scrollbar {display:none}
+  .nav a {display:flex;align-items:center;justify-content:center;white-space:nowrap;flex:0 0 auto;padding:11px 13px;font-size:14px;font-weight:800;min-height:44px;line-height:1.2;border:0!important}
+  .nav a:first-child {padding-left:10px}
+  .search-strip {min-height:38px;margin:10px 0 12px;border-radius:6px}
+  .breaking-label {font-size:12px;padding:0 10px}
+  .breaking-text {min-width:0;font-size:13px;padding:8px 9px;line-height:1.35;white-space:nowrap;overflow:hidden}
+  .search-btn {padding:4px 10px;font-size:20px}
+  .page-section {margin-block:15px}
+  .hero-layout {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .hero-main {grid-column:1/-1;min-height:0;max-height:360px;aspect-ratio:1.52;border-radius:9px}
+  .hero-main img {object-position:center}
+  .hero-content {left:16px;right:16px;bottom:15px}
+  .hero-content .tag {font-size:12px}
+  .hero-content h1 {font-size:clamp(22px,5.6vw,29px);line-height:1.26;margin:7px 0 6px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .hero-content p {display:none}
+  .hero-content .meta {font-size:11px;gap:6px}
+  .hero-stack {grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .stack-card {display:flex;flex-direction:column;gap:0;margin:0;padding:0;overflow:hidden;border-radius:8px;min-width:0}
+  .stack-card img {width:100%;height:auto;aspect-ratio:1.65;object-fit:cover;border-radius:0}
+  .stack-card>div {padding:9px 10px 10px;min-width:0}
+  .stack-card h3 {font-size:14.5px;line-height:1.34;font-weight:800;margin:0 0 4px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+  .stack-card .meta {font-size:11px}
+  .hero-latest {display:none}
+  .section-head {margin-bottom:10px;gap:8px;align-items:center}
+  .section-head h2 {font-size:18px;padding:6px 12px 5px;line-height:1.25}
+  .section-head a {font-size:12px;white-space:nowrap}
+  .news-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .news-card {min-width:0;border-radius:8px;box-shadow:0 3px 9px #1329430a}
+  .news-card img {aspect-ratio:1.6;object-fit:cover}
+  .news-card .card-body {padding:8px 9px 10px}
+  .news-card .category-kicker {font-size:11px;line-height:1.25}
+  .news-card h3 {font-size:14.5px;line-height:1.36;font-weight:800;margin:4px 0 7px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+  .news-card p {display:none}
+  .news-card .meta {font-size:11px;gap:6px}
+  .news-card .meta span:nth-child(n+2) {display:none}
+  .category-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .category-card {min-width:0;padding:10px}
+  .category-card .sub-links a {font-size:13px}
+  .drought-banner {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:11px;padding:13px 14px;align-items:center;border-radius:9px}
+  .drought-banner h2 {font-size:17px;line-height:1.34}
+  .drought-banner p {display:none}
+  .drought-banner a {white-space:normal;text-align:center;font-size:12px;padding:8px 10px}
+  .tv-layout {grid-template-columns:1fr}
+  .tv-frame {aspect-ratio:16/9;width:100%}
+  .tv-info {padding:13px 15px}
+  .tv-info h3 {font-size:21px;margin:3px 0 5px}
+  .tv-info p {font-size:14px;line-height:1.45;margin-bottom:10px}
+  .tv-status-note {font-size:11px;margin-top:7px}
+  .tv-watch-link {padding:8px 12px;font-size:13px}
+  .tv-offline {min-height:220px}
+  .content-layout {grid-template-columns:1fr;gap:0}
+  .content-layout aside {display:none}
+  .article {padding:15px 14px;border-radius:10px;min-width:0}
+  .article h1 {font-size:clamp(25px,6.5vw,33px);line-height:1.28;margin:12px 0}
+  .article-summary {font-size:17px;padding-left:11px;line-height:1.55}
+  .article-figure {margin:14px 0}
+  .article-figure img {aspect-ratio:16/9}
+  .article-body {font-size:18px;line-height:1.78;overflow-wrap:anywhere}
+  .article-body h2 {font-size:22px}
+  .share-bar {display:flex;flex-wrap:nowrap;align-items:center;gap:7px;overflow-x:auto;scrollbar-width:none;margin:13px 0;padding:11px 0}
+  .share-bar::-webkit-scrollbar {display:none}
+  .share-bar strong {font-size:12px;flex:0 0 auto;white-space:nowrap}
+  .share-btn {font-size:13px;white-space:nowrap;flex:0 0 auto;padding:7px 10px;min-height:36px}
+  .related-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .breadcrumbs {font-size:12px;margin:11px 0;overflow-wrap:anywhere}
+  .plain-page {padding:19px 16px;margin:14px auto;border-radius:9px;max-width:100%}
+  .plain-page h1 {font-size:27px;line-height:1.2}
+  .plain-page h2 {font-size:20px;line-height:1.25}
+  .plain-page p,.plain-page li {font-size:16px;line-height:1.65}
+  .results-toolbar {gap:8px;padding-bottom:15px}
+  .results-toolbar input {width:100%;min-width:0;max-width:none;padding:9px 10px}
+  .results-toolbar button {flex:0 0 auto;padding:9px 12px}
+  .footer {margin-top:24px}
+  .footer-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:19px 12px;padding:22px 0}
+  .footer-grid>:first-child {grid-column:1/-1}
+  .footer-brand {font-size:20px}
+  .footer-logo {width:58px}
+  .footer h3 {font-size:16px;margin-bottom:7px}
+  .footer a {font-size:13px;line-height:1.4}
+  .footer small {font-size:12px}
+  .footer-bottom {font-size:11px;padding:11px 0}
+  .empty-state {padding:23px 12px;font-size:14px}
+}
+@media(min-width:550px) and (max-width:768px) {
+  .news-grid {grid-template-columns:repeat(3,minmax(0,1fr))}
+  .hero-main {aspect-ratio:2.05}
+  .hero-stack {grid-template-columns:repeat(4,minmax(0,1fr))}
+  .stack-card h3 {font-size:14px}
+  .brand-title {font-size:34px}
+}
+@media(max-width:375px) {
+  .container {width:calc(100% - 18px)}
+  .site-logo {width:53px;height:53px}
+  .brand-title {font-size:21px}
+  .brand-tagline {font-size:10px}
+  .brand-actions {gap:4px}
+  .live-nav-cta,.brand-actions .admin-link {width:33px;height:34px;flex-basis:33px}
+  .news-grid,.hero-stack {gap:7px}
+  .news-card h3,.stack-card h3 {font-size:13.5px}
+  .news-card .card-body {padding:7px 8px 8px}
+  .hero-main {aspect-ratio:1.24}
+  .hero-content h1 {font-size:21px}
+  .drought-banner h2 {font-size:15px}
+}
