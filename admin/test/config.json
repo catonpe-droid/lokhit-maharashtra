@@ -1,0 +1,4 @@
+{
+  "publish_api_url": "",
+  "note": "Set the ANIK News API HTTPS base URL after deploying backend/anik-news-api. Never place GitHub tokens here."
+}
