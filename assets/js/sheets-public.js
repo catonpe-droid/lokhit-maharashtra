@@ -9,8 +9,60 @@
   if(article)article.textContent='या बातमीची Google Script जोडणी अद्याप सक्रिय नाही.';
   return;
  }
- const ref=document.createElement('script');
- const cb='lokhitSheetsCallback';
+
+ const DELETE_KEY='lokhit-deleted-slugs-v1';
+ const deleted=new Set();
+ let running=false,refreshTimer=null,activeRequest=null,requestTimeout=null;
+ function deletedFromBrowser(){
+  try{
+   const data=JSON.parse(localStorage.getItem(DELETE_KEY)||'{}');
+   if(data&&typeof data==='object')for(const [slug,ts] of Object.entries(data)){
+    if(/^[a-z0-9_-]{3,115}$/.test(slug)&&Date.now()-Number(ts)<30*86400000)deleted.add(slug);
+   }
+  }catch(e){}
+ }
+ function currentStorySlug(){
+  const m=location.pathname.match(/\/batmi\/([a-z0-9_-]+)\/?$/i);
+  if(!m)return '';
+  return m[1]==='sheet'?String(new URLSearchParams(location.search).get('slug')||''):m[1];
+ }
+ function removeDeletedLinks(){
+  if(!deleted.size)return;
+  for(const a of document.querySelectorAll('a[href]')){
+   let url;try{url=new URL(a.href,location.href)}catch(e){continue}
+   if(url.origin!==location.origin)continue;
+   const m=url.pathname.match(/\/batmi\/([a-z0-9_-]+)\/?$/i);
+   if(!m)continue;
+   const slug=m[1]==='sheet'?url.searchParams.get('slug'):m[1];
+   if(!deleted.has(slug))continue;
+   const box=a.closest('.news-card,.stack-card,.latest-item,.hero-slide,.ticker-item,.admin-post-entry');
+   if(box)box.remove();
+  }
+  const slug=currentStorySlug();
+  if(slug&&deleted.has(slug)){
+   const root=article||document.querySelector('.content-layout article.article');
+   if(root&&root.dataset.removed!=='true'){
+    root.dataset.removed='true';root.replaceChildren();
+    root.append(make('h1','','ही बातमी हटवण्यात आली आहे.'),
+      make('p','article-summary','संपादकांनी ही बातमी वेबसाइटवरून काढली आहे.'),
+      (()=>{const a=make('a','','← ताज्या बातम्या');a.href=base+'tajya-batmya/';return a})());
+    document.title='बातमी हटवण्यात आली | लोकहित महाराष्ट्र';
+    const meta=document.createElement('meta');meta.name='robots';meta.content='noindex,nofollow';document.head.append(meta);
+   }
+  }
+  const hero=document.getElementById('hero-slider');
+  if(hero)document.dispatchEvent(new Event('lokhit:hero-updated'));
+ }
+ function refreshDeleted(slugs){
+  if(Array.isArray(slugs))for(const slug of slugs){
+   if(typeof slug==='string'&&/^[a-z0-9_-]{3,115}$/.test(slug))deleted.add(slug);
+  }
+  removeDeletedLinks();
+ }
+ deletedFromBrowser();
+ document.addEventListener('lokhit:news-deleted',e=>{refreshDeleted([e.detail?.slug]);});
+ window.addEventListener('storage',e=>{if(e.key===DELETE_KEY){deletedFromBrowser();removeDeletedLinks();}});
+
  function make(tag,cl,txt){
   const el=document.createElement(tag);if(cl)el.className=cl;
   if(txt!==undefined)el.textContent=String(txt??'');
@@ -25,7 +77,7 @@
  const source=p=>base+'batmi/sheet/?slug='+encodeURIComponent(String(p.slug||p.id||''));
  const urlFor=p=>p.origin==='github'&&p.slug?base+'batmi/'+encodeURIComponent(p.slug)+'/':source(p);
  function card(p){
-  const a=make('a','news-card');a.href=urlFor(p);
+  const a=make('a','news-card');a.href=urlFor(p);a.dataset.sheetLive='true';
   const im=make('img');im.loading='lazy';im.width=480;im.height=270;im.src=imageUrl(p);
   im.alt=String(p.title||'बातमी');im.onerror=()=>{im.onerror=null;im.src=base+'assets/img/logo.webp';};
   const b=make('div','card-body');
@@ -133,44 +185,78 @@
   };
   const category=catMap[m[1]];if(!category)return;
   const grid=document.querySelector('.page-section .news-grid')||document.querySelector('.news-grid');
-  if(grid){const matched=items.filter(p=>category==='दुष्काळ विशेष'||p.category===category).slice(0,24);
+  if(grid){
+   grid.querySelectorAll('[data-sheet-live="true"]').forEach(n=>n.remove());
+   const matched=items.filter(p=>category==='दुष्काळ विशेष'||p.category===category).slice(0,24);
    matched.reverse().forEach(p=>grid.prepend(card(p)));
   }
  }
- window[cb]=(data)=>{
-  try{
-   const items=Array.isArray(data?.posts)?data.posts:[];
-   if(home&&items.length){
-    const section=document.getElementById('sheet-news-section');if(section)section.hidden=false;
-    home.replaceChildren(...items.slice(0,8).map(card));
-   }
-   if(latest&&items.length)latest.replaceChildren(...items.slice(0,24).map(card));
-   if(article){
-    const qs=new URLSearchParams(location.search),slug=qs.get('slug'),id=qs.get('id');
-    renderArticle(items.find(p=>(slug&&p.slug===slug)||(id&&p.id===id)));
-   }
-   updateCategory(items);
-   if(data?.layout){
-    updateMenu(data.layout);
-    updateBreaking(data.layout,items);
-    updateSlider(data.layout,items);
-    // Existing articles remain on GitHub Pages: include their metadata when
-    // a saved slider selection points to one of those earlier news stories.
-    if(Array.isArray(data.layout.slider)&&data.layout.slider.length){
-     fetch(base+'posts-index.json',{cache:'force-cache'})
-      .then(r=>r.ok?r.json():[])
-      .then(oldPosts=>{if(Array.isArray(oldPosts))updateSlider(data.layout,[...items,...oldPosts])})
-      .catch(()=>{});
+
+ function scheduleNext(wait){
+  clearTimeout(refreshTimer);
+  refreshTimer=setTimeout(()=>{if(!document.hidden)requestFeed();},wait);
+ }
+ function requestFeed(){
+  if(running||document.hidden)return;
+  running=true;
+  const cb='lokhitSheetsCallback'+Math.random().toString(36).slice(2);
+  const ref=document.createElement('script');activeRequest=ref;
+  let finished=false;
+  const finish=()=>{
+   if(finished)return;
+   finished=true;clearTimeout(requestTimeout);running=false;
+   try{delete window[cb]}catch(e){}
+   ref.remove();activeRequest=null;
+   scheduleNext(article||currentStorySlug()?14000:30000);
+  };
+  window[cb]=(data)=>{
+   try{
+    const items=Array.isArray(data?.posts)?data.posts.filter(p=>p&&p.status==='published'):[];
+    refreshDeleted(data?.deletedSlugs);
+    const clean=items.filter(p=>!deleted.has(p.slug));
+    if(home){
+     const section=document.getElementById('sheet-news-section');
+     if(section)section.hidden=!clean.length;
+     home.replaceChildren(...clean.slice(0,8).map(card));
     }
-   }
-   if(data?.site)updateSite(data.site);
-  }catch(err){console.warn('Lokhit news feed display error',err)}
-  finally{try{delete window[cb]}catch(e){}ref.remove()}
- };
- ref.onerror=()=>{
-  if(article)article.textContent='सध्या बातमी लोड होत नाही. नंतर पुन्हा प्रयत्न करा.';
-  try{delete window[cb]}catch(e){}ref.remove();
- };
- ref.src=scriptUrl+'?feed=1&callback='+cb+'&v='+Date.now();
- document.head.append(ref);
+    if(latest)latest.replaceChildren(...clean.slice(0,24).map(card));
+    if(article){
+     const qs=new URLSearchParams(location.search),slug=qs.get('slug'),id=qs.get('id');
+     if(!deleted.has(slug)){
+      article.dataset.removed='false';
+      renderArticle(clean.find(p=>(slug&&p.slug===slug)||(id&&p.id===id)));
+     }
+    }
+    updateCategory(clean);
+    if(data?.layout){
+     updateMenu(data.layout);
+     updateBreaking(data.layout,clean);
+     updateSlider(data.layout,clean);
+     if(Array.isArray(data.layout.slider)&&data.layout.slider.length){
+      fetch(base+'posts-index.json',{cache:'force-cache'})
+       .then(r=>r.ok?r.json():[])
+       .then(oldPosts=>{if(Array.isArray(oldPosts))updateSlider(data.layout,[...clean,...oldPosts.filter(x=>!deleted.has(x.slug))])})
+       .catch(()=>{});
+     }
+    }
+    if(data?.site)updateSite(data.site);
+    removeDeletedLinks();
+    document.dispatchEvent(new CustomEvent('lokhit:feed-updated',{detail:{posts:clean,deletedSlugs:[...deleted]}}));
+   }catch(err){console.warn('Lokhit live feed error',err)}
+   finally{finish();}
+  };
+  ref.onerror=()=>{
+   if(article&&article.dataset.removed!=='true'&&!article.querySelector('h1'))article.textContent='सध्या बातमी लोड होत नाही. नंतर पुन्हा प्रयत्न करा.';
+   finish();
+  };
+  requestTimeout=setTimeout(()=>{ref.onerror();},45000);
+  ref.src=scriptUrl+'?feed=1&callback='+cb+'&v='+Date.now();
+  document.head.append(ref);
+ }
+ document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden){clearTimeout(refreshTimer);requestFeed();}
+ });
+ // Hide locally deleted articles before the remote feed has answered.
+ removeDeletedLinks();
+ requestFeed();
 })();
