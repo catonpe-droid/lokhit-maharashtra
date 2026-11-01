@@ -1,6 +1,17 @@
 (function(){
  const qs=(s)=>document.querySelector(s);const date=document.querySelector('#today-date');if(date)date.textContent=new Date().toLocaleDateString('mr-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
  const nav=qs('#nav-toggle'); if(nav){nav.addEventListener('click',()=>{const el=qs('#nav-links'); const open=el.classList.toggle('open');nav.setAttribute('aria-expanded',String(open));});}
+ const tickerToggle=document.querySelector('.ticker-toggle');
+ if(tickerToggle){
+  tickerToggle.addEventListener('click',()=>{
+   const strip=tickerToggle.closest('.live-ticker');
+   const paused=strip.classList.toggle('ticker-paused');
+   tickerToggle.textContent=paused?'▶':'Ⅱ';
+   tickerToggle.setAttribute('aria-pressed',String(paused));
+   tickerToggle.setAttribute('aria-label',paused?'ब्रेकिंग न्यूज पट्टी पुन्हा सुरू करा':'ब्रेकिंग न्यूज पट्टी थांबवा');
+   tickerToggle.title=paused?'Play':'Pause';
+  });
+ }
  const hero=document.getElementById('hero-slider');
  if(hero){
   const slides=Array.from(hero.querySelectorAll('.hero-slide')),dots=Array.from(hero.querySelectorAll('[data-slide-to]'));let active=0,clock=null,startX=null;
