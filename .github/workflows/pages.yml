@@ -30,6 +30,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Validate Mini CMS and website JavaScript
+        run: |
+          node --check assets/js/admin.js
+          node --check assets/js/cms.js
+          node --check assets/js/site.js
       - name: Build 20+ Marathi stories and SEO pages
         run: python build.py
       - name: Configure Pages
