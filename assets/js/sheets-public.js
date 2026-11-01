@@ -1,8 +1,8 @@
 /* Lokhit Maharashtra: public Google Apps Script articles and live CMS settings. No admin credentials. */
 (()=>{'use strict';
  const base=document.body.dataset.base||'/lokhit-maharashtra/';
- const home=document.getElementById('sheet-news-home');
- const latest=document.getElementById('sheet-news-latest');
+ const home=document.getElementById('homepage-latest-grid');
+ const latest=document.getElementById('latest-all-grid');
  const article=document.getElementById('sheet-article-root');
  const scriptUrl=String(window.LOKHIT_SHEETS_WEBAPP_URL||'').trim();
  if(!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(scriptUrl)){
@@ -24,7 +24,7 @@
  function currentStorySlug(){
   const m=location.pathname.match(/\/batmi\/([a-z0-9_-]+)\/?$/i);
   if(!m)return '';
-  return m[1]==='sheet'?String(new URLSearchParams(location.search).get('slug')||''):m[1];
+  return (m[1]==='sheet'||m[1]==='live')?String(new URLSearchParams(location.search).get('slug')||''):m[1];
  }
  function removeDeletedLinks(){
   if(!deleted.size)return;
@@ -33,7 +33,7 @@
    if(url.origin!==location.origin)continue;
    const m=url.pathname.match(/\/batmi\/([a-z0-9_-]+)\/?$/i);
    if(!m)continue;
-   const slug=m[1]==='sheet'?url.searchParams.get('slug'):m[1];
+   const slug=(m[1]==='sheet'||m[1]==='live')?url.searchParams.get('slug'):m[1];
    if(!deleted.has(slug))continue;
    const box=a.closest('.news-card,.stack-card,.latest-item,.hero-slide,.ticker-item,.admin-post-entry');
    if(box)box.remove();
@@ -74,10 +74,10 @@
   if(/^assets\/img\/[a-z0-9_.-]+$/i.test(img))return base+img;
   return base+'assets/img/logo.webp';
  }
- const source=p=>base+'batmi/sheet/?slug='+encodeURIComponent(String(p.slug||p.id||''));
+ const source=p=>base+'batmi/live/?slug='+encodeURIComponent(String(p.slug||p.id||''));
  const urlFor=p=>p.origin==='github'&&p.slug?base+'batmi/'+encodeURIComponent(p.slug)+'/':source(p);
  function card(p){
-  const a=make('a','news-card');a.href=urlFor(p);a.dataset.sheetLive='true';
+  const a=make('a','news-card');a.href=urlFor(p);a.dataset.sheetLive='true';a.dataset.articleSlug=String(p.slug||'');
   const im=make('img');im.loading='lazy';im.width=480;im.height=270;im.src=imageUrl(p);
   im.alt=String(p.title||'बातमी');im.onerror=()=>{im.onerror=null;im.src=base+'assets/img/logo.webp';};
   const b=make('div','card-body');
@@ -85,27 +85,116 @@
   b.append(make('div','meta','✍ '+String(p.author||'लोकहित महाराष्ट्र')));
   a.append(im,b);return a;
  }
- function renderArticle(p){
+
+ const knownPosts=[];
+ let originalLoaded=false;
+ const originalsPromise=fetch(base+'posts-index.json',{cache:'force-cache'})
+  .then(r=>r.ok?r.json():[])
+  .then(list=>{
+   if(Array.isArray(list)){
+    knownPosts.splice(0,knownPosts.length,...list.filter(p=>p?.slug).map(p=>({...p,origin:'github'})));
+   }
+   originalLoaded=true;return knownPosts;
+  }).catch(()=>{originalLoaded=true;return knownPosts;});
+ let feedPosts=[];
+ const combinedPosts=()=>{
+  const bySlug=new Map();
+  for(const p of knownPosts)if(!deleted.has(p.slug))bySlug.set(p.slug,p);
+  for(const p of feedPosts)if(!deleted.has(p.slug))bySlug.set(p.slug,p);
+  return [...bySlug.values()].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+ };
+ function shareBar(){
+  const wrap=make('div','share-bar');
+  wrap.append(make('strong','','ही बातमी शेअर करा :'));
+  const buttons=[['wa','WhatsApp'],['fb','Facebook'],['x','X'],['tg','Telegram'],['copy','लिंक कॉपी'],['native','इतर']];
+  for(const [type,label] of buttons){
+   const b=make('button','share-btn share-'+type,label);
+   b.type='button';b.dataset.share=type;wrap.append(b);
+  }
+  return wrap;
+ }
+ function showRelated(p,all){
+  const matched=all.filter(x=>x.slug!==p.slug && !deleted.has(x.slug) && x.category===p.category);
+  const others=all.filter(x=>x.slug!==p.slug && !deleted.has(x.slug) && x.category!==p.category);
+  const related=[...matched,...others].slice(0,2);
+  if(!related.length)return;
+  article.append(make('div','section-head',undefined));
+  const section=article.lastChild;section.append(make('h2','','संबंधित बातम्या'));
+  const grid=make('div','related-grid');
+  grid.append(...related.map(card));
+  article.append(grid);
+ }
+ function renderArticle(p,all){
+  if(!article)return;
+  if(article.dataset.removed==='true')return;
   article.replaceChildren();
-  if(!p){article.append(make('h1','','बातमी सापडली नाही'));return}
-  article.append(make('span','tag',p.category),make('h1','',p.title),
-   make('p','article-summary',p.description),
-   make('div','meta','✍ '+String(p.author||'लोकहित महाराष्ट्र')+' · '+String(p.date||'').slice(0,10)));
+  if(!p){
+   article.append(make('h1','','बातमी सापडली नाही.'),make('p','article-summary','ही बातमी उपलब्ध नाही किंवा हटवण्यात आली आहे.'));
+   return;
+  }
+  const breadcrumbs=document.getElementById('live-article-breadcrumb');
+  if(breadcrumbs){
+   breadcrumbs.replaceChildren();
+   const h=make('a','','मुख्यपृष्ठ');h.href=base;
+   const c=make('a','',p.category||'बातम्या');
+   c.href=base+'tajya-batmya/';
+   breadcrumbs.append(h,document.createTextNode(' / '),c,document.createTextNode(' / '+String(p.title||'')));
+  }
+  const info=make('div','meta');
+  info.append(make('span','','✍ '+String(p.author||'लोकहित महाराष्ट्र डिजिटल डेस्क')));
+  const dt=new Date(p.date||'');
+  const displayDate=Number.isFinite(dt.getTime())?dt.toLocaleDateString('mr-IN',{day:'2-digit',month:'2-digit',year:'numeric'}):String(p.date||'').slice(0,10);
+  info.append(make('span','','📅 '+displayDate));
+  article.append(make('span','tag',p.category||'बातम्या'),make('h1','',p.title),
+   make('p','article-summary',p.description),info);
   if(p.image){
    const fig=make('figure','article-figure'),img=make('img');
-   img.src=imageUrl(p);img.alt=String(p.title||'बातमी');img.onerror=()=>fig.remove();fig.append(img);article.append(fig);
+   img.src=imageUrl(p);img.alt=p.title||'बातमी';img.width=960;img.height=540;
+   img.onerror=()=>fig.remove();
+   fig.append(img);
+   if(/^assets\/img\//.test(p.image)){fig.append(make('figcaption','','प्रतीकात्मक, संगणकनिर्मित चित्र'))}
+   article.append(fig);
   }
-  const section=make('div','article-body');
-  for(const para of String(p.body||'').split(/\n\s*\n/).filter(Boolean)){
-   if(para.startsWith('## '))section.append(make('h2','',para.slice(3)));
-   else section.append(make('p','',para));
+  article.append(shareBar());
+  const body=make('div','article-body');
+  for(const block of String(p.body||'').split(/\n\s*\n/).filter(Boolean)){
+   const line=block.trim();
+   if(line.startsWith('### '))body.append(make('h3','',line.slice(4)));
+   else if(line.startsWith('## '))body.append(make('h2','',line.slice(3)));
+   else if(line.startsWith('# '))body.append(make('h2','',line.slice(2)));
+   else if(/^(?:[-*] )/.test(line)){
+    const ul=make('ul');
+    for(const li of line.split('\n').filter(x=>/^[-*] /.test(x)))ul.append(make('li','',li.slice(2)));
+    body.append(ul);
+   }else body.append(make('p','',line));
   }
-  article.append(section);
-  if(p.video&&/^https:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\//i.test(p.video)){
-   const link=make('a','','संबंधित YouTube व्हिडिओ पहा');link.href=p.video;link.target='_blank';link.rel='noopener noreferrer';article.append(link);
+  if(p.video){
+   const video=String(p.video||'');
+   const match=video.match(/(?:youtube\.com\/(?:watch\?v=|live\/|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+   if(match){
+    const wrap=make('div','video-embed'),frame=make('iframe');
+    frame.src='https://www.youtube-nocookie.com/embed/'+match[1];
+    frame.title='संबंधित YouTube व्हिडिओ';frame.loading='lazy';frame.allowFullscreen=true;
+    frame.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    wrap.append(frame);body.append(wrap);
+   }
   }
-  const back=make('a','','← सर्व बातम्या');back.href=base+'tajya-batmya/';article.append(back);
+  article.append(body,shareBar());
+  showRelated(p,all||[]);
   document.title=String(p.title||'बातमी')+' | लोकहित महाराष्ट्र';
+  // Public article metadata is completed by the static build; this ensures
+  // correct page title/description in the browser during the live phase.
+  const desc=document.querySelector('meta[name="description"]');
+  if(desc)desc.content=String(p.description||'').slice(0,300);
+ }
+ function updateSidebar(all){
+  const root=document.getElementById('live-article-sidebar');
+  if(!root)return;
+  root.replaceChildren();
+  for(const p of all.slice(0,9)){
+   const link=make('a','latest-item');link.href=urlFor(p);
+   link.append(make('span','latest-dot','•'),make('span','',p.title));root.append(link);
+  }
  }
  function updateMenu(layout){
   if(!Array.isArray(layout?.menu)||!layout.menu.length)return;
