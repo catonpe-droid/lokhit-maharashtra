@@ -129,7 +129,7 @@ def shell(content,title,desc,path='',image=None,kind='website',published=None,mo
 <nav class="nav" aria-label="मुख्य मेनू"><div class="container nav-inner"><button id="nav-toggle" class="hamburger" aria-expanded="false" aria-controls="nav-links" aria-label="मेनू उघडा">☰</button><div class="nav-links" id="nav-links" style="display:contents">{nav}</div></div></nav>
 <main>{breakbar}{content}</main>
 <footer class="footer"><div class="container"><div class="footer-grid"><div><div class="footer-brand"><img src="{U('assets/img/logo.webp')}" alt="" class="footer-logo">लोकहित महाराष्ट्र</div><p>{E(CFG['tagline'])}. महाराष्ट्र, दुष्काळ, शेती, योजना आणि ग्रामीण विकासाविषयी मराठी माहिती.</p><small>डिजिटल न्यूज व जनमाहिती पोर्टल. हे कोणत्याही शासकीय कार्यालयाचे अधिकृत संकेतस्थळ नाही.</small></div>{footer}</div><div class="footer-bottom"><span>© २०२६ लोकहित महाराष्ट्र. सर्व हक्क राखीव.</span><span>माहितीतील त्रुटी निदर्शनास आणण्यासाठी संपर्क पृष्ठ वापरा.</span></div></div></footer>
-<div id="toast" class="toast" role="status" aria-live="polite"></div><script src="{U('assets/js/site.js')}" defer></script><script src="{U('assets/js/sheets-config.js')}" defer></script><script src="{U('assets/js/sheets-public.js')}" defer></script></body></html>'''.replace('id="nav-links" style="display:contents"','id="nav-links"')
+<div id="toast" class="toast" role="status" aria-live="polite"></div><script src="{U('assets/js/site.js')}" defer></script></body></html>'''.replace('id="nav-links" style="display:contents"','id="nav-links"')
 def write(path,content):
  target=OUT/path
  target.parent.mkdir(parents=True,exist_ok=True)
