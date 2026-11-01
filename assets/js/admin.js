@@ -1,6 +1,6 @@
 'use strict';
 (() => {
- const $=(id)=>document.getElementById(id);let token='',repository='',branch='main',current=null,records=[],loggedIn=false;
+ const $=(id)=>document.getElementById(id);let token='',repository='',branch='main',current=null,records=[],loggedIn=false,shareCheckId=0;
  const apiBase='https://api.github.com/repos/';
  const status=(message,error=false,target='editor-status')=>{const node=$(target);node.textContent=message;node.className=error?'status error':'status'};
  const escapeHTML=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&quot;'}[c]));
@@ -52,14 +52,54 @@
   $('post-list').innerHTML='';if(!list.length){$('post-list').textContent='बातम्या आढळल्या नाहीत.';return}
   for(const p of list){const b=document.createElement('button');b.type='button';b.className='admin-post'+(current?._path===p._path?' active':'');const strong=document.createElement('strong');strong.textContent=p.title;const small=document.createElement('small');small.textContent=p.category+' · '+(p.status==='draft'?'मसुदा':'प्रकाशित');b.append(strong,small);b.onclick=()=>openPost(p);$('post-list').appendChild(b)}
  }
- function newPost(){current=null;$('post-form').reset();$('author').value='लोकहित महाराष्ट्र डिजिटल डेस्क';$('category').value='दुष्काळ विशेष';$('post-status').value='published';$('editor-heading').textContent='नवीन बातमी';$('edit-state').textContent='नवीन';$('slug').disabled=false;$('delete').hidden=true;$('image-preview').innerHTML='';$('live-preview').hidden=true;status('');renderList()}
- function openPost(p){current=p;$('title').value=p.title||'';$('description').value=p.description||'';$('category').value=p.category||'महाराष्ट्र';$('body').value=p.body||'';$('video').value=p.video||'';$('author').value=p.author||'';$('slug').value=p.slug||'';$('slug').disabled=true;$('post-status').value=p.status||'published';$('featured').checked=!!p.featured;$('editor-heading').textContent='बातमी संपादित करा';$('edit-state').textContent='अद्ययावत';$('delete').hidden=false;$('image-preview').innerHTML='';if(p.image){let im=document.createElement('img');im.src='../'+p.image;im.alt='सध्याचा फोटो';$('image-preview').appendChild(im)}$('live-preview').hidden=true;status('');renderList();window.scrollTo({top:0,behavior:'smooth'})}
+ function newPost(){shareCheckId++;$('published-link').hidden=true;current=null;$('post-form').reset();$('author').value='लोकहित महाराष्ट्र डिजिटल डेस्क';$('category').value='दुष्काळ विशेष';$('post-status').value='published';$('editor-heading').textContent='नवीन बातमी';$('edit-state').textContent='नवीन';$('slug').disabled=false;$('delete').hidden=true;$('image-preview').innerHTML='';$('live-preview').hidden=true;status('');renderList()}
+ function openPost(p){shareCheckId++;$('published-link').hidden=true;current=p;$('title').value=p.title||'';$('description').value=p.description||'';$('category').value=p.category||'महाराष्ट्र';$('body').value=p.body||'';$('video').value=p.video||'';$('author').value=p.author||'';$('slug').value=p.slug||'';$('slug').disabled=true;$('post-status').value=p.status||'published';$('featured').checked=!!p.featured;$('editor-heading').textContent='बातमी संपादित करा';$('edit-state').textContent='अद्ययावत';$('delete').hidden=false;$('image-preview').innerHTML='';if(p.image){let im=document.createElement('img');im.src=/^https:\/\//i.test(p.image)?p.image:new URL('../../'+p.image,location.href).href;im.alt='सध्याचा फोटो';$('image-preview').appendChild(im)}$('live-preview').hidden=true;status('');renderList();window.scrollTo({top:0,behavior:'smooth'})}
  function makeSlug(){const supplied=$('slug').value.trim();if(supplied)return supplied;let time=new Date().toISOString().replace(/\D/g,'').slice(0,14);return 'news-'+time+'-'+Math.random().toString(36).slice(2,6)}
  async function imageData(file,slug){
   if(file.size>8*1024*1024)throw Error('फोटो ८ MB पेक्षा कमी असावा.');
   const bitmap=await createImageBitmap(file);const width=Math.min(1280,bitmap.width),height=Math.round(bitmap.height*width/bitmap.width);const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;canvas.getContext('2d').drawImage(bitmap,0,0,width,height);bitmap.close();
   const data=canvas.toDataURL('image/jpeg',.86).split(',')[1],path='assets/img/'+slug+'-'+Date.now()+'.jpg';
   return{data,path};
+ }
+ function publishedUrl(slug){return new URL('../../batmi/'+encodeURIComponent(slug)+'/',location.href).href}
+ function showPublishedLink(slug){
+  const url=publishedUrl(slug),panel=$('published-link');
+  $('published-open').href=url;
+  $('published-url').textContent=url;
+  panel.hidden=false;
+ }
+ async function waitForLiveStory(post){
+  // WhatsApp scrapes the public HTML source. A GitHub JSON commit alone is not enough.
+  // Never invite sharing before the correct article-specific OG title + image are published.
+  const seq=++shareCheckId,url=publishedUrl(post.slug);
+  for(let n=0;n<28;n++){
+   if(seq!==shareCheckId||!loggedIn)return;
+   try{
+    const response=await fetch(url+'?verify='+encodeURIComponent(post.updated||''),{cache:'no-store'});
+    if(response.ok){
+     const doc=new DOMParser().parseFromString(await response.text(),'text/html');
+     const title=doc.querySelector('meta[property="og:title"]')?.content;
+     const updated=doc.querySelector('meta[property="article:modified_time"]')?.content;
+     const image=doc.querySelector('meta[property="og:image"]')?.content;
+     let imageReady=!!image;
+     if(image){
+      const imageUrl=new URL(image,url);
+      if(imageUrl.origin===location.origin){
+       const head=await fetch(imageUrl.href,{method:'HEAD',cache:'no-store'});
+       imageReady=head.ok;
+      }
+     }
+     if(title===post.title&&updated===post.updated&&imageReady){
+      showPublishedLink(post.slug);
+      status('✅ HTML पान आणि WhatsApp Thumbnail प्रकाशित झाले. आता लिंक शेअर करू शकता.');
+      return;
+     }
+    }
+   }catch(e){/* The public website may still be publishing. Retry. */}
+   status('⏳ GitHub वर बातमी जतन झाली. HTML पान आणि Thumbnail प्रकाशित होत आहेत; लिंक तयार झाल्यावर दिसेल.');
+   await new Promise(resolve=>setTimeout(resolve,3500));
+  }
+  if(seq===shareCheckId)status('⚠️ GitHub वर बातमी जतन झाली, पण सार्वजनिक HTML अजून तयार नाही. कृपया GitHub Actions तपासा आणि नंतर पान Refresh करा.',true);
  }
  async function submit(ev){
   ev.preventDefault();if(!loggedIn){status('🔒 प्रकाशनासाठी आधी अधिकृत Login आवश्यक आहे.',true);return}
@@ -72,7 +112,7 @@
    const now=new Date().toISOString(), p={slug,title:$('title').value.trim(),description:$('description').value.trim(),category:$('category').value,body:$('body').value.trim(),image,author:$('author').value.trim()||'लोकहित महाराष्ट्र डिजिटल डेस्क',date:current?.date||now,updated:now,featured:$('featured').checked,status:$('post-status').value,video:$('video').value.trim(),tags:['महाराष्ट्र',$('category').value]};
    const path=current?._path||'content/posts/'+slug+'.json', payload={message:(current?'Update ':'Publish ')+slug,content:base64UTF8(JSON.stringify(p,null,2)+'\n'),branch};if(current?._sha)payload.sha=current._sha;
    await github('contents/'+path,'PUT',payload);
-   status('✅ बातमी Server वर जतन झाली. प्रकाशन प्रक्रिया पूर्ण झाल्यावर वेबसाइट अपडेट होईल.');await loadPosts();const found=records.find(x=>x.slug===slug);if(found)openPost(found);
+   await loadPosts();const found=records.find(x=>x.slug===slug);if(found)openPost(found);status('⏳ GitHub Save पूर्ण. HTML पान तयार होत आहे.');if(p.status==='published')void waitForLiveStory(p);else $('published-link').hidden=true;
   }catch(e){status('जतन अयशस्वी: '+e.message,true)}finally{$('publish').disabled=false}
  }
  async function remove(){if(!current||!confirm('ही बातमी कायमची काढायची?'))return;
@@ -103,6 +143,7 @@
   const label=event.target.closest('label');
   status('कृपया आवश्यक माहिती भरा: '+(label?.textContent?.trim().slice(0,60)||'शीर्षक, सारांश आणि बातमीचा मजकूर'),true);
  },true);
+ $('published-copy')?.addEventListener('click',async()=>{const u=$('published-url').textContent;if(!u)return;try{await navigator.clipboard.writeText(u);status('✅ लिंक कॉपी झाली.')}catch(e){status('लिंक कॉपी झाली नाही; वर दिलेली लिंक कॉपी करा.',true)}});
  $('login-form').addEventListener('submit',login);$('post-form').addEventListener('submit',submit);$('new-post').addEventListener('click',newPost);$('filter-posts').addEventListener('input',renderList);$('preview').addEventListener('click',preview);$('delete').addEventListener('click',remove);$('logout').addEventListener('click',()=>{token='';repository='';loggedIn=false;records=[];current=null;$('dashboard').hidden=true;$('login').hidden=false;$('login-form').reset();document.dispatchEvent(new Event('lokhitcms:logout'));status('');status('','', 'login-status')});
  $('photo').addEventListener('change',()=>{const file=$('photo').files[0];if(!file)return;const im=document.createElement('img');im.alt='नवीन फोटो पूर्वावलोकन';im.src=URL.createObjectURL(file);$('image-preview').replaceChildren(im)});
 })();
