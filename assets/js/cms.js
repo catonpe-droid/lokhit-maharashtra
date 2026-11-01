@@ -56,7 +56,7 @@
   slides.forEach((slide,i)=>{
    const post=bySlug[slide.slug],row=mk('div','cms-manage-item cms-slider-item');
    const img=mk('img','cms-slide-thumb');img.alt='स्लायडर फोटो';img.loading='lazy';
-   const root=document.body.dataset.rootPrefix||'../';img.src=(post?.image?.startsWith('assets/img/')?root+post.image:root+'assets/img/logo.webp');
+   const root=document.body.dataset.rootPrefix||'../';img.src=post?.image?.startsWith('https://')?post.image:(post?.image?.startsWith('assets/img/')?root+post.image:root+'assets/img/logo.webp');
    const fields=mk('div','cms-slide-info');
    fields.append(mk('strong','',post?.title||'बातमी उपलब्ध नाही — '+slide.slug));
    const label=mk('label','cms-row-field');label.append(mk('span','','विशेष मथळा (ऐच्छिक)'));
