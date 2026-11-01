@@ -159,6 +159,23 @@ function jsonCmsWrite_(name,data){
  if(file){file.setContent(json);return file}
  return cmsFolder_().createFile(name,json,MimeType.PLAIN_TEXT);
 }
+function githubPublished_(){
+ try{
+  const cache=CacheService.getScriptCache();
+  const key="GITHUB_ORIGINAL_POSTS_V1";
+  let raw=cache.get(key);
+  if(!raw){
+   const url="https://catonpe-droid.github.io/lokhit-maharashtra/cms-export.json";
+   const response=UrlFetchApp.fetch(url,{muteHttpExceptions:true,followRedirects:true});
+   if(response.getResponseCode()!==200)return [];
+   raw=response.getContentText("UTF-8");
+   if(raw.length<90000)cache.put(key,raw,180);
+  }
+  const data=JSON.parse(raw);
+  return Array.isArray(data)?data.filter(x=>x&&x.slug&&x.status!=="draft")
+   .map(x=>({...x,id:String(x.id||x.slug),status:"published",origin:"github"})):[];
+ }catch(e){return []}
+}
 function allNews_(){
  const folder=cmsFolder_(),files=folder.getFiles(),news=[];
  while(files.hasNext()&&news.length<500){
@@ -168,6 +185,10 @@ function allNews_(){
    const p=JSON.parse(file.getBlob().getDataAsString("UTF-8"));
    if(p&&p.id)news.push(p);
   }catch(e){}
+ }
+ const seen=new Set(news.map(x=>x.slug));
+ for(const item of githubPublished_()){
+  if(!seen.has(item.slug)){news.push(item);seen.add(item.slug)}
  }
  return news.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
 }
@@ -184,7 +205,9 @@ function saveNews(token,raw,image){
  const validStatus=String(raw.status).toLowerCase()==="draft"?"draft":"published";
  const lock=LockService.getScriptLock();lock.waitLock(30000);
  try{
-  const before=jsonCmsRead_("post-"+slug+".json",false)||{};
+  const saved=jsonCmsRead_("post-"+slug+".json",false);
+  const original=saved?null:githubPublished_().find(x=>x.slug===slug);
+  const before=saved||original||{};
   let imageUrl=String(before.image||"").trim();
   if(image){
    if(image.type!=="image/jpeg"||typeof image.data!=="string"||image.data.length>1100000||!/^[A-Za-z0-9+/=]+$/.test(image.data))throw Error("JPEG फोटो ७५० KB पेक्षा लहान निवडा.");
@@ -199,6 +222,7 @@ function saveNews(token,raw,image){
    category:String(raw.category||"महाराष्ट्र").slice(0,65),
    image:imageUrl,video:String(raw.video||"").slice(0,600),
    author:editor.name,status:validStatus,featured:!!raw.featured,
+   origin:original||before.origin==="github_override"?"github_override":"drive",
    date:before.date||now,updated:now
   };
   jsonCmsWrite_("post-"+slug+".json",data);
@@ -215,7 +239,7 @@ function deleteNews(token,slug){
  return {deleted:true,slug};
 }
 function publicFeed_(){
- const posts=allNews_().filter(x=>x.status==="published").slice(0,100);
+ const posts=allNews_().filter(x=>x.status==="published").slice(0,500);
  return {ok:true,posts,layout:jsonCmsRead_("layout.json",true),site:jsonCmsRead_("site.json",true)};
 }
 function readCmsJson(token,path){
