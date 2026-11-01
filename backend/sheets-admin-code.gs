@@ -120,61 +120,146 @@ function logoutAdmin(token){
  if(idx>=1)sheet.getRange(idx+1,6).setValue("YES");
  return {ok:true};
 }
-function listNews(token){
- session_(token);
- return entries_("NEWS").filter(x=>x[0]).map((x,i)=>({
-  row:i+2,id:x[0],date:x[1],title:x[2],description:x[3],body:x[4],
-  category:x[5],image:x[6],status:x[7],author:x[8],featured:x[9]==="YES",
-  slug:x[10],updated:x[11]
- })).reverse().slice(0,200);
+
+/* CMS data lives as JSON files in private Google Drive; Sheet keeps PIN, sessions and editor names. */
+const CMS_FOLDER_NAME="Lokhit Maharashtra — News CMS";
+const GH_RAW="https://raw.githubusercontent.com/catonpe-droid/lokhit-maharashtra/main/";
+function cmsFolder_(){
+ const props=PropertiesService.getScriptProperties();
+ const id=props.getProperty("CMS_FOLDER_ID");
+ if(id){try{return DriveApp.getFolderById(id)}catch(e){}}
+ const folder=DriveApp.createFolder(CMS_FOLDER_NAME);
+ props.setProperty("CMS_FOLDER_ID",folder.getId());
+ return folder;
 }
-function saveNews(token,raw){
+function cmsFile_(name){
+ if(!/^(?:post-[a-z0-9_-]{3,115}\.json|layout\.json|site\.json)$/i.test(name))throw Error("अवैध CMS फाइल.");
+ const iter=cmsFolder_().getFilesByName(name);
+ return iter.hasNext()?iter.next():null;
+}
+function jsonCmsRead_(name,fallback){
+ const file=cmsFile_(name);
+ if(file){try{return JSON.parse(file.getBlob().getDataAsString("UTF-8"))}catch(e){throw Error(name+" वाचता आला नाही.")}}
+ if(fallback){
+  try{
+   const u=GH_RAW+(name==="layout.json"?"content/layout.json":"site.json");
+   const response=UrlFetchApp.fetch(u,{muteHttpExceptions:true});
+   if(response.getResponseCode()===200)return JSON.parse(response.getContentText("UTF-8"));
+  }catch(e){}
+ }
+ return null;
+}
+function jsonCmsWrite_(name,data){
+ const json=JSON.stringify(data,null,2);
+ if(json.length>150000)throw Error("डेटा मर्यादेपेक्षा मोठा आहे.");
+ const file=cmsFile_(name);
+ if(file){file.setContent(json);return file}
+ return cmsFolder_().createFile(name,json,MimeType.PLAIN_TEXT);
+}
+function allNews_(){
+ const folder=cmsFolder_(),files=folder.getFiles(),news=[];
+ while(files.hasNext()&&news.length<500){
+  const file=files.next(),name=file.getName();
+  if(!/^post-[a-z0-9_-]{3,115}\.json$/i.test(name))continue;
+  try{
+   const p=JSON.parse(file.getBlob().getDataAsString("UTF-8"));
+   if(p&&p.id)news.push(p);
+  }catch(e){}
+ }
+ return news.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+}
+function listNews(token){session_(token);return {posts:allNews_()};}
+function saveNews(token,raw,image){
  const editor=session_(token);
- if(!raw||typeof raw!=="object")throw Error("बातमीची माहिती भरा.");
- const title=String(raw.title||"").trim().slice(0,180);
- const description=String(raw.description||"").trim().slice(0,500);
- const body=String(raw.body||"").trim().slice(0,30000);
- const category=LOKHIT_CATEGORIES.includes(raw.category)?raw.category:"महाराष्ट्र";
- const status=raw.status==="PUBLISHED"?"PUBLISHED":"DRAFT";
- const image=String(raw.image||"").trim().slice(0,1300);
- if(!title||!description||!body)throw Error("शीर्षक, सारांश आणि बातमीचा मजकूर आवश्यक आहे.");
- if(image&&!/^https:\/\//i.test(image))throw Error("फोटोची लिंक HTTPS असावी.");
- const lock=LockService.getScriptLock();lock.waitLock(20000);
+ if(!raw||typeof raw!=="object")throw Error("बातमीचा मजकूर द्या.");
+ const title=String(raw.title||"").trim().slice(0,180),
+  description=String(raw.description||"").trim().slice(0,500),
+  body=String(raw.body||"").trim().slice(0,50000);
+ if(!title||!description||!body)throw Error("शीर्षक, सारांश आणि संपूर्ण बातमी लिहा.");
+ const slug=String(raw.slug||"").toLowerCase();
+ if(!/^[a-z0-9][a-z0-9_-]{2,110}$/.test(slug))throw Error("बातमीचा URL/Slug योग्य नाही.");
+ const validStatus=String(raw.status).toLowerCase()==="draft"?"draft":"published";
+ const lock=LockService.getScriptLock();lock.waitLock(30000);
  try{
-  const sh=sheet_("NEWS"),data=sh.getDataRange().getDisplayValues();
-  const existing=raw.id?data.findIndex((x,i)=>i>0&&x[0]===raw.id):-1;
-  const now=new Date().toISOString(),id=existing>0?data[existing][0]:Utilities.getUuid().slice(0,13);
-  const oldDate=existing>0?data[existing][1]:now;
-  const slug=existing>0?data[existing][10]:"sheet-"+id.toLowerCase();
-  const values=[id,oldDate,title,description,body,category,image,status,editor.name,raw.featured?"YES":"NO",slug,now];
-  if(existing>0)sh.getRange(existing+1,1,1,12).setValues([values]);else sh.appendRow(values);
-  return {saved:true,id,status,message:status==="PUBLISHED"?"✅ बातमी प्रकाशित झाली.":"✅ मसुदा जतन झाला."};
+  const before=jsonCmsRead_("post-"+slug+".json",false)||{};
+  let imageUrl=String(before.image||"").trim();
+  if(image){
+   if(image.type!=="image/jpeg"||typeof image.data!=="string"||image.data.length>1100000||!/^[A-Za-z0-9+/=]+$/.test(image.data))throw Error("JPEG फोटो ७५० KB पेक्षा लहान निवडा.");
+   const blob=Utilities.newBlob(Utilities.base64Decode(image.data),"image/jpeg","lokhit-"+slug+"-"+Date.now()+".jpg");
+   const file=cmsFolder_().createFile(blob);
+   file.setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);
+   imageUrl="https://lh3.googleusercontent.com/d/"+file.getId();
+  }
+  const now=new Date().toISOString();
+  const data={
+   id:before.id||Utilities.getUuid(),slug,title,description,body,
+   category:String(raw.category||"महाराष्ट्र").slice(0,65),
+   image:imageUrl,video:String(raw.video||"").slice(0,600),
+   author:editor.name,status:validStatus,featured:!!raw.featured,
+   date:before.date||now,updated:now
+  };
+  jsonCmsWrite_("post-"+slug+".json",data);
+  return {saved:true,slug,status:validStatus,
+   message:validStatus==="draft"?"✅ मसुदा जतन झाला.":"✅ बातमी Save झाली. वेबसाइटवर Feed मधून दिसेल."};
  }finally{lock.releaseLock();}
 }
-function uploadNewsImage(token,file){
+function deleteNews(token,slug){
  session_(token);
- if(!file||!/^image\/(jpeg|png|webp)$/.test(file.mime||""))throw Error("JPG/PNG/WebP फोटो वापरा.");
- if(!/^[A-Za-z0-9+/=]+$/.test(file.base64||"")||file.base64.length>1600000)throw Error("फोटो १ MB पेक्षा लहान वापरा.");
- const blob=Utilities.newBlob(Utilities.base64Decode(file.base64),file.mime,
-  "lokhit-"+Date.now()+"."+(file.mime==="image/png"?"png":file.mime==="image/webp"?"webp":"jpg"));
- const folder=DriveApp.getRootFolder();
- const image=folder.createFile(blob);
- image.setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);
- return {url:"https://lh3.googleusercontent.com/d/"+image.getId()};
+ const name="post-"+String(slug||"").toLowerCase()+".json";
+ const file=cmsFile_(name);
+ if(!file)throw Error("बातमी उपलब्ध नाही.");
+ file.setTrashed(true);
+ return {deleted:true,slug};
 }
 function publicFeed_(){
- return entries_("NEWS").filter(r=>r[0]&&r[7]==="PUBLISHED").map(r=>({
-  id:r[0],slug:r[10],date:r[1],title:r[2],description:r[3],body:r[4],
-  category:r[5],image:r[6],author:r[8],featured:r[9]==="YES",updated:r[11]
- })).sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,100);
+ const posts=allNews_().filter(x=>x.status==="published").slice(0,100);
+ return {ok:true,posts,layout:jsonCmsRead_("layout.json",true),site:jsonCmsRead_("site.json",true)};
 }
+function readCmsJson(token,path){
+ session_(token);
+ if(!["content/layout.json","site.json"].includes(path))throw Error("सेटिंग्ज फाइल अवैध आहे.");
+ return {data:jsonCmsRead_(path==="site.json"?"site.json":"layout.json",true)||{}};
+}
+function writeCmsJson(token,path,data){
+ session_(token);
+ if(!["content/layout.json","site.json"].includes(path))throw Error("सेटिंग्ज फाइल अवैध आहे.");
+ if(!data||typeof data!=="object")throw Error("रिकामी सेटिंग्ज.");
+ const name=path==="site.json"?"site.json":"layout.json",before=jsonCmsRead_(name,true)||{};
+ let safe={...before};
+ if(name==="site.json"){
+  for(const key of ["name","tagline","description","editor_name","contact_email","youtube_live_url","youtube_live_provider","youtube_live_channel_id","youtube_live_channel_url","youtube_url","facebook_url","instagram_url","twitter_url"])
+   if(typeof data[key]==="string")safe[key]=data[key].slice(0,500);
+  if(!String(safe.name||"").trim())throw Error("वेबसाइटचे नाव आवश्यक आहे.");
+ }else{
+  if(!Array.isArray(data.menu)||!Array.isArray(data.slider)||!data.breaking)throw Error("मेनू किंवा स्लायडर डेटा अवैध आहे.");
+  safe={...before,version:2,
+   menu:data.menu.slice(0,24).map(x=>({title:String(x.title||"").slice(0,65),href:String(x.href||"").slice(0,150),enabled:x.enabled!==false})),
+   slider:data.slider.slice(0,12).map(x=>({slug:String(x.slug||"").slice(0,110),title:String(x.title||"").slice(0,160),enabled:x.enabled!==false})),
+   slider_seconds:Math.max(3,Math.min(15,Number(data.slider_seconds)||6)),
+   breaking:{enabled:data.breaking.enabled!==false,mode:data.breaking.mode==="custom"?"custom":"latest",
+    custom:(Array.isArray(data.breaking.custom)?data.breaking.custom:[]).slice(0,12).map(x=>String(x||"").slice(0,170))}
+  };
+  if(safe.menu.some(x=>!x.title||!(/^[a-z0-9_/-]*$/i.test(x.href))||x.href.includes("..")||x.href.startsWith("/")))throw Error("मेनू लिंक तपासा.");
+ }
+ jsonCmsWrite_(name,safe);
+ return {saved:true};
+}
+function updateEditorNames(token,editors){
+ session_(token);
+ if(!Array.isArray(editors)||editors.length!==10)throw Error("दहा Editor नावे आवश्यक आहेत.");
+ const names=editors.map(v=>String(v||"").trim().slice(0,70));
+ if(names.some(x=>!x))throw Error("Editor नाव रिकामे ठेवू नका.");
+ const sh=sheet_("EDITORS");
+ sh.getRange(2,2,10,1).setValues(names.map(x=>[x]));
+ return {saved:true,editors:editorOptions()};
+}
+function publicEditorInfo(){return editorOptions();}
 function doGet(e){
  const p=(e&&e.parameter)||{};
  if(p.feed==="1"){
   const cb=String(p.callback||"");
   if(!/^[A-Za-z_$][A-Za-z0-9_$]{0,90}$/.test(cb))return ContentService.createTextOutput("/* invalid */").setMimeType(ContentService.MimeType.JAVASCRIPT);
-  const news=publicFeed_();
-  const payload=JSON.stringify({ok:true,posts:news});
+  const payload=JSON.stringify(publicFeed_());
   return ContentService.createTextOutput(cb+"("+payload+");").setMimeType(ContentService.MimeType.JAVASCRIPT);
  }
  return HtmlService.createHtmlOutput(APP_HTML_).setTitle("लोकहित महाराष्ट्र | News Admin")
