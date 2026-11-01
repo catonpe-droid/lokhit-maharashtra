@@ -77,7 +77,7 @@ def shell(content,title,desc,path='',image=None,kind='website',published=None,mo
 <nav class="nav" aria-label="मुख्य मेनू"><div class="container nav-inner"><button id="nav-toggle" class="hamburger" aria-expanded="false" aria-controls="nav-links" aria-label="मेनू उघडा">☰</button><div class="nav-links" id="nav-links" style="display:contents">{nav}</div></div></nav>
 <main>{breakbar}{content}</main>
 <footer class="footer"><div class="container"><div class="footer-grid"><div><div class="footer-brand"><img src="{U('assets/img/logo.webp')}" alt="" class="footer-logo">लोकहित महाराष्ट्र</div><p>{E(CFG['tagline'])}. महाराष्ट्र, दुष्काळ, शेती, योजना आणि ग्रामीण विकासाविषयी मराठी माहिती.</p><small>डिजिटल न्यूज व जनमाहिती पोर्टल. हे कोणत्याही शासकीय कार्यालयाचे अधिकृत संकेतस्थळ नाही.</small></div>{footer}</div><div class="footer-bottom"><span>© २०२६ लोकहित महाराष्ट्र. सर्व हक्क राखीव.</span><span>माहितीतील त्रुटी निदर्शनास आणण्यासाठी संपर्क पृष्ठ वापरा.</span></div></div></footer>
-<div id="toast" class="toast" role="status" aria-live="polite"></div><script src="{U('assets/js/site.js')}" defer></script></body></html>'''.replace('id="nav-links" style="display:contents"','id="nav-links"')
+<div id="toast" class="toast" role="status" aria-live="polite"></div><script src="{U('assets/js/site.js')}" defer></script><script src="{U('assets/js/sheets-config.js')}" defer></script><script src="{U('assets/js/sheets-public.js')}" defer></script></body></html>'''.replace('id="nav-links" style="display:contents"','id="nav-links"')
 def write(path,content):
  target=OUT/path
  target.parent.mkdir(parents=True,exist_ok=True)
@@ -143,6 +143,7 @@ else:
  hero='<div class="empty-state">बातम्या लवकरच उपलब्ध होतील.</div>'
 other_posts=[p for p in POSTS if not lead or p['slug']!=lead['slug']]
 home=f'<div class="container"><section class="page-section hero-layout">{hero}<div class="hero-stack">'+''.join(stack(p) for p in other_posts[:4])+f'</div><div class="hero-latest side-panel"><div class="panel-title">ताज्या बातम्या <a href="{U("tajya-batmya/")}">सर्व पहा ›</a></div><div class="panel-content">'+''.join(latest(p) for p in POSTS[5:11])+'</div></div></section>'
+home+='<section class="page-section" id="sheet-news-section" hidden><div class="section-head"><h2>⚡ नुकत्याच प्रकाशित बातम्या</h2><a href="'+U('tajya-batmya/')+'">सर्व बातम्या ›</a></div><div class="news-grid" id="sheet-news-home"></div></section>'
 home+=section('दुष्काळ विशेष',[p for p in POSTS if p['category'] in ('दुष्काळ विशेष','मराठवाडा','पाणी')][:4],CATEGORY_PATH['दुष्काळ विशेष'])
 home+='<section class="page-section drought-banner"><div><h2>🌾 दुष्काळ विशेष : माहिती, मदत आणि मार्गदर्शन</h2><p>पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी</p></div><a href="'+U(CATEGORY_PATH['दुष्काळ विशेष'])+'">सर्व बातम्या पहा →</a></section>'
 home+=live_section(True)
@@ -195,8 +196,12 @@ for cat,slug in PAGES:
  write(path+'index.html',shell(content,cat+' बातम्या',cat+' विभागातील ताज्या मराठी बातम्या',path,active=path))
 # latest index
 path='tajya-batmya/'
-latest_content=f'<div class="container">{breadcrumbs(["ताज्या बातम्या"])}<div class="section-head"><h2>ताज्या बातम्या</h2></div><div class="news-grid">'+''.join(card(p) for p in POSTS)+'</div></div>'
+latest_content=f'<div class="container">{breadcrumbs(["ताज्या बातम्या"])}<div class="news-grid" id="sheet-news-latest"></div><div class="section-head"><h2>सर्व बातम्या</h2></div><div class="news-grid">'+''.join(card(p) for p in POSTS)+'</div></div>'
 write(path+'index.html',shell(latest_content,'ताज्या बातम्या','लोकहित महाराष्ट्रच्या सर्व बातम्या',path,active=path))
+# Reader-accessible immediate article route: works before the next GitHub build.
+instant_article='<div class="container">'+breadcrumbs(["ताज्या बातम्या","नवीन बातमी"])+'<div class="content-layout"><article class="article" id="sheet-article-root"><p class="article-summary">नवीन बातमी लोड होत आहे…</p></article><aside><div class="side-panel sidebar-box"><div class="panel-title">लोकहित महाराष्ट्र</div><div class="panel-content"><p>नवीन प्रकाशित बातम्यांसाठी मुख्यपृष्ठ उघडा.</p><a href="'+U('')+'">मुख्यपृष्ठ →</a></div></div></aside></div></div>'
+write('batmi/sheet/index.html',shell(instant_article,'नवीन बातमी','लोकहित महाराष्ट्रवरील ताजी बातमी','batmi/sheet/'))
+
 
 # Search page
 path='shodh/'
