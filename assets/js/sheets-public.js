@@ -22,8 +22,8 @@
   if(/^assets\/img\/[a-z0-9_.-]+$/i.test(img))return base+img;
   return base+'assets/img/logo.webp';
  }
- const source=p=>base+'batmi/sheet/?id='+encodeURIComponent(String(p.id||''));
- const urlFor=p=>p.id?source(p):(p.slug?base+'batmi/'+encodeURIComponent(p.slug)+'/':base);
+ const source=p=>base+'batmi/sheet/?slug='+encodeURIComponent(String(p.slug||p.id||''));
+ const urlFor=p=>p.origin==='github'&&p.slug?base+'batmi/'+encodeURIComponent(p.slug)+'/':source(p);
  function card(p){
   const a=make('a','news-card');a.href=urlFor(p);
   const im=make('img');im.loading='lazy';im.width=480;im.height=270;im.src=imageUrl(p);
@@ -146,8 +146,8 @@
    }
    if(latest&&items.length)latest.replaceChildren(...items.slice(0,24).map(card));
    if(article){
-    const id=new URLSearchParams(location.search).get('id');
-    renderArticle(items.find(p=>p.id===id));
+    const qs=new URLSearchParams(location.search),slug=qs.get('slug'),id=qs.get('id');
+    renderArticle(items.find(p=>(slug&&p.slug===slug)||(id&&p.id===id)));
    }
    updateCategory(items);
    if(data?.layout){
