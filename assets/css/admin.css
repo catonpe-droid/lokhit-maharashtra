@@ -129,3 +129,17 @@ body{background:#eff2f7}.admin-header{background:var(--navy);color:#fff}.admin-h
  .cms-actions .btn{width:100%}
  .cms-actions .status{flex-basis:100%}
 }
+
+
+/* News links: keep old editor layout but make publishing immediately actionable. */
+.published-link{border:1px solid #cfe4d6;background:#f5fbf6;border-radius:10px;margin-top:16px;padding:14px 16px}
+.published-link strong{display:block;margin:0 0 10px;color:#155b3a}
+.published-link-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.published-link-actions .btn{text-decoration:none}
+.published-url{font-size:12px;word-break:break-all;color:#486078;margin:10px 0 4px}
+.published-link small{line-height:1.5}
+.admin-post-entry{position:relative;border-top:1px solid #e6eaf0;padding-bottom:6px}
+.admin-post-entry .admin-post{border:0;padding-bottom:4px}
+.admin-post-entry .post-live-link{display:inline-block;font-size:13px;color:#0b5c88;padding:3px 7px;margin-left:2px;text-decoration:none}
+.admin-post-entry .post-live-link:hover{text-decoration:underline}
+.admin-post-entry .admin-post.active{background:#eef5fb}
