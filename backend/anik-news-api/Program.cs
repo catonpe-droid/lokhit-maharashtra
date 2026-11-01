@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.ConfigureKestrel(o => o.Limits.MaxRequestBodySize = 2_500_000);
+builder.WebHost.ConfigureKestrel(o => o.Limits.MaxRequestBodySize = 10_000_000);
 builder.Services.AddHttpClient("github", c =>
 {
     c.BaseAddress = new Uri("https://api.github.com/");
@@ -141,6 +141,7 @@ app.MapPost("/publish", async (HttpContext context, IHttpClientFactory factory) 
         return Results.Json(new { error = "GitHub बातमी जतन झाली नाही: " + newsCommit.Error }, statusCode: 502);
     return Results.Ok(new { saved = true, status = "building", slug, url = publicSite + "batmi/" + slug + "/", title });
 });
+app.MapStudioEndpoints(token, enabled, ipAllowList);
 app.Run();
 
 public sealed record NewsInput(string? Title, string? Description, string? Body, string? Category,
