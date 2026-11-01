@@ -238,6 +238,12 @@
        .then(oldPosts=>{if(Array.isArray(oldPosts))updateSlider(data.layout,[...clean,...oldPosts.filter(x=>!deleted.has(x.slug))])})
        .catch(()=>{});
      }
+    }else if(clean.length){
+     // Even without custom settings, fresh published news can reach the ticker
+     // and featured stories can enter the homepage slider before the next build.
+     updateBreaking({breaking:{enabled:true,mode:'latest'}},clean);
+     const featured=clean.filter(p=>p.featured).slice(0,4);
+     if(featured.length)updateSlider({slider:featured.map(p=>({slug:p.slug,title:'',enabled:true})),slider_seconds:6},clean);
     }
     if(data?.site)updateSite(data.site);
     removeDeletedLinks();
