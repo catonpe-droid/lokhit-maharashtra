@@ -74,8 +74,8 @@
   if(/^assets\/img\/[a-z0-9_.-]+$/i.test(img))return base+img;
   return base+'assets/img/logo.webp';
  }
- const source=p=>base+'batmi/live/?slug='+encodeURIComponent(String(p.slug||p.id||''));
- const urlFor=p=>p.origin==='github'&&p.slug?base+'batmi/'+encodeURIComponent(p.slug)+'/':source(p);
+ // Every story — new or old — always uses the same portal permalink.
+ const urlFor=p=>base+'batmi/'+encodeURIComponent(String(p.slug||''))+'/';
  function card(p){
   const a=make('a','news-card');a.href=urlFor(p);a.dataset.sheetLive='true';a.dataset.articleSlug=String(p.slug||'');
   const im=make('img');im.loading='lazy';im.width=480;im.height=270;im.src=imageUrl(p);
@@ -281,6 +281,24 @@
   }
  }
 
+ function awaitOriginalsForRendering(){
+  // New stories and old stories are one unified news collection.
+  const all=combinedPosts();
+  if(home)home.replaceChildren(...all.slice(0,4).map(card));
+  if(latest)latest.replaceChildren(...all.map(card));
+  updateSidebar(all);
+  if(article){
+   const slug=currentStorySlug();
+   const qs=new URLSearchParams(location.search);
+   const id=qs.get('id');
+   if(!deleted.has(slug)){
+    article.dataset.removed='false';
+    renderArticle(feedPosts.find(p=>p.slug===slug)||(id?feedPosts.find(p=>p.id===id):null),all);
+   }
+  }
+ }
+ originalsPromise.then(()=>{if(feedPosts.length||article||home||latest)awaitOriginalsForRendering()});
+
  function scheduleNext(wait){
   clearTimeout(refreshTimer);
   refreshTimer=setTimeout(()=>{if(!document.hidden)requestFeed();},wait);
@@ -302,20 +320,9 @@
    try{
     const items=Array.isArray(data?.posts)?data.posts.filter(p=>p&&p.status==='published'):[];
     refreshDeleted(data?.deletedSlugs);
-    const clean=items.filter(p=>!deleted.has(p.slug));
-    if(home){
-     const section=document.getElementById('sheet-news-section');
-     if(section)section.hidden=!clean.length;
-     home.replaceChildren(...clean.slice(0,8).map(card));
-    }
-    if(latest)latest.replaceChildren(...clean.slice(0,24).map(card));
-    if(article){
-     const qs=new URLSearchParams(location.search),slug=qs.get('slug'),id=qs.get('id');
-     if(!deleted.has(slug)){
-      article.dataset.removed='false';
-      renderArticle(clean.find(p=>(slug&&p.slug===slug)||(id&&p.id===id)));
-     }
-    }
+    feedPosts=items.filter(p=>!deleted.has(p.slug));
+    awaitOriginalsForRendering();
+    const clean=feedPosts;
     updateCategory(clean);
     if(data?.layout){
      updateMenu(data.layout);
