@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="mr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>लोकहित महाराष्ट्र — Login-Free Test Editor</title>
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+*{box-sizing:border-box}body{background:#f3f5f9;color:#19263b;font-family:system-ui,-apple-system,"Noto Sans Devanagari",sans-serif}
+.test-shell{max-width:1100px;margin:20px auto;padding:12px}
+.test-head{background:#fff;border-radius:16px;padding:22px;display:flex;gap:14px;align-items:center;margin-bottom:16px}
+.test-head img{width:56px;height:56px;object-fit:contain}
+.test-head h1{font-size:clamp(22px,4vw,30px);margin:0}.test-head p{color:#53647c;margin:4px 0}
+.test-layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.panel{background:#fff;border-radius:16px;padding:24px;box-shadow:0 3px 16px #102b4b0b}
+label{display:block;margin:0 0 16px;font-weight:650}
+input:not([type=file]),textarea,select{display:block;width:100%;font:inherit;font-weight:400;border:1px solid #cdd5e1;border-radius:9px;padding:11px;margin-top:7px;background:#fff}
+textarea{resize:vertical;min-height:82px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin:17px 0 6px}
+.btns button,.btns a{border:0;border-radius:9px;font:inherit;font-weight:700;cursor:pointer;padding:12px 16px;text-decoration:none;background:#e6eaf2;color:#223b57}
+.btns .primary{background:#b60013;color:#fff}
+.note{background:#fff4de;padding:12px 16px;border-radius:9px;color:#6f501b;line-height:1.6}
+article{line-height:1.8;overflow-wrap:anywhere}
+article h2{font-size:clamp(22px,3vw,29px);line-height:1.5;margin:6px 0 12px}
+.article-image{width:100%;max-height:320px;object-fit:cover;border-radius:12px;margin:14px 0}
+.article-summary{font-weight:600;color:#364960;margin:12px 0}
+.article-body p{margin:0 0 15px;white-space:pre-wrap}
+.share-mock{margin-top:18px;border:1px solid #dde4ed;border-radius:12px;overflow:hidden;background:#f9fafb}
+.share-mock img{height:145px;width:100%;object-fit:cover;display:none}
+.share-mock .copy{padding:13px}
+.share-mock strong,.share-mock small{display:block;overflow-wrap:anywhere}
+.share-mock small{color:#718095;padding-top:5px}
+small{font-weight:400}
+.hidden{display:none}
+@media(max-width:800px){.test-layout{grid-template-columns:1fr}.panel{padding:18px}.test-head{padding:16px}}
+</style>
+</head><body>
+<main class="test-shell">
+<header class="test-head">
+<img src="../../assets/img/logo.webp" alt="">
+<div><h1>लोकहित महाराष्ट्र — Test Editor</h1><p>🔓 Login नाही • Google Sheet नाही • फक्त चाचणी</p></div>
+</header>
+<div class="note"><strong>TEST MODE:</strong> इथे बातमी लिहिणे, फोटो पाहणे व WhatsApp-शैलीचा Preview तपासणे शक्य आहे. या पानातून प्रत्यक्ष वेबसाइटवर बातमी Publish होत नाही. Live वेबसाइटचे संरक्षण करण्यासाठी सार्वजनिक लेखन बंद आहे.</div>
+<div class="test-layout">
+<section class="panel">
+<h2>📝 नवीन बातमी</h2>
+<form id="story">
+<label>बातमीचा मथळा <input id="headline" maxlength="180" required placeholder="मराठी बातमीचा मथळा"></label>
+<label>विभाग <select id="category"><option>दुष्काळ विशेष</option><option>महाराष्ट्र</option><option>मराठवाडा</option><option>विदर्भ</option><option>शेती</option><option>शासन योजना</option><option>पाणी</option><option>पशुसंवर्धन</option><option>रोजगार</option><option>राजकारण</option><option>समाज</option><option>ग्रामविकास</option><option>महिला व विकास</option><option>अर्थकारण</option><option>शिक्षण</option><option>आरोग्य</option></select></label>
+<label>थोडक्यात सारांश <textarea id="summary" required maxlength="300" placeholder="WhatsApp आणि बातमीसाठी सारांश"></textarea></label>
+<label>पूर्ण बातमी <textarea id="body" required rows="12" placeholder="बातमीचा पूर्ण मजकूर"></textarea></label>
+<label>बातमीचा फोटो <input type="file" id="photo" accept="image/png,image/jpeg,image/webp"><small>फोटो तुमच्याच ब्राउझरमध्ये दाखवला जातो; Server वर Upload होत नाही.</small></label>
+<div class="btns"><button class="primary" type="submit">👁 बातमी Preview</button><button type="button" id="save">💾 Test Draft जतन करा</button><button type="button" id="copy">📋 बातमी कॉपी करा</button><button type="button" id="clear">नवीन सुरू करा</button></div>
+<p id="notice" aria-live="polite"></p>
+</form>
+</section>
+<section class="panel">
+<h2>📰 बातमी कशी दिसेल?</h2>
+<article>
+<div id="story-category" style="font-weight:700;color:#b60013">दुष्काळ विशेष</div>
+<h2 id="story-title">येथे बातमीचा मथळा दिसेल</h2>
+<div id="story-summary" class="article-summary">थोडक्यात सारांश येथे दिसेल.</div>
+<img id="story-image" class="article-image hidden" alt="बातमीचा निवडलेला फोटो">
+<div id="story-body" class="article-body"></div>
+</article>
+<h3>WhatsApp Preview नमुना</h3>
+<div class="share-mock">
+<img id="share-photo" alt="">
+<div class="copy"><strong id="share-title">बातमीचा मथळा</strong><small id="share-summary">सारांश</small><small>catonpe-droid.github.io · फक्त नमुना</small></div>
+</div>
+<p><small>हा Preview नमुना आहे. प्रत्यक्ष WhatsApp Thumbnail तपासण्यासाठी बातमीचे Live HTML पान प्रकाशित असणे गरजेचे आहे.</small></p>
+</section>
+</div>
+<div class="btns"><a href="../direct/">🔐 सुरक्षित Live Publishing (GitHub)</a><a href="https://app.pagescms.org/" rel="noopener noreferrer">GitHub Sign-in सह Pages CMS</a><a href="../../">🌐 वेबसाइट</a></div>
+</main>
+<script>
+'use strict';
+(()=>{
+ const $=id=>document.getElementById(id);
+ const key='lokhit-test-story-v1';
+ let photoUrl='';
+ function render(){
+  const title=$('headline').value.trim()||'येथे बातमीचा मथळा दिसेल';
+  const summary=$('summary').value.trim()||'थोडक्यात सारांश येथे दिसेल.';
+  $('story-title').textContent=$('share-title').textContent=title;
+  $('story-summary').textContent=$('share-summary').textContent=summary;
+  $('story-category').textContent=$('category').value;
+  const target=$('story-body');target.replaceChildren();
+  for(const value of $('body').value.trim().split(/\n\s*\n/).filter(Boolean)){
+   const p=document.createElement('p');p.textContent=value;target.appendChild(p);
+  }
+  const img=$('story-image'),thumb=$('share-photo');
+  if(photoUrl){img.src=thumb.src=photoUrl;img.classList.remove('hidden');thumb.style.display='block';}
+  else{img.classList.add('hidden');img.removeAttribute('src');thumb.style.display='none';thumb.removeAttribute('src');}
+ }
+ function message(t){$('notice').textContent=t;}
+ $('story').addEventListener('submit',e=>{e.preventDefault();render();message('✅ बातमीचा टेस्ट Preview तयार आहे. Live Publish केलेले नाही.');});
+ $('photo').addEventListener('change',()=>{
+  if(photoUrl){URL.revokeObjectURL(photoUrl);photoUrl='';}
+  const file=$('photo').files?.[0];
+  if(file&&file.type.startsWith('image/'))photoUrl=URL.createObjectURL(file);
+  render();
+ });
+ $('save').addEventListener('click',()=>{
+  try{localStorage.setItem(key,JSON.stringify({title:$('headline').value,summary:$('summary').value,body:$('body').value,category:$('category').value}));message('✅ टेस्ट मजकूर या ब्राउझरमध्ये जतन झाला. फोटो पुन्हा निवडावा लागेल.');}
+  catch(e){message('Browser मध्ये जतन झाले नाही; मजकूर कॉपी करून ठेवा.');}
+ });
+ $('copy').addEventListener('click',async()=>{
+  const result=['मथळा: '+$('headline').value,'विभाग: '+$('category').value,'सारांश: '+$('summary').value,'बातमी:\n'+$('body').value].join('\n\n');
+  try{await navigator.clipboard.writeText(result);message('✅ बातमीचा मजकूर कॉपी झाला.');}
+  catch(e){message('कॉपी करता आली नाही. कृपया मजकूर निवडून कॉपी करा.');}
+ });
+ $('clear').addEventListener('click',()=>{
+  if(!confirm('टेस्ट बातमीचा मजकूर साफ करायचा का?'))return;
+  $('story').reset();localStorage.removeItem(key);
+  if(photoUrl){URL.revokeObjectURL(photoUrl);photoUrl='';}
+  render();message('नवीन टेस्ट बातमी सुरू करा.');
+ });
+ try{const saved=JSON.parse(localStorage.getItem(key)||'null');
+ if(saved){$('headline').value=saved.title||'';$('summary').value=saved.summary||'';$('body').value=saved.body||'';$('category').value=saved.category||'दुष्काळ विशेष';}}catch(e){}
+ render();
+})();
+</script>
+</body></html>
