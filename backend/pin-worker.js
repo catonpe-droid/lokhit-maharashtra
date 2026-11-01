@@ -84,7 +84,7 @@ async function github(env,path,method="GET",payload){
  return body;
 }
 function toBase64(s){
- const bytes=enc.encode(s);let binary="";
+ const bytes=encoder.encode(s);let binary="";
  for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));
  return btoa(binary);
 }
