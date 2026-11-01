@@ -1,0 +1,223 @@
+# Lokhit Maharashtra | Pages CMS, token-free editor login with GitHub App
+media:
+  input: assets/img
+  output: /assets/img
+  rename: safe
+
+content:
+  - name: news
+    label: "📰 बातम्या | News"
+    type: collection
+    path: content/posts
+    format: json
+    filename:
+      template: "{year}-{month}-{day}-{hour}-{minute}-{second}.json"
+      field: false
+    view:
+      fields: [title, category, date, status, featured]
+      primary: title
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: slug
+        label: Article URL slug
+        type: string
+        hidden: true
+      - name: title
+        label: "बातमीचे शीर्षक"
+        type: string
+        required: true
+      - name: description
+        label: "थोडक्यात सारांश / SEO"
+        type: text
+        required: true
+      - name: category
+        label: "विभाग"
+        type: select
+        required: true
+        default: "महाराष्ट्र"
+        options:
+          values: ["महाराष्ट्र", "मराठवाडा", "विदर्भ", "पश्चिम महाराष्ट्र", "कोकण", "दुष्काळ विशेष", "शेती", "शासन योजना", "पशुसंवर्धन", "पाणी", "रोजगार", "ग्रामविकास", "महिला व विकास", "अर्थकारण", "राजकारण", "समाज", "शिक्षण", "आरोग्य", "विश्लेषण"]
+      - name: body
+        label: "पूर्ण बातमी"
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          media: false
+          switcher: true
+      - name: image
+        label: "बातमीचा फोटो"
+        type: image
+        required: true
+        options:
+          rename: safe
+          extensions: [jpg, jpeg, png, webp]
+      - name: date
+        label: "प्रकाशन तारीख"
+        type: date
+        required: true
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm:ss"
+      - name: author
+        label: "लेखक"
+        type: string
+        default: "लोकहित महाराष्ट्र डिजिटल डेस्क"
+      - name: video
+        label: "YouTube व्हिडिओ लिंक (ऐच्छिक)"
+        type: string
+      - name: status
+        label: "प्रकाशन स्थिती"
+        type: select
+        default: draft
+        options:
+          values:
+            - name: draft
+              label: "मसुदा / Draft"
+            - name: published
+              label: "प्रकाशित / Published"
+      - name: featured
+        label: "मुख्य बातमी"
+        type: boolean
+        default: false
+      - name: tags
+        label: "Keywords"
+        type: string
+        list: true
+      - name: updated
+        label: "Updated"
+        type: string
+        hidden: true
+
+  - name: design
+    label: "🎨 मेनू, स्लायडर व ब्रेकिंग न्यूज"
+    type: file
+    path: content/layout.json
+    format: json
+    operations:
+      delete: false
+    fields:
+      - name: version
+        type: number
+        hidden: true
+      - name: menu
+        label: "☰ मेनू — क्रम बदलण्यासाठी आयटम हलवा"
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{title}"
+        fields:
+          - name: title
+            label: "मेनूचे नाव"
+            type: string
+            required: true
+          - name: href
+            label: "पानाचा पाथ — उदा. vibhag/sheti/"
+            type: string
+          - name: enabled
+            label: "मेनू दाखवा"
+            type: boolean
+            default: true
+      - name: slider
+        label: "🖼️ मुख्यपृष्ठ स्लायडर"
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{slug}"
+        fields:
+          - name: slug
+            label: "बातमीचा URL slug"
+            type: string
+            required: true
+          - name: title
+            label: "विशेष स्लायडर मथळा (ऐच्छिक)"
+            type: string
+          - name: enabled
+            label: "स्लाइड दाखवा"
+            type: boolean
+            default: true
+      - name: slider_seconds
+        label: "स्लाइड बदलण्याचा वेळ (सेकंद)"
+        type: number
+        default: 6
+      - name: breaking
+        label: "⚡ चालणारी Breaking News पट्टी"
+        type: object
+        fields:
+          - name: enabled
+            label: "पट्टी चालू ठेवा"
+            type: boolean
+            default: true
+          - name: mode
+            label: "मथळे"
+            type: select
+            default: latest
+            options:
+              values:
+                - name: latest
+                  label: "नवीन बातम्यांचे मथळे आपोआप"
+                - name: custom
+                  label: "स्वतः लिहिलेले मथळे"
+          - name: custom
+            label: "सानुकूल मथळे — एकेक आयटम जोडा"
+            type: string
+            list: true
+
+  - name: settings
+    label: "⚙️ वेबसाइट सेटिंग्ज"
+    type: file
+    path: site.json
+    format: json
+    operations:
+      delete: false
+    fields:
+      - name: name
+        label: "वेबसाइटचे नाव"
+        type: string
+        required: true
+      - name: tagline
+        label: "टॅगलाइन"
+        type: string
+      - name: description
+        label: "वेबसाइटचे वर्णन / SEO"
+        type: text
+      - name: editor_name
+        label: "संपादकाचे नाव"
+        type: string
+      - name: contact_email
+        label: "संपर्क ईमेल"
+        type: string
+      - name: youtube_live_url
+        label: "Live TV YouTube व्हिडिओ लिंक"
+        type: string
+      - name: youtube_live_provider
+        label: "Live TV चॅनेलचे नाव"
+        type: string
+      - name: youtube_live_channel_id
+        label: "YouTube चॅनेल ID"
+        type: string
+      - name: youtube_live_channel_url
+        label: "चॅनेलची लिंक"
+        type: string
+      - name: youtube_url
+        type: string
+      - name: facebook_url
+        type: string
+      - name: instagram_url
+        type: string
+      - name: twitter_url
+        type: string
+      - name: site_url
+        type: string
+        hidden: true
+      - name: base_path
+        type: string
+        hidden: true
+      - name: github_repo
+        type: string
+        hidden: true
