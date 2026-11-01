@@ -6,7 +6,7 @@
  const status=(id,txt,bad=false)=>{const e=$(id);if(e){e.textContent=txt;e.classList.toggle('error',bad)}};
  const previewOnly=()=>!api()?.canPublish();
  const saveBtnIds=['menu-save','slider-save','breaking-save','settings-save'];
- const refreshPermissions=()=>{const demo=previewOnly();$('cms-demo-banner').hidden=!demo;saveBtnIds.forEach(id=>{const b=$(id);if(b){b.disabled=demo;b.title=demo?'हा डेमो मोड आहे; अधिकृत Server access आवश्यक आहे':''}})};
+ const refreshPermissions=()=>{saveBtnIds.forEach(id=>{const b=$(id);if(b){b.disabled=false;b.removeAttribute('aria-disabled');b.title='साइटवर बदल प्रकाशित करा'}})};
  const safePath=s=>/^[a-z0-9_/-]*$/i.test(s) && !s.includes('..') && !s.startsWith('/') && !s.includes('//');
  function setTab(name){
   mode=name;
@@ -83,12 +83,12 @@
    layout=l.data;site=s.data;menu=Array.isArray(layout.menu)?structuredClone(layout.menu):[];slides=Array.isArray(layout.slider)?structuredClone(layout.slider):[];
    posts=api().posts();renderMenu();renderSlideOptions();renderSlider();renderBreaking();renderSettings();
    $('slider-seconds').value=String(layout.slider_seconds||6);
-   ['menu-status','slider-status','breaking-status','settings-status'].forEach(id=>status(id,previewOnly()?'डेमो पूर्वावलोकन – प्रकाशन बंद आहे.':'सेटिंग्ज वाचल्या.'));
+   ['menu-status','slider-status','breaking-status','settings-status'].forEach(id=>status(id,'सेटिंग्ज वाचल्या. प्रकाशनासाठी Save क्लिक करा.'));
   }catch(err){['menu-status','slider-status','breaking-status','settings-status'].forEach(id=>status(id,'सेटिंग्ज मिळाल्या नाहीत: '+err.message,true))}
   finally{loading=false}
  }
  async function saveLayout(section,newData,buttonId,statusId,message){
-  if(previewOnly()){status(statusId,'डेमो मोडमध्ये बदल जतन करता येत नाहीत.',true);return}
+  if(previewOnly()){status(statusId,'प्रकाशनासाठी आधी अधिकृत Login करा.',true);return}
   const button=$(buttonId);button.disabled=true;status(statusId,'Server वर प्रकाशित करत आहे…');
   try{
    // Read the current remote layout before each save to preserve other settings.
@@ -97,7 +97,7 @@
    await api().writeJson('content/layout.json',merged,message);
    layout=merged;status(statusId,'✅ बदल जतन झाले. Server वर नवीन आवृत्ती प्रकाशित झाल्यावर वेबसाइटवर दिसतील.');
   }catch(err){status(statusId,'प्रकाशन अयशस्वी: '+err.message,true)}
-  finally{button.disabled=previewOnly()}
+  finally{button.disabled=false}
  }
  document.querySelectorAll('[data-cms-tab]').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.cmsTab)));
  $('menu-add-form').addEventListener('submit',ev=>{
@@ -139,7 +139,7 @@
    await api().writeJson('site.json',update,'Update Lokhit Maharashtra site settings');
    site=update;status('settings-status','✅ वेबसाइट सेटिंग्ज जतन झाली. पुनर्प्रकाशन झाल्यावर बदल दिसतील.');
   }catch(err){status('settings-status','प्रकाशन अयशस्वी: '+err.message,true)}
-  finally{btn.disabled=previewOnly()}
+  finally{btn.disabled=false}
  });
  document.addEventListener('lokhitcms:ready',initialize);
  document.addEventListener('lokhitcms:logout',()=>{layout={};site={};menu=[];slides=[];posts=[];setTab('news')});
