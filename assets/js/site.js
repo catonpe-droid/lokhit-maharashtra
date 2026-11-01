@@ -48,13 +48,31 @@
   show(0);start();
  }
  function notify(msg){let el=qs('#toast');if(!el){el=document.createElement('div');el.id='toast';el.className='toast';document.body.appendChild(el)}el.textContent=msg;el.classList.add('visible');setTimeout(()=>el.classList.remove('visible'),2500)}
- document.querySelectorAll('[data-share]').forEach(btn=>btn.addEventListener('click',async()=>{
-  const link=location.href, title=document.title.replace(' | लोकहित महाराष्ट्र',''); const t=btn.dataset.share;
-  if(t==='native'){if(navigator.share){try{await navigator.share({title,url:link,text:title})}catch(e){}}else{try{await navigator.clipboard.writeText(link);notify('बातमीची लिंक कॉपी झाली')}catch(e){notify('लिंक कॉपी करता आली नाही')}}return;}
-  if(t==='copy'){try{await navigator.clipboard.writeText(link);notify('लिंक कॉपी झाली')}catch(e){notify('लिंक कॉपी करता आली नाही')}return;}
-  const links={wa:'https://api.whatsapp.com/send?text='+encodeURIComponent(title+'\n'+link),fb:'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(link),x:'https://twitter.com/intent/tweet?text='+encodeURIComponent(title)+'&url='+encodeURIComponent(link),tg:'https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent(title)};
+ // Event delegation supports both original static articles and freshly
+ // published articles rendered in the same news portal layout.
+ document.addEventListener('click',async(event)=>{
+  const btn=event.target.closest('[data-share]');
+  if(!btn)return;
+  const link=location.href,title=document.title.replace(' | लोकहित महाराष्ट्र','');
+  const t=btn.dataset.share;
+  if(t==='native'){
+   if(navigator.share){try{await navigator.share({title,url:link,text:title})}catch(e){}}
+   else{try{await navigator.clipboard.writeText(link);notify('बातमीची लिंक कॉपी झाली')}catch(e){notify('लिंक कॉपी करता आली नाही')}}
+   return;
+  }
+  if(t==='copy'){
+   try{await navigator.clipboard.writeText(link);notify('लिंक कॉपी झाली')}
+   catch(e){notify('लिंक कॉपी करता आली नाही')}
+   return;
+  }
+  const links={
+   wa:'https://api.whatsapp.com/send?text='+encodeURIComponent(title+'\n'+link),
+   fb:'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(link),
+   x:'https://twitter.com/intent/tweet?text='+encodeURIComponent(title)+'&url='+encodeURIComponent(link),
+   tg:'https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent(title)
+  };
   if(links[t])window.open(links[t],'_blank','noopener,noreferrer,width=850,height=680');
- }));
+ });
  const search=qs('#search-input'), results=qs('#search-results'), form=qs('#search-form');
  if(search&&results){
   const root=document.body.dataset.base||'/';
@@ -78,7 +96,7 @@
    if(!list.length){const empty=document.createElement('div');empty.className='empty-state';empty.textContent='या शोधासाठी बातम्या आढळल्या नाहीत.';results.append(empty);return}
    for(const p of list){
     const a=document.createElement('a');a.className='news-card';
-    a.href=p.origin==='github'?root+'batmi/'+encodeURIComponent(p.slug)+'/':root+'batmi/sheet/?slug='+encodeURIComponent(p.slug);
+    a.href=root+'batmi/'+encodeURIComponent(p.slug)+'/';
     const image=document.createElement('img');image.loading='lazy';image.alt='';
     image.src=/^https:\/\//.test(p.image||'')?p.image:root+String(p.image||'assets/img/logo.webp');
     const box=document.createElement('div');box.className='card-body';
