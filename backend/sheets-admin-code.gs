@@ -224,7 +224,7 @@ function saveNews(token,raw,image){
    category:String(raw.category||"महाराष्ट्र").slice(0,65),
    image:imageUrl,video:String(raw.video||"").slice(0,600),
    author:editor.name,status:validStatus,featured:!!raw.featured,
-   origin:original||before.origin==="github_override"?"github_override":"drive",
+   origin:original||raw.origin==="github"||raw.origin==="github_override"||before.origin==="github_override"?"github_override":"drive",
    date:before.date||now,updated:now
   };
   jsonCmsWrite_("post-"+slug+".json",data);
