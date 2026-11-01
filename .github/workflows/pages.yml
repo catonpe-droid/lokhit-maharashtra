@@ -33,6 +33,8 @@ jobs:
           python-version: '3.12'
       - name: Validate site and CMS JavaScript
         run: |
+          node --check assets/js/studio.js
+          python -m py_compile rich_renderer.py
           node --check assets/js/admin.js
           node --check admin/test/publisher.js
           node --check assets/js/pin-admin.js
