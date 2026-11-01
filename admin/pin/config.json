@@ -1,4 +1,4 @@
 {
-  "worker_url": "",
+  "worker_url": "https://lokhit-pin-admin.catonpe.workers.dev",
   "note": "Set only the public Cloudflare PIN Worker URL here after secure deployment. Do not store PIN or GitHub tokens in GitHub."
 }
