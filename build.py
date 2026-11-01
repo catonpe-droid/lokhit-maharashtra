@@ -20,9 +20,19 @@ for x in sorted((ROOT/'content/posts').glob('*.json')):
    POSTS.append(p)
  except Exception as exc: print(f'WARNING: invalid {x}: {exc}')
 POSTS.sort(key=lambda p:p.get('date',''),reverse=True)
+# Editor-managed layout data, committed to GitHub by the CMS.
+try:
+ LAYOUT=json.loads((ROOT/'content/layout.json').read_text(encoding='utf8'))
+except (OSError,ValueError) as exc:
+ print('WARNING: layout unavailable:',exc)
+ LAYOUT={}
+POST_BY_SLUG={p['slug']:p for p in POSTS}
 PAGES=[('महाराष्ट्र','maharashtra'),('मराठवाडा','marathwada'),('विदर्भ','vidarbha'),('पश्चिम महाराष्ट्र','paschim-maharashtra'),('कोकण','konkan'),('दुष्काळ विशेष','dushkal'),('शेती','sheti'),('शासन योजना','shasan-yojana'),('पशुसंवर्धन','pashusanvardhan'),('पाणी','pani'),('रोजगार','rojgar'),('ग्रामविकास','gramvikas'),('महिला व विकास','mahila-vikas'),('अर्थकारण','arthakaran'),('राजकारण','rajkaran'),('समाज','samaj'),('शिक्षण','shikshan'),('आरोग्य','arogya'),('विश्लेषण','vishleshan'),('व्हिडिओ','video')]
 CATEGORY_PATH={name:'vibhag/'+slug+'/' for name,slug in PAGES}
-NAV=[('मुख्यपृष्ठ',''),('ताज्या बातम्या','tajya-batmya/'),('महाराष्ट्र',CATEGORY_PATH['महाराष्ट्र']),('मराठवाडा',CATEGORY_PATH['मराठवाडा']),('विदर्भ',CATEGORY_PATH['विदर्भ']),('दुष्काळ विशेष',CATEGORY_PATH['दुष्काळ विशेष']),('शेती',CATEGORY_PATH['शेती']),('शासन योजना',CATEGORY_PATH['शासन योजना']),('पशुसंवर्धन',CATEGORY_PATH['पशुसंवर्धन']),('राजकारण',CATEGORY_PATH['राजकारण']),('व्हिडिओ','video/'),('🔴 Live TV','live-tv/'),('विश्लेषण',CATEGORY_PATH['विश्लेषण'])]
+DEFAULT_NAV=[('मुख्यपृष्ठ',''),('ताज्या बातम्या','tajya-batmya/'),('महाराष्ट्र',CATEGORY_PATH['महाराष्ट्र']),('मराठवाडा',CATEGORY_PATH['मराठवाडा']),('विदर्भ',CATEGORY_PATH['विदर्भ']),('दुष्काळ विशेष',CATEGORY_PATH['दुष्काळ विशेष']),('शेती',CATEGORY_PATH['शेती']),('शासन योजना',CATEGORY_PATH['शासन योजना']),('पशुसंवर्धन',CATEGORY_PATH['पशुसंवर्धन']),('राजकारण',CATEGORY_PATH['राजकारण']),('व्हिडिओ','video/'),('🔴 Live TV','live-tv/'),('विश्लेषण',CATEGORY_PATH['विश्लेषण'])]
+CUSTOM_NAV=LAYOUT.get('menu')
+NAV=[(str(item.get('title','')).strip()[:65],str(item.get('href','')).strip()) for item in CUSTOM_NAV if isinstance(item,dict) and item.get('enabled',True) and str(item.get('title','')).strip() and re.fullmatch(r'[A-Za-z0-9_/-]*',str(item.get('href','')).strip())] if isinstance(CUSTOM_NAV,list) else DEFAULT_NAV
+NAV= NAV[:24] if NAV else DEFAULT_NAV
 def article_path(p):return 'batmi/'+p['slug']+'/'
 def article_url(p):return A(article_path(p))
 def time_marathi(s):
@@ -42,13 +52,19 @@ def shell(content,title,desc,path='',image=None,kind='website',published=None,mo
  quick=''.join(L(s,path) for s,path in [('About Us','about/'),('Contact','contact/'),('Advertise','advertise/')])
  footer_lists=[('विभाग',[('महाराष्ट्र',CATEGORY_PATH['महाराष्ट्र']),('मराठवाडा',CATEGORY_PATH['मराठवाडा']),('दुष्काळ विशेष',CATEGORY_PATH['दुष्काळ विशेष']),('शेती',CATEGORY_PATH['शेती']),('शासन योजना',CATEGORY_PATH['शासन योजना'])]),('Information',[('About Us','about/'),('Contact','contact/'),('Editorial Policy','editorial-policy/'),('Corrections Policy','corrections/'),('Advertise','advertise/')]),('Important Pages',[('Privacy Policy','privacy-policy/'),('Terms & Conditions','terms/'),('Disclaimer','disclaimer/'),('Grievance Redressal','grievance/'),('Cookie Policy','cookie-policy/')])]
  footer=''.join('<div><h3>'+E(name)+'</h3>'+''.join(L(n,p) for n,p in group)+'</div>' for name,group in footer_lists)
- ticker=' · '.join(f'<a href="{U(article_path(p))}">{E(p["title"])}</a>' for p in POSTS[:3])
+ ticker_settings=LAYOUT.get('breaking',{})
+ custom_headlines=ticker_settings.get('custom',[]) if isinstance(ticker_settings,dict) else []
+ if isinstance(custom_headlines,list) and ticker_settings.get('mode')=='custom':
+  ticker=' · '.join(E(str(t)[:170]) for t in custom_headlines[:8] if str(t).strip())
+ else:
+  ticker=' · '.join(f'<a href="{U(article_path(p))}">{E(p["title"])}</a>' for p in POSTS[:4])
+ breakbar=f'<div class="container"><div class="search-strip"><span class="breaking-label">ठळक बातम्या</span><div class="breaking-text">{ticker}</div><a class="search-btn" href="{U("shodh/")}" aria-label="शोधा">⌕</a></div></div>' if ticker_settings.get('enabled',True) else ''
  meta=ld_head(title,desc,A(path),image,kind,published,modified)
  return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#b60013"><link rel="icon" type="image/png" href="{U('assets/img/favicon.png')}"><link rel="manifest" href="{U('manifest.webmanifest')}"><link rel="alternate" type="application/rss+xml" title="लोकहित महाराष्ट्र बातम्या" href="{U('rss.xml')}"><link rel="stylesheet" href="{U('assets/css/style.css')}">{meta}</head><body data-base="{E(BASE)}">
 <div class="utility"><div class="container"><span><span id="today-date">महाराष्ट्राचा डिजिटल आवाज</span> · स्वतंत्र मराठी न्यूज पोर्टल</span><div class="utility-links">{quick}<a href="{U('privacy-policy/')}">Privacy Policy</a></div></div></div>
 <header class="brand-header"><div class="container brand-inner"><a href="{U()}" class="identity" aria-label="लोकहित महाराष्ट्र मुखपृष्ठ"><img src="{U('assets/img/logo.webp')}" alt="लोकहित महाराष्ट्र लोगो" class="site-logo" width="112" height="112"><div><div class="brand-title">लोकहित <span>महाराष्ट्र</span></div><div class="brand-tagline">{E(CFG['tagline'])}</div></div></a><div class="brand-actions"><a class="icon-btn" href="{U('shodh/')}" aria-label="बातमी शोधा">⌕ शोधा</a><a class="live-nav-cta" href="{U('live-tv/')}">🔴 Live TV</a><a class="admin-link" href="{U('admin/')}" rel="nofollow">🔒 प्रशासन</a></div></div></header>
 <nav class="nav" aria-label="मुख्य मेनू"><div class="container nav-inner"><button id="nav-toggle" class="hamburger" aria-expanded="false" aria-controls="nav-links" aria-label="मेनू उघडा">☰</button><div class="nav-links" id="nav-links" style="display:contents">{nav}</div></div></nav>
-<main><div class="container"><div class="search-strip"><span class="breaking-label">ठळक बातम्या</span><div class="breaking-text">{ticker}</div><a class="search-btn" href="{U('shodh/')}" aria-label="शोधा">⌕</a></div></div>{content}</main>
+<main>{breakbar}{content}</main>
 <footer class="footer"><div class="container"><div class="footer-grid"><div><div class="footer-brand"><img src="{U('assets/img/logo.webp')}" alt="" class="footer-logo">लोकहित महाराष्ट्र</div><p>{E(CFG['tagline'])}. महाराष्ट्र, दुष्काळ, शेती, योजना आणि ग्रामीण विकासाविषयी मराठी माहिती.</p><small>डिजिटल न्यूज व जनमाहिती पोर्टल. हे कोणत्याही शासकीय कार्यालयाचे अधिकृत संकेतस्थळ नाही.</small></div>{footer}</div><div class="footer-bottom"><span>© २०२६ लोकहित महाराष्ट्र. सर्व हक्क राखीव.</span><span>माहितीतील त्रुटी निदर्शनास आणण्यासाठी संपर्क पृष्ठ वापरा.</span></div></div></footer>
 <div id="toast" class="toast" role="status" aria-live="polite"></div><script src="{U('assets/js/site.js')}" defer></script></body></html>'''.replace('id="nav-links" style="display:contents"','id="nav-links"')
 def write(path,content):
@@ -88,13 +104,34 @@ def live_section(homepage=False):
  note='हे '+label+' या बाह्य YouTube चॅनेलचे प्रक्षेपण आहे; लोकहित महाराष्ट्रचे स्वतःचे प्रक्षेपण नाही. कार्यक्रम लाइव्ह उपलब्ध असताना प्लेअर चालेल.'
  return '<section class="page-section live-tv-section"><div class="section-head"><h2><span class="on-air-dot"></span> YouTube Live TV</h2><a href="'+U('live-tv/')+'">Live TV पान उघडा ›</a></div><div class="tv-layout">'+live_embed()+'<div class="tv-info"><div class="tv-eyebrow">बाह्य YouTube प्रक्षेपण</div><h3>'+label+'</h3><p>'+E(note)+'</p>'+btn+'<div class="tv-status-note">टीप: YouTube वर सध्या लाइव्ह प्रसारण नसल्यास व्हिडिओ उपलब्ध नसेल.</div></div></div></section>'
 
-# Home
+# Homepage carousel is rendered from the editor-managed slider list.
 lead=next((p for p in POSTS if p.get('featured')),POSTS[0] if POSTS else None)
-if lead:
- hero=f'<a class="hero-main" href="{U(article_path(lead))}"><img src="{img(lead)}" alt="" fetchpriority="high"><div class="hero-content"><span class="tag">{E(lead["category"])}</span><h1>{E(lead["title"])}</h1><p>{E(lead["description"])}</p><div class="meta">📅 {E(time_marathi(lead["date"]))} · लोकहित महाराष्ट्र डिजिटल डेस्क</div></div></a>'
- else_hero=''
-else:hero='<div class="empty-state">बातम्या लवकरच उपलब्ध होतील.</div>'
-home=f'<div class="container"><section class="page-section hero-layout">{hero}<div class="hero-stack">'+''.join(stack(p) for p in [p for p in POSTS if p['slug']!=lead['slug']][:4])+f'</div><div class="hero-latest side-panel"><div class="panel-title">ताज्या बातम्या <a href="{U("tajya-batmya/")}">सर्व पहा ›</a></div><div class="panel-content">'+''.join(latest(p) for p in POSTS[5:11])+'</div></div></section>'
+configured=LAYOUT.get('slider',[])
+slides=[]
+if isinstance(configured,list):
+ for item in configured[:12]:
+  if not isinstance(item,dict) or not item.get('enabled',True):continue
+  post=POST_BY_SLUG.get(str(item.get('slug','')))
+  if post:
+   slides.append((post,str(item.get('title','')).strip()[:160]))
+if not slides:
+ slides=[(p,'') for p in ([lead]+[q for q in POSTS if lead and q['slug']!=lead['slug']][:3] if lead else [])]
+if slides:
+ slide_html=[]
+ for i,(post,custom_title) in enumerate(slides):
+  is_active=i==0
+  slide_html.append(f'<a href="{U(article_path(post))}" class="hero-main hero-slide {"is-active" if is_active else ""}" data-slide-index="{i}" aria-hidden="{"false" if is_active else "true"}" tabindex="{0 if is_active else -1}"><img src="{img(post)}" alt="{E(post["title"])}" fetchpriority="{"high" if is_active else "auto"}"><div class="hero-content"><span class="tag">{E(post["category"])}</span><h1>{E(custom_title or post["title"])}</h1><p>{E(post["description"])}</p><div class="meta">📅 {E(time_marathi(post["date"]))} · लोकहित महाराष्ट्र डिजिटल डेस्क</div></div></a>')
+ controls=''
+ if len(slide_html)>1:
+  dots=''.join(f'<button type="button" class="hero-dot {"is-active" if i==0 else ""}" aria-label="बातमी स्लाइड {i+1}" aria-current="{"true" if i==0 else "false"}" data-slide-to="{i}"></button>' for i in range(len(slide_html)))
+  controls=f'<button class="hero-arrow hero-prev" type="button" aria-label="मागील स्लाइड">‹</button><button class="hero-arrow hero-next" type="button" aria-label="पुढील स्लाइड">›</button><div class="hero-dots">{dots}</div>'
+ seconds=LAYOUT.get('slider_seconds',6)
+ seconds=seconds if isinstance(seconds,(int,float)) and 3<=seconds<=15 else 6
+ hero=f'<div class="hero-slider" id="hero-slider" aria-roledescription="carousel" aria-label="मुख्य बातम्या" data-interval="{int(seconds)*1000}">{"".join(slide_html)}{controls}</div>'
+else:
+ hero='<div class="empty-state">बातम्या लवकरच उपलब्ध होतील.</div>'
+other_posts=[p for p in POSTS if not lead or p['slug']!=lead['slug']]
+home=f'<div class="container"><section class="page-section hero-layout">{hero}<div class="hero-stack">'+''.join(stack(p) for p in other_posts[:4])+f'</div><div class="hero-latest side-panel"><div class="panel-title">ताज्या बातम्या <a href="{U("tajya-batmya/")}">सर्व पहा ›</a></div><div class="panel-content">'+''.join(latest(p) for p in POSTS[5:11])+'</div></div></section>'
 home+=section('दुष्काळ विशेष',[p for p in POSTS if p['category'] in ('दुष्काळ विशेष','मराठवाडा','पाणी')][:4],CATEGORY_PATH['दुष्काळ विशेष'])
 home+='<section class="page-section drought-banner"><div><h2>🌾 दुष्काळ विशेष : माहिती, मदत आणि मार्गदर्शन</h2><p>पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी</p></div><a href="'+U(CATEGORY_PATH['दुष्काळ विशेष'])+'">सर्व बातम्या पहा →</a></section>'
 home+=live_section(True)
