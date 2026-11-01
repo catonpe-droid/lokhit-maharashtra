@@ -24,6 +24,15 @@ for x in sorted((ROOT/'content/posts').glob('*.json')):
    POSTS.append(p)
  except Exception as exc: print(f'WARNING: invalid {x}: {exc}')
 POSTS.sort(key=lambda p:p.get('date',''),reverse=True)
+# Remove old generated article pages for stories deleted from the source.
+# Without this, the existing /docs/batmi/<slug>/index.html can remain publicly
+# accessible even after a deleted story vanishes from content/posts.
+published_slugs={str(p['slug']) for p in POSTS}
+article_dir=OUT/'batmi'
+if article_dir.is_dir():
+ for old_dir in article_dir.iterdir():
+  if old_dir.is_dir() and old_dir.name!='sheet' and old_dir.name not in published_slugs and (old_dir/'index.html').is_file():
+   shutil.rmtree(old_dir)
 # Editor-managed layout data, committed to GitHub by the CMS.
 try:
  LAYOUT=json.loads((ROOT/'content/layout.json').read_text(encoding='utf8'))
