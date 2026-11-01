@@ -212,6 +212,10 @@ write(path+'index.html',shell(latest_content,'ताज्या बातम्
 instant_sidebar='<aside><div class="side-panel sidebar-box"><div class="panel-title">ताज्या बातम्या</div><div class="panel-content" id="live-article-sidebar">'+''.join(latest(q) for q in POSTS[:9])+'</div></div><div class="side-panel"><div class="panel-title">लोकहित विशेष</div><div class="panel-content"><p>शेती, पाणी, रोजगार आणि शासन योजनांची माहिती</p><a class="admin-link" href="'+U(CATEGORY_PATH['दुष्काळ विशेष'])+'">सर्व लेख पहा</a></div></div></aside>'
 instant_article='<div class="container"><div class="breadcrumbs" id="live-article-breadcrumb"><a href="'+U()+'">मुख्यपृष्ठ</a> / ताज्या बातम्या</div><div class="content-layout"><article class="article" id="sheet-article-root"><p class="article-summary">बातमी लोड होत आहे…</p></article>'+instant_sidebar+'</div></div>'
 # Keep legacy links working, but use a neutral public "live" URL for new news.
+# GitHub Pages serves this same full news layout at /batmi/<slug>/ before
+# its first static build (404 fallback). Once synced, the proper indexed page takes over.
+write('404.html',shell(instant_article,'बातमी','लोकहित महाराष्ट्र बातमी','batmi/'))
+# Keep legacy links working, without creating a separate-looking news design.
 write('batmi/live/index.html',shell(instant_article,'बातमी','लोकहित महाराष्ट्र बातमी','batmi/live/'))
 write('batmi/sheet/index.html',shell(instant_article,'बातमी','लोकहित महाराष्ट्र बातमी','batmi/sheet/'))
 
