@@ -34,6 +34,7 @@ jobs:
       - name: Validate site and CMS JavaScript
         run: |
           node --check assets/js/admin.js
+          node --check admin/test/publisher.js
           node --check assets/js/pin-admin.js
           node --check assets/js/cms.js
           node --check assets/js/site.js
