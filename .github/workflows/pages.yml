@@ -1,0 +1,41 @@
+name: Publish Lokhit Maharashtra
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/**'
+      - 'assets/**'
+      - 'admin/**'
+      - 'build.py'
+      - 'site.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build Marathi news portal
+        run: |
+          test -f build.py || { echo "Missing build.py; upload the complete project source"; exit 1; }
+          python build.py
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
