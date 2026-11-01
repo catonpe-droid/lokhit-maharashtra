@@ -1,6 +1,6 @@
 'use strict';
 (() => {
- const $=(id)=>document.getElementById(id);let token='',repository='',branch='main',current=null,records=[],loggedIn=false,demoMode=false;
+ const $=(id)=>document.getElementById(id);let token='',repository='',branch='main',current=null,records=[],loggedIn=false;
  const apiBase='https://api.github.com/repos/';
  const status=(message,error=false,target='editor-status')=>{const node=$(target);node.textContent=message;node.className=error?'status error':'status'};
  const escapeHTML=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&quot;'}[c]));
@@ -13,31 +13,29 @@
  function decodeUTF8(content){const bin=atob(content.replace(/\s/g,'')),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
  async function login(ev){
   ev.preventDefault();
-  const id=$('username').value.trim(),password=$('password').value.trim();
-  repository='catonpe-droid/lokhit-maharashtra';branch='main';demoMode=(id==='admin'&&password==='1234');
-  token=demoMode?'':password;
-  $('login-status').textContent=demoMode?'डेमो पूर्वावलोकन उघडत आहे…':'Server प्रकाशनाचे अधिकार तपासत आहे…';
+  const id=$('username').value.trim(),key=$('password').value.trim(),button=$('login-form').querySelector('[type="submit"]');
+  repository='catonpe-droid/lokhit-maharashtra';branch='main';loggedIn=false;
+  if(!id||!key){status('Login ID आणि Password (Access Key) भरा.',true,'login-status');return}
+  button.disabled=true;button.textContent='अधिकार तपासत आहे…';token=key;
+  status('प्रकाशनासाठी अधिकृत प्रवेश तपासत आहे…',false,'login-status');
   try{
-   if(!demoMode){
-    const userResp=await fetch('https://api.github.com/user',{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token}});
-    if(!userResp.ok)throw Error('प्रकाशनासाठी GitHub access token आवश्यक आहे. साधा GitHub पासवर्ड येथे वापरू नका.');
-    const user=await userResp.json();
-    if(!user.login||user.login.toLowerCase()!==id.toLowerCase())throw Error('Login ID हा GitHub username असणे आवश्यक आहे.');
-    const info=await github('');
-    branch=info.default_branch||'main';
-   }
+   const res=await fetch('https://api.github.com/user',{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token}});
+   if(!res.ok)throw Error('Access Key चुकीचा आहे किंवा कालबाह्य झाला आहे. GitHub fine-grained Personal Access Token वापरा.');
+   const user=await res.json();
+   if(!user.login||user.login.toLowerCase()!==id.toLowerCase())throw Error('Login ID हा Access Key असलेल्या GitHub खात्याच्या username शी जुळत नाही.');
+   const info=await github('');
+   if(info.permissions&&info.permissions.push===false)throw Error('या खात्याला वेबसाइटमध्ये बदल करण्याची परवानगी नाही. Repository Contents → Read and write अधिकार तपासा.');
+   branch=info.default_branch||'main';
    const files=await github('contents/content/posts?ref='+encodeURIComponent(branch));
-   if(!Array.isArray(files))throw Error('बातम्यांचा डेटा सापडला नाही.');
-   loggedIn=!demoMode;
-   $('password').value='';
-   $('login').hidden=true;$('dashboard').hidden=false;
-   $('publish').disabled=false;
-   $('publish').setAttribute('aria-disabled',String(demoMode));
-   $('publish').title=demoMode?'डेमो मोडमध्ये जतन करता येत नाही. प्रकाशनासाठी अधिकृत Login करा.':'Server वर बातमी जतन करा';
-   status(demoMode?'डेमो मोड : बातम्या वाचा आणि पूर्वावलोकन करा. प्रकाशनासाठी अधिकृत Server प्रवेश वापरा.':'✅ Server प्रकाशनाचे अधिकार तपासले. तुम्ही बातम्या जतन करू शकता.',demoMode);
+   if(!Array.isArray(files))throw Error('बातम्यांचा डेटा उपलब्ध नाही.');
+   loggedIn=true;$('password').value='';$('login').hidden=true;$('dashboard').hidden=false;
+   $('publish').disabled=false;$('publish').removeAttribute('aria-disabled');
+   $('publish').title='बातमी Server वर जतन करा';
    await loadPosts();
+   status('✅ अधिकृत प्रवेश सुरू आहे. बातम्या प्रकाशित आणि संपादित करता येतील.');
    document.dispatchEvent(new Event('lokhitcms:ready'));
-  }catch(e){status(e.message,true,'login-status');token='';demoMode=false;loggedIn=false;}
+  }catch(err){token='';loggedIn=false;$('password').value='';status(err.message||'Login होऊ शकला नाही. Access Key आणि अधिकार तपासा.',true,'login-status')}
+  finally{button.disabled=false;button.textContent='प्रवेश करा →'}
  }
  async function loadPosts(){
   $('post-list').textContent='बातम्या वाचत आहे…';
@@ -55,7 +53,7 @@
   for(const p of list){const b=document.createElement('button');b.type='button';b.className='admin-post'+(current?._path===p._path?' active':'');const strong=document.createElement('strong');strong.textContent=p.title;const small=document.createElement('small');small.textContent=p.category+' · '+(p.status==='draft'?'मसुदा':'प्रकाशित');b.append(strong,small);b.onclick=()=>openPost(p);$('post-list').appendChild(b)}
  }
  function newPost(){current=null;$('post-form').reset();$('author').value='लोकहित महाराष्ट्र डिजिटल डेस्क';$('category').value='दुष्काळ विशेष';$('post-status').value='published';$('editor-heading').textContent='नवीन बातमी';$('edit-state').textContent='नवीन';$('slug').disabled=false;$('delete').hidden=true;$('image-preview').innerHTML='';$('live-preview').hidden=true;status('');renderList()}
- function openPost(p){current=p;$('title').value=p.title||'';$('description').value=p.description||'';$('category').value=p.category||'महाराष्ट्र';$('body').value=p.body||'';$('video').value=p.video||'';$('author').value=p.author||'';$('slug').value=p.slug||'';$('slug').disabled=true;$('post-status').value=p.status||'published';$('featured').checked=!!p.featured;$('editor-heading').textContent='बातमी संपादित करा';$('edit-state').textContent='अद्ययावत';$('delete').hidden=demoMode;$('image-preview').innerHTML='';if(p.image){let im=document.createElement('img');im.src='../'+p.image;im.alt='सध्याचा फोटो';$('image-preview').appendChild(im)}$('live-preview').hidden=true;status('');renderList();window.scrollTo({top:0,behavior:'smooth'})}
+ function openPost(p){current=p;$('title').value=p.title||'';$('description').value=p.description||'';$('category').value=p.category||'महाराष्ट्र';$('body').value=p.body||'';$('video').value=p.video||'';$('author').value=p.author||'';$('slug').value=p.slug||'';$('slug').disabled=true;$('post-status').value=p.status||'published';$('featured').checked=!!p.featured;$('editor-heading').textContent='बातमी संपादित करा';$('edit-state').textContent='अद्ययावत';$('delete').hidden=false;$('image-preview').innerHTML='';if(p.image){let im=document.createElement('img');im.src='../'+p.image;im.alt='सध्याचा फोटो';$('image-preview').appendChild(im)}$('live-preview').hidden=true;status('');renderList();window.scrollTo({top:0,behavior:'smooth'})}
  function makeSlug(){const supplied=$('slug').value.trim();if(supplied)return supplied;let time=new Date().toISOString().replace(/\D/g,'').slice(0,14);return 'news-'+time+'-'+Math.random().toString(36).slice(2,6)}
  async function imageData(file,slug){
   if(file.size>8*1024*1024)throw Error('फोटो ८ MB पेक्षा कमी असावा.');
@@ -64,7 +62,7 @@
   return{data,path};
  }
  async function submit(ev){
-  ev.preventDefault();if(!loggedIn){status(demoMode?'🔒 तुम्ही Demo Login (admin / 1234) वापरले आहे. यामधून बातमी Server वर जतन होत नाही. वरच्या पिवळ्या सूचनेतील “प्रकाशनासाठी Login करा” वापरा.':'🔒 सर्वप्रथम प्रकाशनाचा अधिकृत Login करा.',true);$('editor-status').scrollIntoView({behavior:'smooth',block:'center'});return}
+  ev.preventDefault();if(!loggedIn){status('🔒 प्रकाशनासाठी आधी अधिकृत Login आवश्यक आहे.',true);return}
   const slug=current?.slug||makeSlug();
   if(!/^[a-zA-Z0-9_-]{3,120}$/.test(slug)){status('URL/Slug साठी फक्त इंग्रजी अक्षरे, अंक, - किंवा _ वापरा.',true);return}
   $('publish').disabled=true;status('बातमी Server वर जतन होत आहे…');
@@ -84,8 +82,7 @@
  function preview(){const box=$('live-preview');box.replaceChildren();let note=document.createElement('p');note.className='preview-note';note.textContent='पूर्वावलोकन — ही माहिती अजून प्रकाशित केलेली नाही.';let h=document.createElement('h2');h.textContent=$('title').value;let desc=document.createElement('strong');desc.textContent=$('description').value;box.append(note,h,desc);for(const para of $('body').value.split(/\n\s*\n/).filter(Boolean)){const p=document.createElement('p');p.textContent=para;box.appendChild(p)}box.hidden=false;box.scrollIntoView({behavior:'smooth',block:'start'})}
  // Controlled publishing bridge for the CMS tabs; credentials remain private in this closure.
  window.LokhitCMS={
-  isDemo:()=>demoMode,
-  canPublish:()=>loggedIn&&!demoMode,
+  canPublish:()=>loggedIn,
   posts:()=>records.map(({slug,title,description,category,image,status})=>({slug,title,description,category,image,status})),
   async readJson(path){
    if(!['content/layout.json','site.json'].includes(path))throw Error('अमान्य सेटिंग्ज पाथ');
@@ -95,32 +92,17 @@
   },
   async writeJson(path,data,message){
    if(!['content/layout.json','site.json'].includes(path))throw Error('अमान्य सेटिंग्ज पाथ');
-   if(!loggedIn||demoMode)throw Error('हा डेमो मोड आहे. प्रकाशनासाठी GitHub username आणि मर्यादित-अधिकार token वापरून पुन्हा प्रवेश करा.');
+   if(!loggedIn)throw Error('अधिकृत प्रवेश आवश्यक आहे. पुन्हा Login करा.');
    const existing=await github('contents/'+path+'?ref='+encodeURIComponent(branch));
    return github('contents/'+path,'PUT',{message:String(message||'Update CMS settings').slice(0,120),sha:existing.sha,branch,content:base64UTF8(JSON.stringify(data,null,2)+'\n')});
   }
  };
 
- // Demo is intentionally read-only. Never leave a dead Save button.
- function warnDemo(){
-  if(!demoMode)return;
-  status('🔒 Demo Login (admin / 1234) मध्ये Save बंद आहे. खरे प्रकाशन करण्यासाठी अधिकृत Server/Login access वापरा.',true);
-  $('editor-status').scrollIntoView({behavior:'smooth',block:'center'});
- }
- $('publish').addEventListener('click',warnDemo);
+ // Missing required fields must display a clear error.
  $('post-form').addEventListener('invalid',event=>{
-  if(demoMode){warnDemo();return}
-  const input=event.target;
-  status('आवश्यक माहिती पूर्ण भरा: '+(input.closest('label')?.textContent?.trim().slice(0,55)||'बातमीचे शीर्षक/सारांश/पूर्ण मजकूर')+' .',true);
+  const label=event.target.closest('label');
+  status('कृपया आवश्यक माहिती भरा: '+(label?.textContent?.trim().slice(0,60)||'शीर्षक, सारांश आणि बातमीचा मजकूर'),true);
  },true);
- $('cms-real-login')?.addEventListener('click',()=>{
-  $('logout').click();
-  $('username').value='';
-  $('password').value='';
-  $('username').focus();
-  $('login-status').textContent='खऱ्या प्रकाशनासाठी Login ID = अधिकृत GitHub username, Password = मर्यादित-अधिकार access token वापरा. नेहमीचा GitHub पासवर्ड टाकू नका.';
-  const details=document.querySelector('.login-help');if(details)details.open=true;
- });
- $('login-form').addEventListener('submit',login);$('post-form').addEventListener('submit',submit);$('new-post').addEventListener('click',newPost);$('filter-posts').addEventListener('input',renderList);$('preview').addEventListener('click',preview);$('delete').addEventListener('click',remove);$('logout').addEventListener('click',()=>{token='';repository='';loggedIn=false;demoMode=false;records=[];current=null;$('dashboard').hidden=true;$('login').hidden=false;$('login-form').reset();document.dispatchEvent(new Event('lokhitcms:logout'));status('');status('','', 'login-status')});
+ $('login-form').addEventListener('submit',login);$('post-form').addEventListener('submit',submit);$('new-post').addEventListener('click',newPost);$('filter-posts').addEventListener('input',renderList);$('preview').addEventListener('click',preview);$('delete').addEventListener('click',remove);$('logout').addEventListener('click',()=>{token='';repository='';loggedIn=false;records=[];current=null;$('dashboard').hidden=true;$('login').hidden=false;$('login-form').reset();document.dispatchEvent(new Event('lokhitcms:logout'));status('');status('','', 'login-status')});
  $('photo').addEventListener('change',()=>{const file=$('photo').files[0];if(!file)return;const im=document.createElement('img');im.alt='नवीन फोटो पूर्वावलोकन';im.src=URL.createObjectURL(file);$('image-preview').replaceChildren(im)});
 })();
