@@ -37,6 +37,9 @@ jobs:
           node --check assets/js/cms.js
           node --check assets/js/site.js
           node --check assets/js/google-admin.js
+          node --check assets/js/pin-admin.js
+          node --check --input-type=module < backend/pin-worker.js
+          node backend/test-pin-worker.mjs
           node --check --input-type=module < backend/worker.js
           node backend/test-worker.mjs
       - name: Build Marathi news portal and all article pages
