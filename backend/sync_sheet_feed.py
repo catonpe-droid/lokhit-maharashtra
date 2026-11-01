@@ -61,8 +61,8 @@ def main():
         if not SLUG.fullmatch(slug) or slug in seen:
             continue
         path = POSTS / (slug + ".json")
-        if path.exists() and slug not in managed:
-            print("Skipping original GitHub article with overlapping slug:", slug)
+        if path.exists() and slug not in managed and item.get("origin") != "github_override":
+            print("Preserving unedited original GitHub article:", slug)
             continue
         seen.add(slug)
         image = str(item.get("image") or "")
