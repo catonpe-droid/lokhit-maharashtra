@@ -38,15 +38,31 @@ jobs:
       - name: Build Marathi news portal and all article pages
         run: python build.py
       - name: Sync finished website to repository root
+        shell: bash
         run: |
-          cp -a docs/. ./
-          rm -rf docs
-          git add -A
-          if ! git diff --cached --quiet; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4; do
+            echo "Publish attempt ${attempt}: refreshing latest source and rebuilding"
+            git fetch origin main
+            git reset --hard origin/main
+            rm -rf docs
+            python build.py
+            cp -a docs/. ./
+            rm -rf docs
+            git add -A
+            if git diff --cached --quiet; then
+              echo "Website files already current."
+              exit 0
+            fi
             git commit -m "Build and publish latest Lokhit Maharashtra website [skip ci]"
-            git push origin HEAD:main
-          else
-            echo "Published HTML is already up to date"
-          fi
+            if git push origin HEAD:main; then
+              echo "Latest website successfully synced to main."
+              exit 0
+            fi
+            echo "A newer commit arrived. Retrying with latest repository."
+            sleep 2
+          done
+          echo "Could not publish after 4 safe attempts."
+          exit 1
