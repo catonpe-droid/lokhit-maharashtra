@@ -181,7 +181,7 @@ function doGet(e){
   .addMetaTag("viewport","width=device-width, initial-scale=1");
 }
 
-const APP_HTML_ = \`<!doctype html>
+const APP_HTML_ = `<!doctype html>
 <html lang="mr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f0f4f8;color:#162b46;font-family:Arial,"Noto Sans Devanagari",sans-serif;line-height:1.5}
@@ -373,4 +373,4 @@ $("search").addEventListener("input",renderList);
 categories.forEach(name=>{const op=document.createElement("option");op.value=name;op.textContent=name;$("category").append(op)});
 loadEditors();restore();
 })();
-</script></body></html>\`;
+</script></body></html>`;
