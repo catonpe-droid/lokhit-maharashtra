@@ -5,3 +5,55 @@
 @media(max-width:420px){.news-grid{grid-template-columns:1fr 1fr}.brand-title{font-size:26px}.brand-tagline{font-size:10px}.brand-actions .admin-link{font-size:0;padding:8px}.brand-actions .admin-link:before{content:'🔒';font-size:18px}.hero-stack{grid-template-columns:1fr 1fr}.hero-main{min-height:315px}.site-logo{width:60px;height:60px}}
 .nav-links{display:flex;align-items:center;flex-wrap:nowrap}
 @media(max-width:760px){.nav-links{display:none;flex-direction:column;align-items:stretch;width:100%}.nav-links.open{display:flex}}
+
+
+/* Lokhit Maharashtra • 2026 refinement: consistent Mukta, editorial spacing, live TV */
+html,body,button,input,select,textarea,summary,.brand-title,.nav a,.news-card,.article,.plain-page{font-family:'Mukta','Noto Sans Devanagari',sans-serif!important}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{background:#f5f6f8;color:#17273b}
+.brand-header{background:linear-gradient(120deg,#fff 0%,#fff 58%,#fff7ee 100%);border-bottom:1px solid #f0e2d7}
+.brand-inner{padding-block:14px}
+.brand-title{letter-spacing:-.022em;line-height:1.17}
+.brand-tagline{letter-spacing:.015em}
+.site-logo{filter:drop-shadow(0 2px 4px #00000012)}
+.brand-actions{flex-wrap:wrap;justify-content:flex-end}
+.live-nav-cta,.tv-watch-link{display:inline-flex;justify-content:center;align-items:center;gap:8px;background:#b90012;color:#fff;border:1px solid #a60012;border-radius:8px;padding:9px 14px;font-weight:800;transition:background .2s,transform .2s}
+.live-nav-cta:hover,.tv-watch-link:hover{background:#8c0010;transform:translateY(-1px)}
+.live-nav-cta{background:#fff4f4;color:#bc0018;border-color:#ffcad0}
+.live-nav-cta:hover{color:#fff}
+.nav{box-shadow:0 3px 12px #7a071125}
+.nav a{font-size:16px;letter-spacing:0;font-weight:800}
+.page-section{margin-block:24px}
+.section-head h2{font-weight:800;letter-spacing:-.01em}
+.hero-main,.news-card,.stack-card,.side-panel,.plain-page,.article{box-shadow:0 6px 25px rgba(7,26,49,.055)}
+.news-card,.stack-card,.hero-main{transition:box-shadow .24s,transform .24s,border-color .24s}
+.news-card:hover,.stack-card:hover{transform:translateY(-3px);box-shadow:0 13px 30px rgba(7,26,49,.12);border-color:#efd1d5}
+.news-card h3,.stack-card h3{letter-spacing:0;line-height:1.42}
+.news-card img{transition:transform .35s}
+.news-card:hover img{transform:scale(1.025)}
+.news-card{overflow:hidden}
+.article{border-radius:12px}
+.article-body{font-size:20px;line-height:1.84}
+.article-body p{margin-bottom:21px}
+.plain-page{border-radius:12px;line-height:1.72}
+.plain-page h2{border-bottom:1px solid #eef0f4;padding-bottom:5px}
+.plain-page p{color:#374456}
+.footer{background:linear-gradient(135deg,#082044,#0b2d55)}
+.tv-layout{display:grid;grid-template-columns:minmax(0,1.48fr) minmax(265px,.86fr);gap:0;background:#fff;border:1px solid #e6eaf0;border-radius:14px;overflow:hidden;box-shadow:0 10px 34px #13294315}
+.tv-frame{background:#091b35;aspect-ratio:16/9;width:100%;align-self:center}
+.tv-frame iframe{display:block;width:100%;height:100%;border:0}
+.tv-info{padding:27px 30px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.tv-info h3{font-size:clamp(23px,2vw,31px);line-height:1.25;color:#0a2448;margin:7px 0 9px}
+.tv-info p{font-size:17px;line-height:1.58;color:#4c5a6d;margin:0 0 18px}
+.tv-eyebrow{color:#ae071a;text-transform:uppercase;font-size:13px;font-weight:800;letter-spacing:.06em}
+.tv-status-note{font-size:13px;color:#7a8390;margin-top:14px}
+.on-air-dot{width:10px;height:10px;border-radius:50%;display:inline-block;background:#ef1328;box-shadow:0 0 0 4px #ffedf0;margin-right:8px}
+.tv-offline{background:linear-gradient(145deg,#07244a,#132f53);color:#fff;min-height:330px;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:26px;text-align:center}
+.tv-offline h3{font-size:27px;margin:14px 0 5px}
+.tv-offline p{color:#d9e3f0;margin:0}
+.tv-play-symbol{width:80px;height:80px;border-radius:50%;display:grid;place-items:center;background:#ce001a;color:#fff;font-size:29px}
+.live-tv-section>.section-head{border-color:#c9001b}
+@media(max-width:980px){.tv-layout{grid-template-columns:1fr}.tv-info{padding:20px 24px}.tv-frame{max-height:none}.live-nav-cta{padding:7px 10px}}
+@media(max-width:760px){.brand-actions{gap:6px}.live-nav-cta{font-size:12px;padding:7px 8px}.tv-layout{border-radius:10px}.tv-info{padding:18px}.nav-links{align-items:stretch}.nav-links a{border-bottom:1px solid #ffffff24}.page-section{margin-block:18px}.article-body{font-size:19px}}
+@media(max-width:420px){.brand-actions{flex-wrap:nowrap}.live-nav-cta{font-size:11px}.tv-offline{min-height:220px}.tv-info h3{font-size:24px}}
+@media(prefers-reduced-motion:reduce){.news-card,.stack-card,.hero-main,.news-card img,.live-nav-cta,.tv-watch-link{transition:none!important}}
