@@ -1,0 +1,98 @@
+{
+  "version": 2,
+  "menu": [
+    {
+      "title": "मुख्यपृष्ठ",
+      "href": "",
+      "enabled": true
+    },
+    {
+      "title": "ताज्या बातम्या",
+      "href": "tajya-batmya/",
+      "enabled": true
+    },
+    {
+      "title": "महाराष्ट्र",
+      "href": "vibhag/maharashtra/",
+      "enabled": true
+    },
+    {
+      "title": "मराठवाडा",
+      "href": "vibhag/marathwada/",
+      "enabled": true
+    },
+    {
+      "title": "विदर्भ",
+      "href": "vibhag/vidarbha/",
+      "enabled": true
+    },
+    {
+      "title": "दुष्काळ विशेष",
+      "href": "vibhag/dushkal/",
+      "enabled": true
+    },
+    {
+      "title": "शेती",
+      "href": "vibhag/sheti/",
+      "enabled": true
+    },
+    {
+      "title": "शासन योजना",
+      "href": "vibhag/shasan-yojana/",
+      "enabled": true
+    },
+    {
+      "title": "पशुसंवर्धन",
+      "href": "vibhag/pashusanvardhan/",
+      "enabled": true
+    },
+    {
+      "title": "राजकारण",
+      "href": "vibhag/rajkaran/",
+      "enabled": true
+    },
+    {
+      "title": "व्हिडिओ",
+      "href": "video/",
+      "enabled": true
+    },
+    {
+      "title": "🔴 Live TV",
+      "href": "live-tv/",
+      "enabled": true
+    },
+    {
+      "title": "विश्लेषण",
+      "href": "vibhag/vishleshan/",
+      "enabled": true
+    }
+  ],
+  "slider": [
+    {
+      "slug": "maharashtra-drought-265-305-talukas",
+      "title": "",
+      "enabled": true
+    },
+    {
+      "slug": "marathwada-water-tankers",
+      "title": "",
+      "enabled": true
+    },
+    {
+      "slug": "livestock-water-fodder-crisis",
+      "title": "",
+      "enabled": true
+    },
+    {
+      "slug": "drip-irrigation-water-saving",
+      "title": "",
+      "enabled": true
+    }
+  ],
+  "slider_seconds": 6,
+  "breaking": {
+    "enabled": true,
+    "mode": "latest",
+    "custom": []
+  }
+}
