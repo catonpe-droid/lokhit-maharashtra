@@ -176,7 +176,7 @@ function githubPublished_(){
    .map(x=>({...x,id:String(x.id||x.slug),status:"published",origin:"github"})):[];
  }catch(e){return []}
 }
-function allNews_(){
+function allNews_(includeDeleted){
  const folder=cmsFolder_(),files=folder.getFiles(),news=[];
  while(files.hasNext()&&news.length<500){
   const file=files.next(),name=file.getName();
@@ -190,7 +190,8 @@ function allNews_(){
  for(const item of githubPublished_()){
   if(!seen.has(item.slug)){news.push(item);seen.add(item.slug)}
  }
- return news.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+ return news.filter(x=>includeDeleted||x.status!=="deleted")
+  .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
 }
 function listNews(token){session_(token);return {posts:allNews_()};}
 function saveNews(token,raw,image){
@@ -232,15 +233,21 @@ function saveNews(token,raw,image){
 }
 function deleteNews(token,slug){
  session_(token);
- const name="post-"+String(slug||"").toLowerCase()+".json";
+ const safeSlug=String(slug||"").toLowerCase();
+ if(!/^[a-z0-9][a-z0-9_-]{2,110}$/.test(safeSlug))throw Error("बातमीची लिंक अवैध.");
+ const name="post-"+safeSlug+".json";
  const file=cmsFile_(name);
- if(!file)throw Error("बातमी उपलब्ध नाही.");
- file.setTrashed(true);
- return {deleted:true,slug};
+ const inGithub=githubPublished_().some(x=>x.slug===safeSlug);
+ if(!file&&!inGithub)throw Error("बातमी उपलब्ध नाही.");
+ if(file)file.setTrashed(true);
+ if(inGithub)jsonCmsWrite_(name,{id:safeSlug,slug:safeSlug,status:"deleted",date:new Date().toISOString()});
+ return {deleted:true,slug:safeSlug};
 }
 function publicFeed_(){
- const posts=allNews_().filter(x=>x.status==="published").slice(0,500);
- return {ok:true,posts,layout:jsonCmsRead_("layout.json",true),site:jsonCmsRead_("site.json",true)};
+ const all=allNews_(true);
+ const posts=all.filter(x=>x.status==="published").slice(0,500);
+ const deletedSlugs=all.filter(x=>x.status==="deleted").map(x=>x.slug).filter(Boolean);
+ return {ok:true,posts,deletedSlugs,layout:jsonCmsRead_("layout.json",true),site:jsonCmsRead_("site.json",true)};
 }
 function readCmsJson(token,path){
  session_(token);
