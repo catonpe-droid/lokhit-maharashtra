@@ -85,7 +85,16 @@ def main():
             "featured": bool(item.get("featured")), "status": "published"
         }
         updated |= save_if_changed(path, article)
-    # Previous Sheet-managed stories no longer published are removed, never original stories.
+    # Delete articles explicitly removed in the original GitHub Editor.
+    deleted = {str(x).lower() for x in (data.get("deletedSlugs") or []) if isinstance(x, str)}
+    for slug in deleted:
+        if not SLUG.fullmatch(slug):
+            continue
+        path = POSTS / (slug + ".json")
+        if path.exists():
+            path.unlink()
+            updated = True
+    # Previously Sheet-managed stories no longer published are removed.
     for slug in managed - seen:
         if not SLUG.fullmatch(slug):
             continue
