@@ -1,0 +1,4 @@
+{
+  "worker_url": "",
+  "note": "Set only the public Cloudflare PIN Worker URL here after secure deployment. Do not store PIN or GitHub tokens in GitHub."
+}
