@@ -5,8 +5,11 @@ from email.utils import format_datetime
 ROOT=pathlib.Path(__file__).resolve().parent
 OUT=ROOT/'docs'
 CFG=json.loads((ROOT/'site.json').read_text(encoding='utf8'))
-BASE=os.environ.get('SITE_BASE',CFG['base_path']).rstrip('/')+'/'
-URL=os.environ.get('SITE_URL',CFG['site_url']).rstrip('/')+'/'
+CUSTOM_DOMAIN=str(CFG.get('custom_domain','')).strip().lower()
+if CUSTOM_DOMAIN:
+ assert re.fullmatch(r'(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,63}',CUSTOM_DOMAIN), 'Invalid custom domain'
+BASE=os.environ.get('SITE_BASE', '/' if CUSTOM_DOMAIN else CFG['base_path']).rstrip('/')+'/'
+URL=os.environ.get('SITE_URL', 'https://'+CUSTOM_DOMAIN+'/' if CUSTOM_DOMAIN else CFG['site_url']).rstrip('/')+'/'
 assert BASE.startswith('/') and URL.startswith('https://')
 E=lambda s:html.escape(str(s or ''),quote=True)
 def U(s=''):return BASE+s.lstrip('/')
@@ -225,5 +228,7 @@ for folder in ['assets','admin']:
  dest=OUT/folder
  if dest.exists():shutil.rmtree(dest)
  shutil.copytree(ROOT/folder,dest)
+if CUSTOM_DOMAIN:
+ write('CNAME',CUSTOM_DOMAIN+'\n')
 write('.nojekyll','')
 print(f'Built {len(POSTS)} published articles, {len(allpaths)} indexable URLs in {OUT}')
