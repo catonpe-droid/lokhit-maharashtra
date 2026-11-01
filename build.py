@@ -16,7 +16,8 @@ POSTS=[]
 for x in sorted((ROOT/'content/posts').glob('*.json')):
  try:
   p=json.loads(x.read_text(encoding='utf8'))
-  if p.get('status','published')=='published' and p.get('slug'):
+  if p.get('status','published')=='published':
+   p['slug']=p.get('slug') or x.stem
    POSTS.append(p)
  except Exception as exc: print(f'WARNING: invalid {x}: {exc}')
 POSTS.sort(key=lambda p:p.get('date',''),reverse=True)
@@ -155,10 +156,18 @@ for p in POSTS:
  for para in re.split(r'\n\s*\n',p.get('body','')):
   para=para.strip()
   if not para:continue
+  if para.startswith('### '):body.append('<h3>'+E(para[4:])+'</h3>');continue
   if para.startswith('## '):body.append('<h2>'+E(para[3:])+'</h2>');continue
+  if para.startswith('# '):body.append('<h2>'+E(para[2:])+'</h2>');continue
   vid=youtube_id(para)
-  if vid: body_yts.append(vid)
-  body.append('<p>'+E(para).replace('\n','<br>')+'</p>')
+  if vid:body_yts.append(vid)
+  if re.match(r'^[-*] ',para):
+   items=[re.sub(r'\*\*([^*]+)\*\*',r'<strong>\1</strong>',E(line[2:])) for line in para.split('\n') if line.startswith(('- ','* '))]
+   body.append('<ul>'+''.join('<li>'+item+'</li>' for item in items)+'</ul>')
+   continue
+  safe=re.sub(r'\*\*([^*\n]+)\*\*',r'<strong>\1</strong>',E(para))
+  safe=re.sub(r'(?<!\*)\*([^*\n]+)\*(?!\*)',r'<em>\1</em>',safe)
+  body.append('<p>'+safe.replace('\n','<br>')+'</p>')
  yvid=youtube_id(p.get('video','')) or (body_yts[0] if body_yts else None)
  video=f'<div class="video-embed"><iframe src="https://www.youtube-nocookie.com/embed/{yvid}" title="संबंधित YouTube व्हिडिओ" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>' if yvid else ''
  bar='<div class="share-bar"><strong>ही बातमी शेअर करा :</strong><button class="share-btn share-wa" data-share="wa">WhatsApp</button><button class="share-btn share-fb" data-share="fb">Facebook</button><button class="share-btn share-x" data-share="x">X</button><button class="share-btn share-tg" data-share="tg">Telegram</button><button class="share-btn share-copy" data-share="copy">लिंक कॉपी</button><button class="share-btn share-native" data-share="native">इतर</button></div>'
