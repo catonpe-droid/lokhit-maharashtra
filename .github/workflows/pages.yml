@@ -1,4 +1,4 @@
-name: Publish Lokhit Maharashtra
+name: Build Lokhit Maharashtra and publish to site root
 on:
   push:
     branches: [main]
@@ -10,39 +10,43 @@ on:
       - 'site.json'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
+
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
+
 concurrency:
-  group: pages
+  group: lokhit-root-sync
   cancel-in-progress: false
+
 jobs:
-  build:
+  build-and-sync:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Prepare Python
+        with:
+          persist-credentials: true
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Validate Mini CMS and website JavaScript
+      - name: Validate site and CMS JavaScript
         run: |
           node --check assets/js/admin.js
           node --check assets/js/cms.js
           node --check assets/js/site.js
-      - name: Build 20+ Marathi stories and SEO pages
+      - name: Build Marathi news portal and all article pages
         run: python build.py
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-      - name: Upload site
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Sync finished website to repository root
+        run: |
+          cp -a docs/. ./
+          rm -rf docs
+          git add -A
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Build and publish latest Lokhit Maharashtra website [skip ci]"
+            git push origin HEAD:main
+          else
+            echo "Published HTML is already up to date"
+          fi
