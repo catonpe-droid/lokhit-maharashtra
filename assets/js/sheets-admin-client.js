@@ -133,11 +133,39 @@ async function saveEditorNames(ev){
  finally{button.disabled=false}
 }
  async function loadPosts(){
-  $('post-list').textContent='बातम्या वाचत आहे…';
+  $('post-list').textContent='मूळ GitHub बातम्या आणि नवीन बातम्या वाचत आहे…';
   try{
-   const data=await api('/posts');
-   records=(data.posts||[]).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+   // GitHub Pages remains the source of all originally published stories.
+   // The Apps Script back end may not be able to fetch Github's original
+   // export; fetch it directly from this same-origin site instead.
+   const [saved,original]=await Promise.allSettled([
+    api('/posts'),
+    fetch('../../cms-export.json',{cache:'no-store'})
+      .then(r=>{if(!r.ok)throw Error('मूळ बातम्यांची फाइल उघडली नाही.');return r.json()})
+   ]);
+   const fromDrive=saved.status==='fulfilled'&&Array.isArray(saved.value?.posts)?saved.value.posts:[];
+   const fromGithub=original.status==='fulfilled'&&Array.isArray(original.value)?original.value:[];
+   if(saved.status==='rejected'&&original.status==='rejected'){
+    throw Error('Google Sheet: '+saved.reason.message+' | GitHub: '+original.reason.message);
+   }
+   const bySlug=new Map();
+   for(const p of fromGithub){
+    if(p&&p.slug&&p.status!=='draft'){
+     bySlug.set(p.slug,{...p,id:p.id||p.slug,origin:'github'});
+    }
+   }
+   // New stories and edits saved through the editor always win.
+   for(const p of fromDrive){
+    if(p&&p.slug)bySlug.set(p.slug,p);
+   }
+   records=Array.from(bySlug.values()).filter(p=>p.status!=='deleted')
+    .sort((a,b)=>(b.date||'').localeCompare(a.date||''));
    renderList();
+   if(saved.status==='rejected'){
+    status('मूळ GitHub बातम्या दिसत आहेत; नवीन बातम्या लोड होऊ शकल्या नाहीत: '+saved.reason.message,true);
+   }else if(original.status==='rejected'){
+    status('Google Sheet बातम्या दिसत आहेत; जुन्या GitHub बातम्या लोड होऊ शकल्या नाहीत: '+original.reason.message,true);
+   }
   }catch(e){$('post-list').textContent='बातम्या लोड होत नाहीत: '+e.message;throw e}
  }
  function renderList(){const q=$('filter-posts').value.trim().toLowerCase(), list=records.filter(p=>(p.title+' '+p.category).toLowerCase().includes(q));
