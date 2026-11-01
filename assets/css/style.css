@@ -379,3 +379,6 @@ body{background:#f5f6f8;color:#17273b}
   .live-ticker .ticker-move{animation:none;transform:none}
   .live-ticker .ticker-window{overflow-x:auto;mask-image:none;-webkit-mask-image:none}
 }
+
+/* Rich News Studio articles: media within story text */
+.article-body .inline-news-photo{margin:20px 0 27px}.article-body .inline-news-photo img{display:block;max-width:100%;width:auto;height:auto;max-height:700px;margin:auto;border-radius:9px}.article-body ol,.article-body ul{padding-left:30px;margin:10px 0 24px}.article-body li{margin-bottom:8px}.article-body blockquote{border-left:5px solid #b60013;background:#fff7f8;padding:12px 18px;margin:18px 0}.article-body a{color:#a5091d;text-decoration:underline;overflow-wrap:anywhere}.article-body h3{font-size:22px;line-height:1.5;color:#092045}
