@@ -272,7 +272,7 @@ path='shodh/'
 search_content=f'<div class="container">{breadcrumbs(["बातमी शोधा"])}<div class="section-head"><h2>बातमी शोधा</h2></div><form class="results-toolbar" id="search-form"><input type="search" id="search-input" placeholder="मराठी मथळा, विभाग किंवा विषय शोधा..." aria-label="बातमी शोधा"><button type="submit">शोधा</button></form><div id="search-results" class="news-grid"><div class="empty-state">बातम्या लोड होत आहेत...</div></div></div>'
 write(path+'index.html',shell(search_content,'बातमी शोधा','लोकहित महाराष्ट्रच्या बातम्या शोधा',path))
 # Video page
-videos=[p for p in POSTS if youtube_id(p.get('video','')) or youtube_id(p.get('body','')) or any(isinstance(x,dict) and isinstance(x.get("insert"),dict) and x["insert"].get("video") for x in p.get("rich_delta",[]) if isinstance(p.get("rich_delta"),list))]
+videos=[p for p in POSTS if youtube_id(p.get('video','')) or youtube_id(p.get('body','')) or any(isinstance(x,dict) and isinstance(x.get("insert"),dict) and x["insert"].get("video") for x in (p.get("rich_delta") if isinstance(p.get("rich_delta"),list) else []))]
 video_content=f'<div class="container">{breadcrumbs(["व्हिडिओ"])}<div class="section-head"><h2>व्हिडिओ बातम्या</h2></div>'+( '<div class="news-grid">'+''.join(card(p) for p in videos)+'</div>' if videos else '<div class="empty-state">अधिकृत व्हिडिओ बातमी उपलब्ध झाल्यावर या विभागात दिसेल. प्रशासनातून बातमीमध्ये YouTube लिंक जोडा.</div>')+'</div>'
 write('video/index.html',shell(video_content,'व्हिडिओ बातम्या','YouTube व्हिडिओसह मराठी बातम्या','video/',active='video/'))
 # Live TV page with the provider explicitly credited
