@@ -7,7 +7,7 @@ OUT=ROOT/'docs'
 CFG=json.loads((ROOT/'site.json').read_text(encoding='utf8'))
 CUSTOM_DOMAIN=str(CFG.get('custom_domain','')).strip().lower()
 if CUSTOM_DOMAIN:
- assert re.fullmatch(r'(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,63}',CUSTOM_DOMAIN), 'Invalid custom domain'
+ assert re.fullmatch(r'(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}',CUSTOM_DOMAIN), 'Invalid custom domain'
 BASE=os.environ.get('SITE_BASE', '/' if CUSTOM_DOMAIN else CFG['base_path']).rstrip('/')+'/'
 URL=os.environ.get('SITE_URL', 'https://'+CUSTOM_DOMAIN+'/' if CUSTOM_DOMAIN else CFG['site_url']).rstrip('/')+'/'
 assert BASE.startswith('/') and URL.startswith('https://')
