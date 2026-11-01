@@ -1,11 +1,7 @@
 name: Sync Lokhit News from Google Sheets Admin
+# Legacy Google Sheets sync is OFF; direct GitHub publishing is the primary CMS.
+# Manual dispatch is retained only as an optional recovery action.
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/sync-sheets.yml'
-  schedule:
-    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 permissions:
