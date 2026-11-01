@@ -91,12 +91,13 @@ def write(path,content):
  target=OUT/path
  target.parent.mkdir(parents=True,exist_ok=True)
  target.write_text(content,encoding='utf8')
-def section(title,items,see=None):
+def section(title,items,see=None,grid_id=''):
  if not items:return ''
  see=see or CATEGORY_PATH.get(title,'tajya-batmya/')
- return f'<section class="page-section"><div class="section-head"><h2>{E(title)}</h2><a href="{U(see)}">सर्व बातम्या ›</a></div><div class="news-grid">'+''.join(card(p) for p in items[:4])+'</div></section>'
+ grid_attr=' id="'+E(grid_id)+'"' if grid_id else ''
+ return f'<section class="page-section"><div class="section-head"><h2>{E(title)}</h2><a href="{U(see)}">सर्व बातम्या ›</a></div><div class="news-grid"{grid_attr}>'+''.join(card(p) for p in items[:4])+'</div></section>'
 def card(p):
- return f'<a class="news-card" href="{U(article_path(p))}"><img src="{img(p)}" alt="{E(p["title"])}" width="480" height="270" loading="lazy"><div class="card-body"><span class="category-kicker">{E(p["category"])}</span><h3>{E(p["title"])}</h3><p>{E(p["description"])}</p><div class="meta"><span>📅 {E(time_marathi(p["date"]))}</span><span>लोकहित डेस्क</span></div></div></a>'
+ return f'<a class="news-card" data-article-slug="{E(p["slug"])}" href="{U(article_path(p))}"><img src="{img(p)}" alt="{E(p["title"])}" width="480" height="270" loading="lazy"><div class="card-body"><span class="category-kicker">{E(p["category"])}</span><h3>{E(p["title"])}</h3><p>{E(p["description"])}</p><div class="meta"><span>📅 {E(time_marathi(p["date"]))}</span><span>लोकहित डेस्क</span></div></div></a>'
 def stack(p):return f'<a class="stack-card" href="{U(article_path(p))}"><img src="{img(p)}" alt="" loading="lazy"><div><h3>{E(p["title"])}</h3><span class="meta">{E(time_marathi(p["date"]))}</span></div></a>'
 def latest(p):return f'<a class="latest-item" href="{U(article_path(p))}"><span class="latest-dot">•</span><span>{E(p["title"])}</span></a>'
 def breadcrumbs(parts):return '<div class="breadcrumbs"><a href="'+U()+'">मुख्यपृष्ठ</a> / '+' / '.join(parts)+'</div>'
@@ -152,7 +153,7 @@ else:
  hero='<div class="empty-state">बातम्या लवकरच उपलब्ध होतील.</div>'
 other_posts=[p for p in POSTS if not lead or p['slug']!=lead['slug']]
 home=f'<div class="container"><section class="page-section hero-layout">{hero}<div class="hero-stack">'+''.join(stack(p) for p in other_posts[:4])+f'</div><div class="hero-latest side-panel"><div class="panel-title">ताज्या बातम्या <a href="{U("tajya-batmya/")}">सर्व पहा ›</a></div><div class="panel-content">'+''.join(latest(p) for p in POSTS[5:11])+'</div></div></section>'
-home+='<section class="page-section" id="sheet-news-section" hidden><div class="section-head"><h2>⚡ नुकत्याच प्रकाशित बातम्या</h2><a href="'+U('tajya-batmya/')+'">सर्व बातम्या ›</a></div><div class="news-grid" id="sheet-news-home"></div></section>'
+home+=section('ताज्या बातम्या',POSTS[:4],'tajya-batmya/',grid_id='homepage-latest-grid')
 home+=section('दुष्काळ विशेष',[p for p in POSTS if p['category'] in ('दुष्काळ विशेष','मराठवाडा','पाणी')][:4],CATEGORY_PATH['दुष्काळ विशेष'])
 home+='<section class="page-section drought-banner"><div><h2>🌾 दुष्काळ विशेष : माहिती, मदत आणि मार्गदर्शन</h2><p>पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी</p></div><a href="'+U(CATEGORY_PATH['दुष्काळ विशेष'])+'">सर्व बातम्या पहा →</a></section>'
 home+=live_section(True)
@@ -205,11 +206,14 @@ for cat,slug in PAGES:
  write(path+'index.html',shell(content,cat+' बातम्या',cat+' विभागातील ताज्या मराठी बातम्या',path,active=path))
 # latest index
 path='tajya-batmya/'
-latest_content=f'<div class="container">{breadcrumbs(["ताज्या बातम्या"])}<div class="news-grid" id="sheet-news-latest"></div><div class="section-head"><h2>सर्व बातम्या</h2></div><div class="news-grid">'+''.join(card(p) for p in POSTS)+'</div></div>'
+latest_content=f'<div class="container">{breadcrumbs(["ताज्या बातम्या"])}<div class="section-head"><h2>ताज्या बातम्या</h2></div><div class="news-grid" id="latest-all-grid">'+''.join(card(p) for p in POSTS)+'</div></div>'
 write(path+'index.html',shell(latest_content,'ताज्या बातम्या','लोकहित महाराष्ट्रच्या सर्व बातम्या',path,active=path))
 # Reader-accessible immediate article route: works before the next GitHub build.
-instant_article='<div class="container">'+breadcrumbs(["ताज्या बातम्या","नवीन बातमी"])+'<div class="content-layout"><article class="article" id="sheet-article-root"><p class="article-summary">नवीन बातमी लोड होत आहे…</p></article><aside><div class="side-panel sidebar-box"><div class="panel-title">लोकहित महाराष्ट्र</div><div class="panel-content"><p>नवीन प्रकाशित बातम्यांसाठी मुख्यपृष्ठ उघडा.</p><a href="'+U('')+'">मुख्यपृष्ठ →</a></div></div></aside></div></div>'
-write('batmi/sheet/index.html',shell(instant_article,'नवीन बातमी','लोकहित महाराष्ट्रवरील ताजी बातमी','batmi/sheet/'))
+instant_sidebar='<aside><div class="side-panel sidebar-box"><div class="panel-title">ताज्या बातम्या</div><div class="panel-content" id="live-article-sidebar">'+''.join(latest(q) for q in POSTS[:9])+'</div></div><div class="side-panel"><div class="panel-title">लोकहित विशेष</div><div class="panel-content"><p>शेती, पाणी, रोजगार आणि शासन योजनांची माहिती</p><a class="admin-link" href="'+U(CATEGORY_PATH['दुष्काळ विशेष'])+'">सर्व लेख पहा</a></div></div></aside>'
+instant_article='<div class="container"><div class="breadcrumbs" id="live-article-breadcrumb"><a href="'+U()+'">मुख्यपृष्ठ</a> / ताज्या बातम्या</div><div class="content-layout"><article class="article" id="sheet-article-root"><p class="article-summary">बातमी लोड होत आहे…</p></article>'+instant_sidebar+'</div></div>'
+# Keep legacy links working, but use a neutral public "live" URL for new news.
+write('batmi/live/index.html',shell(instant_article,'बातमी','लोकहित महाराष्ट्र बातमी','batmi/live/'))
+write('batmi/sheet/index.html',shell(instant_article,'बातमी','लोकहित महाराष्ट्र बातमी','batmi/sheet/'))
 
 
 # Search page
