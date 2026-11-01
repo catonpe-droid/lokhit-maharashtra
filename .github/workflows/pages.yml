@@ -8,6 +8,7 @@ on:
       - 'admin/**'
       - 'build.py'
       - 'site.json'
+      - '.github/workflows/pages.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,19 +24,20 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Prepare Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Build Marathi news portal
-        run: |
-          test -f build.py || { echo "Missing build.py; upload the complete project source"; exit 1; }
-          python build.py
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - name: Build 20+ Marathi stories and SEO pages
+        run: python build.py
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
         with:
           path: docs
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
