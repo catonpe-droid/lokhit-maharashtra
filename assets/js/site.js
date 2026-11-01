@@ -48,21 +48,39 @@
   show(0);start();
  }
  function notify(msg){let el=qs('#toast');if(!el){el=document.createElement('div');el.id='toast';el.className='toast';document.body.appendChild(el)}el.textContent=msg;el.classList.add('visible');setTimeout(()=>el.classList.remove('visible'),2500)}
- // Event delegation supports both original static articles and freshly
- // published articles rendered in the same news portal layout.
+ async function copyShareUrl(url){
+  try{
+   if(navigator.clipboard&&window.isSecureContext){
+    await navigator.clipboard.writeText(url);return true;
+   }
+  }catch(e){}
+  // Clipboard permission may be denied on mobile or embedded browsers.
+  const field=document.createElement('textarea');
+  field.value=url;field.setAttribute('readonly','');
+  field.style.cssText='position:fixed;left:-9999px;top:0';
+  document.body.appendChild(field);field.select();
+  let copied=false;
+  try{copied=document.execCommand('copy')}catch(e){}
+  field.remove();
+  if(!copied)window.prompt('बातमीची लिंक कॉपी करा:',url);
+  return copied;
+ }
+ // Delegation works for articles created after page load, too.
  document.addEventListener('click',async(event)=>{
   const btn=event.target.closest('[data-share]');
   if(!btn)return;
   const link=location.href,title=document.title.replace(' | लोकहित महाराष्ट्र','');
   const t=btn.dataset.share;
   if(t==='native'){
-   if(navigator.share){try{await navigator.share({title,url:link,text:title})}catch(e){}}
-   else{try{await navigator.clipboard.writeText(link);notify('बातमीची लिंक कॉपी झाली')}catch(e){notify('लिंक कॉपी करता आली नाही')}}
+   if(navigator.share){
+    try{await navigator.share({title,url:link,text:title})}
+    catch(e){if(e?.name!=='AbortError')notify('शेअर करता आले नाही. लिंक कॉपी वापरा.')}
+   }else{const done=await copyShareUrl(link);if(done)notify('बातमीची लिंक कॉपी झाली')}
    return;
   }
   if(t==='copy'){
-   try{await navigator.clipboard.writeText(link);notify('लिंक कॉपी झाली')}
-   catch(e){notify('लिंक कॉपी करता आली नाही')}
+   const done=await copyShareUrl(link);
+   if(done)notify('बातमीची लिंक कॉपी झाली');
    return;
   }
   const links={
@@ -71,7 +89,11 @@
    x:'https://twitter.com/intent/tweet?text='+encodeURIComponent(title)+'&url='+encodeURIComponent(link),
    tg:'https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent(title)
   };
-  if(links[t])window.open(links[t],'_blank','noopener,noreferrer,width=850,height=680');
+  if(links[t]){
+   // Open synchronously from the click; otherwise popup blockers may suppress it.
+   const popup=window.open(links[t],'_blank','noopener,noreferrer');
+   if(!popup && !/Mobi|Android/i.test(navigator.userAgent||''))notify('नवीन टॅब ब्लॉक झाला असल्यास Pop-up परवानगी द्या.');
+  }
  });
  const search=qs('#search-input'), results=qs('#search-results'), form=qs('#search-form');
  if(search&&results){
