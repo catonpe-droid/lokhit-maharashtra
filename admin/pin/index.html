@@ -2,20 +2,17 @@
 <header class="admin-header"><div class="container admin-header-inner"><a href="../../"><img alt="" src="../../assets/img/logo.webp" class="admin-logo"> <strong>लोकहित महाराष्ट्र</strong></a><span>संपादकीय प्रशासन</span></div></header>
 <main class="container"><section id="login" class="login-card">
 <div class="login-symbol">🔐</div><h1>लोकहित महाराष्ट्र — Admin</h1>
-<p>सुरुवातीला फक्त ६ अंकी PIN टाका, त्यानंतर तुमचे Editor नाव निवडा.</p>
-<form id="pin-form" autocomplete="off">
-<label>Admin PIN
+<p>आपल्याच GitHub Editor मध्ये बातम्या, Category, Menu, Slider, Breaking News आणि Settings व्यवस्थापित करा. Login Google Sheet मधून होतो.</p>
+<form id="login-form" autocomplete="off">
+<label>सहा अंकी Admin PIN
 <input id="pin-code" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="off" placeholder="••••••" required></label>
-<button type="submit" class="btn btn-primary login-submit">पुढे जा →</button>
-</form>
-<form id="editor-form" hidden>
-<label>तुमचे Editor नाव
-<select id="editor-choice" required></select></label>
-<button type="submit" class="btn btn-primary login-submit">Editor म्हणून प्रवेश करा →</button>
-<button id="pin-back" type="button" class="btn btn-light">← PIN बदला</button>
-</form>
-<div id="login-status" class="status" role="status"></div>
-<div id="setup-needed" class="cms-demo-banner" hidden><strong>एकदाच मोफत Server जोडणी आवश्यक आहे.</strong><p>सुरक्षित PIN Login आणि बातमी Publish करण्याची जोडणी अजून सक्रिय नाही. तोपर्यंत तुमच्या बातम्या पूर्वीप्रमाणे GitHub वर सुरक्षित राहतील.</p></div>
+<label>Editor नाव
+<select id="editor-choice" required><option value="">Editor लोड होत आहेत...</option></select></label>
+<label style="display:flex;align-items:center;gap:9px;font-weight:500;margin-bottom:18px">
+<input id="remember" type="checkbox" checked style="width:18px;height:18px;flex:none">
+या ब्राउझरमध्ये ३० दिवस Login लक्षात ठेवा</label>
+<button type="submit" class="btn btn-primary login-submit" id="login-btn">Admin Editor उघडा →</button>
+</form><div id="login-status" class="status" role="status">Google Sheet Login जोडत आहे...</div>
 </section>
 <section id="dashboard" hidden>
 <div class="dash-title"><div><h1>लोकहित महाराष्ट्र <span class="cms-heading-accent">Mini CMS</span></h1><p>बातम्या, मेनू, स्लायडर आणि वेबसाइटचे व्यवस्थापन एकाच ठिकाणी.</p></div><div class="dash-buttons"><a href="../../" target="_blank" rel="noopener" class="btn btn-light">🌐 वेबसाइट पाहा</a><button id="toggle-editor-names" type="button" class="btn btn-light">✍️ Editor नावे बदला</button><button id="logout" type="button" class="btn btn-light">बाहेर पडा</button></div></div>
@@ -73,4 +70,4 @@
 <p class="cms-hint">Server configuration आणि live वेबसाइट URL सुरक्षिततेसाठी या फॉर्ममध्ये बदलता येत नाहीत.</p>
 <div class="cms-actions"><button type="submit" id="settings-save" class="btn btn-primary">💾 सेटिंग्ज प्रकाशित करा</button><span id="settings-status" class="status" role="status"></span></div></form></section>
 </section></main>
-<script src="../../assets/js/pin-admin.js" defer></script><script src="../../assets/js/cms.js" defer></script></body></html>
+<script src="../../assets/js/sheets-admin-client.js" defer></script><script src="../../assets/js/cms.js" defer></script></body></html>
