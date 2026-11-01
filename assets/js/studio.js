@@ -119,7 +119,10 @@
  $('photo').addEventListener('change',e=>{const f=e.target.files?.[0];setCover(f?URL.createObjectURL(f):(current?.image?new URL(current.image,BASE).href:''));});
  function preview(){
   const title=$('headline').value.trim()||'बातमीचा मथळा';
-  const safe=DOMPurify.sanitize(quill.root.innerHTML,{ALLOWED_URI_REGEXP:/^(?:(?:https?:|data:image\/(?:jpeg|png|webp);base64,)|[^a-z]|[a-z+.-]+(?:[^a-z+.-:]|$))/i});
+  const previewWrapper=document.createElement('div');
+  previewWrapper.innerHTML=DOMPurify.sanitize(quill.root.innerHTML,{ADD_TAGS:['iframe'],ADD_ATTR:['allow','allowfullscreen','loading','referrerpolicy']});
+  previewWrapper.querySelectorAll('iframe').forEach(frame=>{const clean=cleanYouTube(frame.src);if(!clean)frame.remove();else{frame.src=clean;frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-presentation');}});
+  const safe=previewWrapper.innerHTML;
   const modal=$('preview-modal');
   const media=coverUrl?'<img alt="" src="'+escapeHTML(coverUrl)+'">':'';
   $('article-preview').innerHTML='<small>'+escapeHTML($('category').value)+'</small><h1>'+escapeHTML(title)+'</h1><p class="summary">'+escapeHTML($('summary').value)+'</p>'+media+'<div class="body-preview">'+safe+'</div>';
