@@ -5,6 +5,7 @@ on:
     paths:
       - 'content/**'
       - 'assets/**'
+      - 'backend/**'
       - 'admin/**'
       - 'build.py'
       - 'site.json'
@@ -37,6 +38,7 @@ jobs:
           node --check assets/js/site.js
           node --check assets/js/google-admin.js
           node --check --input-type=module < backend/worker.js
+          node backend/test-worker.mjs
       - name: Build Marathi news portal and all article pages
         run: python build.py
       - name: Sync finished website to repository root
