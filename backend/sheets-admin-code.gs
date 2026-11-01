@@ -61,12 +61,15 @@ function sessionsSheet_(){
  const book=SpreadsheetApp.openById(LOKHIT_BOOK_ID);
  let sh=book.getSheetByName("SESSIONS");
  if(!sh){
-  const lock=LockService.getDocumentLock()||LockService.getScriptLock();
-  lock.waitLock(15000);
+  // Do not recursively acquire a script lock here: loginAdmin already holds it.
   try{
+   sh=book.insertSheet("SESSIONS");
+   sh.appendRow(["Token Hash","Editor ID","Login Version","Created At","Expires At","Revoked"]);
+   sh.setFrozenRows(1);
+  }catch(e){
    sh=book.getSheetByName("SESSIONS");
-   if(!sh){sh=book.insertSheet("SESSIONS");sh.appendRow(["Token Hash","Editor ID","Login Version","Created At","Expires At","Revoked"]);sh.setFrozenRows(1);}
-  }finally{lock.releaseLock()}
+   if(!sh)throw e;
+  }
  }
  return sh;
 }
