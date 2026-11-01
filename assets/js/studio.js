@@ -163,7 +163,7 @@
   await loadPosts();
   try{const old=JSON.parse(localStorage.getItem(LOCAL)||'null');if(old && !current){$('headline').value=old.title||'';$('summary').value=old.summary||'';$('category').value=old.category||'महाराष्ट्र';$('author').value=old.author||'लोकहित महाराष्ट्र डिजिटल डेस्क';$('tags').value=old.tags||'';$('video').value=old.video||'';$('featured').checked=!!old.featured;if(Array.isArray(old.body))quill.setContents(old.body);notice('पूर्वीचा Local Draft उघडला आहे.');}}catch{}
  }
- async function waitLive(post,slug){
+ async function waitLive(post,slug,revision){
    const url=makeUrl(slug);let verified=false;
    for(let i=0;i<28;i++){
     try{
@@ -172,7 +172,7 @@
       const doc=new DOMParser().parseFromString(await res.text(),'text/html');
       const title=doc.querySelector('meta[property="og:title"]')?.content||'';
       const og=doc.querySelector('meta[property="og:image"]')?.content||'';
-      if(title===post.title && og && doc.querySelector('link[rel="canonical"]')?.href===url){
+      if(title===post.title && og && doc.querySelector('link[rel="canonical"]')?.href===url && (!revision || doc.querySelector('article[data-news-revision]')?.getAttribute('data-news-revision')===revision)){
        const pic=new URL(og,url);
        if(pic.origin===location.origin){const head=await fetch(pic.href,{method:'HEAD',cache:'no-store'});if(!head.ok)throw Error('Photo pending');}
        verified=true;break;
@@ -226,7 +226,7 @@
    if(!res.ok||!result.saved)throw Error(result.error||'Server HTTP '+res.status);
    localStorage.removeItem(LOCAL);$('photo').value='';
    await loadPosts();const fresh=posts.find(p=>p.slug===result.slug);if(fresh)openPost(fresh);
-   if(data.status==='published'){await waitLive(data,result.slug);}
+   if(data.status==='published'){await waitLive(data,result.slug,result.updated);}
    else{notice('✅ बातमी Draft म्हणून GitHub वर जतन झाली; सार्वजनिक वेबसाइटवर दिसणार नाही.');$('live-box').hidden=true;}
   }catch(err){notice('❌ जतन अयशस्वी: '+err.message,true);}
   finally{busy=false;['publish','save-publish','save-draft','delete'].forEach(id=>$(id).disabled=false);}
