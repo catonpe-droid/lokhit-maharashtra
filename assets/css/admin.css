@@ -51,3 +51,81 @@ body{background:#eff2f7}.admin-header{background:var(--navy);color:#fff}.admin-h
  .login-card{padding:21px 17px}
  .login-card input{width:100%}
 }
+
+
+
+/* Lokhit Marathi mini CMS: professional tabbed administration */
+.cms-heading-accent{font-size:15px;font-weight:800;vertical-align:middle;background:#fff0ed;color:#bd1829;border:1px solid #ffcfd1;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.cms-tabs{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0 0 18px;padding:6px;background:#e9edf4;border:1px solid #dce3eb;border-radius:11px}
+.cms-tab{font-family:'Mukta',sans-serif;min-height:42px;border:0;border-radius:8px;background:transparent;color:#324662;font-size:16px;font-weight:800;padding:9px 15px;cursor:pointer;white-space:nowrap}
+.cms-tab:hover{background:#fff;color:#a60013}
+.cms-tab.is-active{background:#fff;color:#ab0018;box-shadow:0 2px 7px #0a233316}
+.cms-tab-panel[hidden],.cms-demo-banner[hidden]{display:none!important}
+.cms-tab-panel{margin-bottom:35px}
+.cms-demo-banner{background:#fff5e7;border:1px solid #f1d3a9;border-radius:9px;padding:12px 15px;margin:0 0 15px;color:#764410;font-size:15px;font-weight:700}
+.cms-section-header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px}
+.cms-section-header h2{font-size:28px;margin:0;color:#092045;line-height:1.2}
+.cms-section-header p{color:#607087;margin:3px 0;font-size:16px}
+.cms-card{background:#fff;border:1px solid #e0e5ee;border-radius:13px;padding:24px 26px;box-shadow:0 8px 26px #14283c0e;max-width:1160px}
+.cms-card>h3,.cms-card h3{font-size:21px;color:#112a4e;margin:0 0 14px}
+.cms-count{color:#8b98a9;font-weight:500}
+.cms-manage-list{display:grid;gap:10px;margin-bottom:20px}
+.cms-manage-item{display:flex;align-items:center;gap:11px;background:#fbfcfe;border:1px solid #e3e9f0;border-radius:9px;padding:11px;min-width:0}
+.cms-item-number{flex:0 0 25px;font-size:13px;font-weight:800;color:#718098;text-align:center}
+.cms-row-field{display:flex;flex:1;flex-direction:column;gap:4px;font-size:12px;color:#586779;font-weight:800;min-width:120px;margin:0!important}
+.cms-row-field input{display:block;background:#fff;border:1px solid #d3dbe5;border-radius:7px;font-size:16px;font-weight:600;padding:7px 9px;line-height:1.5;width:100%;min-width:0;color:#1d2e44}
+.cms-row-field input:focus{outline:2px solid #e5a4ab;outline-offset:1px}
+.cms-row-check,.cms-check{display:flex!important;flex-direction:row;align-items:center;gap:8px;white-space:nowrap;margin:0!important;font-weight:800;font-size:14px!important;color:#455368}
+.cms-row-check input,.cms-check input{appearance:auto;width:17px;height:17px;min-width:17px;margin:0}
+.cms-row-actions{display:flex;gap:4px;align-items:center}
+.cms-icon-btn{border:1px solid #d3dce7;background:#fff;color:#34475e;font-weight:800;font-size:16px;border-radius:6px;min-width:29px;height:32px;padding:0 7px;cursor:pointer}
+.cms-icon-btn:hover{background:#fff0f1;color:#b60013;border-color:#f1c3c7}
+.cms-icon-btn:disabled{opacity:.3;cursor:not-allowed}
+.cms-add-form{border:1px dashed #bac9dc;border-radius:9px;background:#f8fafe;display:flex;align-items:end;gap:12px;padding:15px;margin-bottom:19px}
+.cms-add-form label{font-weight:800;font-size:14px;display:flex;flex:1;min-width:0;flex-direction:column;gap:5px;margin:0!important}
+.cms-add-form input,.cms-add-form select{border:1px solid #cbd5e1;border-radius:7px;padding:9px 11px;font-size:16px;background:#fff;min-height:43px}
+.cms-add-form .btn{min-height:43px}
+.cms-actions{display:flex;align-items:center;gap:14px;margin-top:17px;flex-wrap:wrap}
+.cms-actions .btn{font-size:16px}
+.cms-actions .btn:disabled{opacity:.48;cursor:not-allowed}
+.cms-actions .status{flex:1;font-size:14px;line-height:1.4}
+.cms-hint{font-size:14px!important;line-height:1.6;color:#6b798b;margin:14px 0 0}
+.cms-slider-item .cms-row-check{margin-inline:5px!important}
+.cms-slide-thumb{width:125px;aspect-ratio:16/9;object-fit:cover;border-radius:7px;flex:0 0 125px;background:#eef1f5}
+.cms-slide-info{flex:1;min-width:0}
+.cms-slide-info strong{font-size:16px;line-height:1.35;display:block;color:#20324b;margin:0 0 8px}
+.cms-slide-info .cms-row-field{margin:0!important}
+.cms-inline-field{display:flex;align-items:center;gap:13px;font-size:15px;font-weight:800;margin:8px 0 16px}
+.cms-inline-field select{padding:8px 11px;background:#fff;border:1px solid #cbd5e1;border-radius:7px}
+.cms-card>label:not(.cms-check){display:grid;gap:6px;margin:14px 0;color:#26354e;font-weight:800}
+.cms-card>label input,.cms-card>label textarea,.cms-card>label select,.cms-card .form-two input,.cms-card .form-two textarea{width:100%;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;color:#1d2e44;background:#fff;font-size:16px;font-weight:400}
+.cms-card textarea{resize:vertical;line-height:1.65}
+.cms-muted{opacity:.55}
+@media(max-width:980px){
+ .cms-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain}
+ .cms-tab{flex:0 0 auto;font-size:14px;min-height:38px;padding:8px 11px}
+ .cms-manage-item{flex-wrap:wrap}
+ .cms-menu-item .cms-row-field{flex-basis:calc(50% - 45px)}
+ .cms-row-actions{margin-left:auto}
+ .cms-slider-item .cms-slide-info{flex-basis:calc(100% - 145px)}
+}
+@media(max-width:580px){
+ .cms-section-header h2{font-size:23px}
+ .cms-section-header p{font-size:14px}
+ .cms-card{padding:15px 13px;border-radius:10px}
+ .cms-manage-item{padding:10px 8px;gap:8px}
+ .cms-menu-item .cms-item-number{flex-basis:19px}
+ .cms-menu-item .cms-row-field{flex:1 1 calc(50% - 25px);min-width:95px}
+ .cms-menu-item .cms-row-field:nth-child(3){flex:1 1 100%}
+ .cms-menu-item .cms-row-check{margin-left:26px!important}
+ .cms-row-actions{margin-left:auto}
+ .cms-add-form{flex-direction:column;align-items:stretch;gap:9px;padding:12px}
+ .cms-add-form label,.cms-add-form .btn{width:100%}
+ .cms-slide-thumb{width:95px;flex-basis:95px}
+ .cms-slider-item .cms-slide-info{flex:1 1 calc(100% - 110px)}
+ .cms-slider-item .cms-row-check{margin-left:0!important}
+ .cms-card .form-two{grid-template-columns:1fr}
+ .cms-actions{align-items:stretch}
+ .cms-actions .btn{width:100%}
+ .cms-actions .status{flex-basis:100%}
+}
