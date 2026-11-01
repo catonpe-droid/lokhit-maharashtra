@@ -16,3 +16,38 @@ body{background:#eff2f7}.admin-header{background:var(--navy);color:#fff}.admin-h
 .login-help p{margin-bottom:5px;line-height:1.6}
 .dash-list,.editor-panel{border-radius:14px;box-shadow:0 8px 25px #10243910}
 @media(max-width:460px){.login-card{padding:24px 20px;margin:28px auto}.login-card h1{font-size:27px}}
+
+
+/* Compact mobile administration without overflowing controls */
+@media(max-width:768px){
+ .admin-header-inner{min-height:60px;gap:9px}
+ .admin-header a{min-width:0;font-size:16px;line-height:1.2}
+ .admin-header-inner>span{font-size:12px;white-space:nowrap}
+ .admin-logo{width:41px;height:41px}
+ .login-card{margin:20px auto;max-width:460px}
+ .dashboard-grid{grid-template-columns:minmax(0,1fr);gap:11px;padding-bottom:20px}
+ .dash-title{padding:16px 0 12px}
+ .dash-title h1{font-size:25px}
+ .dash-title p{font-size:14px}
+ .dash-buttons{display:flex;gap:7px;flex-wrap:wrap}
+ .dash-list,.editor-panel{padding:13px;border-radius:10px;min-width:0}
+ .dash-list{max-height:210px;overflow:auto}
+ .admin-post-list{max-height:145px}
+ .admin-post{padding:8px 3px}
+ .admin-post strong{font-size:14px}
+ .edit-top{margin-bottom:13px}
+ .edit-top h2{font-size:22px}
+ .editor-panel label{font-size:14px;margin-bottom:12px}
+ .editor-panel input,.editor-panel textarea,.editor-panel select{font-size:16px;max-width:100%}
+ .editor-panel textarea{line-height:1.5}
+ .editor-actions{gap:7px}
+ .editor-actions .btn{font-size:14px;min-height:42px;padding:9px 10px}
+ .editor-actions #publish{flex:1}
+ .form-two{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+}
+@media(max-width:480px){
+ .form-two{grid-template-columns:1fr}
+ .admin-header-inner>span{display:none}
+ .login-card{padding:21px 17px}
+ .login-card input{width:100%}
+}
