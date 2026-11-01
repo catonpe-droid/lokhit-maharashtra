@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "editors": [
+    {
+      "id": 1,
+      "name": "Editor 1"
+    },
+    {
+      "id": 2,
+      "name": "Editor 2"
+    },
+    {
+      "id": 3,
+      "name": "Editor 3"
+    },
+    {
+      "id": 4,
+      "name": "Editor 4"
+    },
+    {
+      "id": 5,
+      "name": "Editor 5"
+    },
+    {
+      "id": 6,
+      "name": "Editor 6"
+    },
+    {
+      "id": 7,
+      "name": "Editor 7"
+    },
+    {
+      "id": 8,
+      "name": "Editor 8"
+    },
+    {
+      "id": 9,
+      "name": "Editor 9"
+    },
+    {
+      "id": 10,
+      "name": "Editor 10"
+    }
+  ]
+}
