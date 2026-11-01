@@ -16,7 +16,7 @@
   const id=$('username').value.trim(),password=$('password').value.trim();
   repository='catonpe-droid/lokhit-maharashtra';branch='main';demoMode=(id==='admin'&&password==='1234');
   token=demoMode?'':password;
-  $('login-status').textContent=demoMode?'डेमो पूर्वावलोकन उघडत आहे…':'GitHub अधिकार तपासत आहे…';
+  $('login-status').textContent=demoMode?'डेमो पूर्वावलोकन उघडत आहे…':'Server प्रकाशनाचे अधिकार तपासत आहे…';
   try{
    if(!demoMode){
     const userResp=await fetch('https://api.github.com/user',{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token}});
@@ -32,7 +32,7 @@
    $('password').value='';
    $('login').hidden=true;$('dashboard').hidden=false;
    $('publish').disabled=demoMode;
-   status(demoMode?'डेमो मोड : बातम्या वाचा आणि पूर्वावलोकन करा. प्रकाशित करण्यासाठी GitHub username आणि fine-grained token वापरून पुन्हा प्रवेश करा.':'✅ GitHub ची ओळख तपासली. तुम्ही बातम्या जतन करू शकता.',demoMode);
+   status(demoMode?'डेमो मोड : बातम्या वाचा आणि पूर्वावलोकन करा. प्रकाशनासाठी अधिकृत Server प्रवेश वापरा.':'✅ Server प्रकाशनाचे अधिकार तपासले. तुम्ही बातम्या जतन करू शकता.',demoMode);
    await loadPosts();
    document.dispatchEvent(new Event('lokhitcms:ready'));
   }catch(e){status(e.message,true,'login-status');token='';demoMode=false;loggedIn=false;}
@@ -62,21 +62,21 @@
   return{data,path};
  }
  async function submit(ev){
-  ev.preventDefault();if(!loggedIn){status('सर्वप्रथम GitHub प्रवेश करा.',true);return}
+  ev.preventDefault();if(!loggedIn){status('सर्वप्रथम Server प्रवेश करा.',true);return}
   const slug=current?.slug||makeSlug();
   if(!/^[a-zA-Z0-9_-]{3,120}$/.test(slug)){status('URL/Slug साठी फक्त इंग्रजी अक्षरे, अंक, - किंवा _ वापरा.',true);return}
-  $('publish').disabled=true;status('बातमी GitHub वर जतन होत आहे…');
+  $('publish').disabled=true;status('बातमी Server वर जतन होत आहे…');
   try{
    let image=current?.image||'assets/img/logo.webp';const file=$('photo').files[0];
    if(file){status('फोटो अपलोड होत आहे…');const pic=await imageData(file,slug);await github('contents/'+pic.path,'PUT',{message:'Add editorial image for '+slug,content:pic.data,branch});image=pic.path}
    const now=new Date().toISOString(), p={slug,title:$('title').value.trim(),description:$('description').value.trim(),category:$('category').value,body:$('body').value.trim(),image,author:$('author').value.trim()||'लोकहित महाराष्ट्र डिजिटल डेस्क',date:current?.date||now,updated:now,featured:$('featured').checked,status:$('post-status').value,video:$('video').value.trim(),tags:['महाराष्ट्र',$('category').value]};
    const path=current?._path||'content/posts/'+slug+'.json', payload={message:(current?'Update ':'Publish ')+slug,content:base64UTF8(JSON.stringify(p,null,2)+'\n'),branch};if(current?._sha)payload.sha=current._sha;
    await github('contents/'+path,'PUT',payload);
-   status('✅ GitHub वर बातमी जतन झाली. Pages workflow पूर्ण झाल्यावर वेबसाइट अपडेट होईल.');await loadPosts();const found=records.find(x=>x.slug===slug);if(found)openPost(found);
+   status('✅ बातमी Server वर जतन झाली. प्रकाशन प्रक्रिया पूर्ण झाल्यावर वेबसाइट अपडेट होईल.');await loadPosts();const found=records.find(x=>x.slug===slug);if(found)openPost(found);
   }catch(e){status('जतन अयशस्वी: '+e.message,true)}finally{$('publish').disabled=false}
  }
  async function remove(){if(!current||!confirm('ही बातमी कायमची काढायची?'))return;
-  if(!confirm('खात्री करा: हा बदल GitHub मध्येही होईल.'))return;
+  if(!confirm('खात्री करा: हा बदल Server वरील प्रकाशित सामग्रीतही होईल.'))return;
   try{await github('contents/'+current._path,'DELETE',{message:'Remove article '+current.slug,sha:current._sha,branch});status('बातमी काढली.');newPost();await loadPosts()}catch(e){status(e.message,true)}
  }
  function preview(){const box=$('live-preview');box.replaceChildren();let note=document.createElement('p');note.className='preview-note';note.textContent='पूर्वावलोकन — ही माहिती अजून प्रकाशित केलेली नाही.';let h=document.createElement('h2');h.textContent=$('title').value;let desc=document.createElement('strong');desc.textContent=$('description').value;box.append(note,h,desc);for(const para of $('body').value.split(/\n\s*\n/).filter(Boolean)){const p=document.createElement('p');p.textContent=para;box.appendChild(p)}box.hidden=false;box.scrollIntoView({behavior:'smooth',block:'start'})}
