@@ -1,13 +1,13 @@
 // Offline worker contract tests. All GitHub and Google HTTPS calls are mocked.
 import fs from "node:fs";
 import assert from "node:assert/strict";
-import {webcrypto} from "node:crypto";
+import {webcrypto,createHash} from "node:crypto";
 globalThis.crypto ||= webcrypto;
 const workerCode=fs.readFileSync(new URL("./worker.js",import.meta.url),"utf8");
 const worker=(await import("data:text/javascript;base64,"+Buffer.from(workerCode).toString("base64"))).default;
 const ORIGIN="https://catonpe-droid.github.io";
 const WEB_CLIENT="test-client.apps.googleusercontent.com";
-const ENV={GOOGLE_CLIENT_ID:WEB_CLIENT,ADMIN_EMAILS:"editor@gmail.com",GITHUB_TOKEN:"fake-secret",SITE_ORIGINS:ORIGIN};
+const ENV={GOOGLE_CLIENT_ID:WEB_CLIENT,ADMIN_EMAIL_SHA256:createHash("sha256").update("editor@gmail.com").digest("hex"),GITHUB_TOKEN:"fake-secret",SITE_ORIGINS:ORIGIN};
 const keys=await crypto.subtle.generateKey({name:"RSASSA-PKCS1-v1_5",modulusLength:2048,publicExponent:new Uint8Array([1,0,1]),hash:"SHA-256"},true,["sign","verify"]);
 const jwk=await crypto.subtle.exportKey("jwk",keys.publicKey);
 Object.assign(jwk,{kid:"test-google-key",use:"sig",alg:"RS256"});
