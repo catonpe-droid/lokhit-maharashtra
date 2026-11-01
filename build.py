@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Lokhit Maharashtra static mini-CMS renderer. No external pip dependencies."""
-import html, json, os, pathlib, re, shutil, datetime, urllib.parse, xml.etree.ElementTree as ET
+import html, json, os, pathlib, re, shutil, datetime, urllib.parse, xml.etree.ElementTree as ET, hashlib, urllib.request
 from email.utils import format_datetime
 ROOT=pathlib.Path(__file__).resolve().parent
 OUT=ROOT/'docs'
@@ -57,11 +57,54 @@ def img(p):
 def absolute_image(p):
  src=str(p.get('image') or 'assets/img/logo.webp')
  return src if src.startswith('https://') else A(src)
+def share_preview_image(p):
+ # WhatsApp/Facebook scrape the static HTML, not the browser's JavaScript.
+ # Google Drive's googleusercontent /d/ links can reject social crawlers.
+ # Mirror publicly shared Drive photos into our own GitHub Pages assets.
+ src=str(p.get('image') or 'assets/img/logo.webp').strip()
+ if not src.startswith('https://'):return A(src)
+ parsed=urllib.parse.urlsplit(src)
+ if parsed.scheme!='https' or parsed.hostname!='lh3.googleusercontent.com' or not re.fullmatch(r'/d/[A-Za-z0-9_-]+',parsed.path):
+  return src
+ slug=re.sub(r'[^a-z0-9_-]','',str(p.get('slug') or 'news').lower())[:100]
+ digest=hashlib.sha256(src.encode('utf8')).hexdigest()[:12]
+ folder=ROOT/'assets/img/share'
+ for ext in ('jpg','png','webp'):
+  name=f'{slug}-{digest}.{ext}'
+  cached=folder/name
+  if cached.is_file() and 1500<=cached.stat().st_size<=5_000_000:
+   return A('assets/img/share/'+name)
+ try:
+  request=urllib.request.Request(src,headers={
+   'User-Agent':'Mozilla/5.0 (compatible; LokhitNewsPreview/1.0)',
+   'Accept':'image/avif,image/webp,image/png,image/jpeg,image/*;q=0.9'})
+  with urllib.request.urlopen(request,timeout=16) as response:
+   data=response.read(5_000_001)
+  if not 1500<=len(data)<=5_000_000:raise ValueError('image size outside share-preview limits')
+  if data[:3]==bytes.fromhex('ffd8ff'):ext='jpg'
+  elif data[:8]==bytes.fromhex('89504e470d0a1a0a'):ext='png'
+  elif data[:4]==b'RIFF' and data[8:12]==b'WEBP':ext='webp'
+  else:raise ValueError('not a supported image')
+  folder.mkdir(parents=True,exist_ok=True)
+  name=f'{slug}-{digest}.{ext}'
+  (folder/name).write_bytes(data)
+  print('Cached social preview:',name,len(data),'bytes')
+  return A('assets/img/share/'+name)
+ except (OSError,ValueError,TimeoutError) as exc:
+  # Prefer the public portal logo to a blocked Google Drive thumbnail.
+  print('WARNING: Unable to mirror social image for',slug,':',exc)
+  return A('assets/img/logo.webp')
 def ld_head(title,desc,canonical,image=None,kind='website',published=None,modified=None,schema=None):
  metadata={'@context':'https://schema.org','@type':'WebSite' if kind=='website' else 'NewsArticle','headline':title,'name':title,'description':desc,'url':canonical,'inLanguage':'mr-IN','publisher':{'@type':'Organization','name':CFG['name'],'logo':{'@type':'ImageObject','url':A('assets/img/logo.webp')}}}
  if kind=='article':metadata.update({'image':[image or A('assets/img/logo.webp')],'datePublished':published,'dateModified':modified or published,'author':{'@type':'Organization','name':CFG['name']},'mainEntityOfPage':canonical})
  elif kind=='website':metadata.update({'potentialAction':{'@type':'SearchAction','target':A('shodh/')+'?q={search_term_string}','query-input':'required name=search_term_string'}})
  tags=[f'<title>{E(title)} | {E(CFG["name"])}</title>',f'<meta name="description" content="{E(desc)}">',f'<link rel="canonical" href="{E(canonical)}">',f'<meta property="og:type" content="{"article" if kind=="article" else "website"}">',f'<meta property="og:title" content="{E(title)}">',f'<meta property="og:description" content="{E(desc)}">',f'<meta property="og:url" content="{E(canonical)}">',f'<meta property="og:site_name" content="{E(CFG["name"])}">',f'<meta property="og:locale" content="mr_IN">',f'<meta property="og:image" content="{E(image or A("assets/img/logo.webp"))}">',f'<meta property="og:image:alt" content="{E(title)}">',f'<meta name="twitter:card" content="summary_large_image">',f'<meta name="twitter:title" content="{E(title)}">',f'<meta name="twitter:image" content="{E(image or A("assets/img/logo.webp"))}">',f'<script type="application/ld+json">{json.dumps(metadata,ensure_ascii=False)}</script>']
+ # Declare the HTTPS preview image explicitly for messaging/social crawlers.
+ preview=image or A('assets/img/logo.webp')
+ tags.extend([f'<meta property="og:image:secure_url" content="{E(preview)}">',f'<meta name="twitter:description" content="{E(desc)}">',f'<meta name="twitter:image:alt" content="{E(title)}">'])
+ extension=urllib.parse.urlsplit(preview).path.rsplit('.',1)[-1].lower()
+ image_mimes={'jpg':'image/jpeg','jpeg':'image/jpeg','png':'image/png','webp':'image/webp'}
+ if extension in image_mimes:tags.append(f'<meta property="og:image:type" content="{image_mimes[extension]}">')
  if kind=='article':tags+= [f'<meta property="article:published_time" content="{E(published)}">',f'<meta property="article:modified_time" content="{E(modified or published)}">']
  return '\n'.join(tags)
 def shell(content,title,desc,path='',image=None,kind='website',published=None,modified=None,active=''):
@@ -192,7 +235,7 @@ for p in POSTS:
  bar='<div class="share-bar"><strong>ही बातमी शेअर करा :</strong><button class="share-btn share-wa" data-share="wa">WhatsApp</button><button class="share-btn share-fb" data-share="fb">Facebook</button><button class="share-btn share-x" data-share="x">X</button><button class="share-btn share-tg" data-share="tg">Telegram</button><button class="share-btn share-copy" data-share="copy">लिंक कॉपी</button><button class="share-btn share-native" data-share="native">इतर</button></div>'
  related=[q for q in POSTS if q['slug']!=p['slug'] and q['category']==p['category']][:2] or [q for q in POSTS if q['slug']!=p['slug']][:2]
  content=f'<div class="container">{breadcrumbs([E(p["category"]),E(p["title"])])}<div class="content-layout"><article class="article"><span class="tag">{E(p["category"])}</span><h1>{E(p["title"])}</h1><p class="article-summary">{E(p["description"])}</p><div class="meta"><span>✍ {E(p.get("author",CFG["name"]))}</span><span>📅 {E(time_marathi(p["date"]))}</span></div><figure class="article-figure"><img src="{img(p)}" alt="{E(p["title"])}" width="960" height="540"><figcaption>प्रतीकात्मक, संगणकनिर्मित चित्र</figcaption></figure>{bar}<div class="article-body">{"".join(body)}{video}</div>{bar}<div class="section-head"><h2>संबंधित बातम्या</h2></div><div class="related-grid">{"".join(card(q) for q in related)}</div></article><aside><div class="side-panel sidebar-box"><div class="panel-title">ताज्या बातम्या</div><div class="panel-content">{"".join(latest(q) for q in POSTS[:9])}</div></div><div class="side-panel"><div class="panel-title">लोकहित विशेष</div><div class="panel-content"><p>शेती, पाणी, रोजगार आणि शासन योजनांची माहिती</p><a class="admin-link" href="{U(CATEGORY_PATH["दुष्काळ विशेष"])}">सर्व लेख पहा</a></div></div></aside></div></div>'
- write(article_path(p)+'index.html',shell(content,p['title'],p['description'],article_path(p),absolute_image(p),'article',p['date'],p.get('updated') or p['date']))
+ write(article_path(p)+'index.html',shell(content,p['title'],p['description'],article_path(p),share_preview_image(p),'article',p['date'],p.get('updated') or p['date']))
 # Category pages
 for cat,slug in PAGES:
  path='vibhag/'+slug+'/'
