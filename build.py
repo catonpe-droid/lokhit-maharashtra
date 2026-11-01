@@ -42,7 +42,12 @@ def article_url(p):return A(article_path(p))
 def time_marathi(s):
  try:return datetime.datetime.fromisoformat(s).strftime('%d-%m-%Y')
  except:return ''
-def img(p):return U(p.get('image','assets/img/logo.webp'))
+def img(p):
+ src=str(p.get('image') or 'assets/img/logo.webp')
+ return src if src.startswith('https://') else U(src)
+def absolute_image(p):
+ src=str(p.get('image') or 'assets/img/logo.webp')
+ return src if src.startswith('https://') else A(src)
 def ld_head(title,desc,canonical,image=None,kind='website',published=None,modified=None,schema=None):
  metadata={'@context':'https://schema.org','@type':'WebSite' if kind=='website' else 'NewsArticle','headline':title,'name':title,'description':desc,'url':canonical,'inLanguage':'mr-IN','publisher':{'@type':'Organization','name':CFG['name'],'logo':{'@type':'ImageObject','url':A('assets/img/logo.webp')}}}
  if kind=='article':metadata.update({'image':[image or A('assets/img/logo.webp')],'datePublished':published,'dateModified':modified or published,'author':{'@type':'Organization','name':CFG['name']},'mainEntityOfPage':canonical})
@@ -72,7 +77,7 @@ def shell(content,title,desc,path='',image=None,kind='website',published=None,mo
 <nav class="nav" aria-label="मुख्य मेनू"><div class="container nav-inner"><button id="nav-toggle" class="hamburger" aria-expanded="false" aria-controls="nav-links" aria-label="मेनू उघडा">☰</button><div class="nav-links" id="nav-links" style="display:contents">{nav}</div></div></nav>
 <main>{breakbar}{content}</main>
 <footer class="footer"><div class="container"><div class="footer-grid"><div><div class="footer-brand"><img src="{U('assets/img/logo.webp')}" alt="" class="footer-logo">लोकहित महाराष्ट्र</div><p>{E(CFG['tagline'])}. महाराष्ट्र, दुष्काळ, शेती, योजना आणि ग्रामीण विकासाविषयी मराठी माहिती.</p><small>डिजिटल न्यूज व जनमाहिती पोर्टल. हे कोणत्याही शासकीय कार्यालयाचे अधिकृत संकेतस्थळ नाही.</small></div>{footer}</div><div class="footer-bottom"><span>© २०२६ लोकहित महाराष्ट्र. सर्व हक्क राखीव.</span><span>माहितीतील त्रुटी निदर्शनास आणण्यासाठी संपर्क पृष्ठ वापरा.</span></div></div></footer>
-<div id="toast" class="toast" role="status" aria-live="polite"></div><script src="{U('assets/js/site.js')}" defer></script><script src="{U('assets/js/sheets-config.js')}" defer></script><script src="{U('assets/js/sheets-public.js')}" defer></script></body></html>'''.replace('id="nav-links" style="display:contents"','id="nav-links"')
+<div id="toast" class="toast" role="status" aria-live="polite"></div><script src="{U('assets/js/site.js')}" defer></script></body></html>'''.replace('id="nav-links" style="display:contents"','id="nav-links"')
 def write(path,content):
  target=OUT/path
  target.parent.mkdir(parents=True,exist_ok=True)
@@ -138,7 +143,6 @@ else:
  hero='<div class="empty-state">बातम्या लवकरच उपलब्ध होतील.</div>'
 other_posts=[p for p in POSTS if not lead or p['slug']!=lead['slug']]
 home=f'<div class="container"><section class="page-section hero-layout">{hero}<div class="hero-stack">'+''.join(stack(p) for p in other_posts[:4])+f'</div><div class="hero-latest side-panel"><div class="panel-title">ताज्या बातम्या <a href="{U("tajya-batmya/")}">सर्व पहा ›</a></div><div class="panel-content">'+''.join(latest(p) for p in POSTS[5:11])+'</div></div></section>'
-home+='<section class="page-section" id="sheet-news-section" hidden><div class="section-head"><h2>📰 नुकत्याच प्रकाशित बातम्या</h2></div><div class="news-grid" id="sheet-news-home"></div></section>'
 home+=section('दुष्काळ विशेष',[p for p in POSTS if p['category'] in ('दुष्काळ विशेष','मराठवाडा','पाणी')][:4],CATEGORY_PATH['दुष्काळ विशेष'])
 home+='<section class="page-section drought-banner"><div><h2>🌾 दुष्काळ विशेष : माहिती, मदत आणि मार्गदर्शन</h2><p>पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी</p></div><a href="'+U(CATEGORY_PATH['दुष्काळ विशेष'])+'">सर्व बातम्या पहा →</a></section>'
 home+=live_section(True)
@@ -177,7 +181,7 @@ for p in POSTS:
  bar='<div class="share-bar"><strong>ही बातमी शेअर करा :</strong><button class="share-btn share-wa" data-share="wa">WhatsApp</button><button class="share-btn share-fb" data-share="fb">Facebook</button><button class="share-btn share-x" data-share="x">X</button><button class="share-btn share-tg" data-share="tg">Telegram</button><button class="share-btn share-copy" data-share="copy">लिंक कॉपी</button><button class="share-btn share-native" data-share="native">इतर</button></div>'
  related=[q for q in POSTS if q['slug']!=p['slug'] and q['category']==p['category']][:2] or [q for q in POSTS if q['slug']!=p['slug']][:2]
  content=f'<div class="container">{breadcrumbs([E(p["category"]),E(p["title"])])}<div class="content-layout"><article class="article"><span class="tag">{E(p["category"])}</span><h1>{E(p["title"])}</h1><p class="article-summary">{E(p["description"])}</p><div class="meta"><span>✍ {E(p.get("author",CFG["name"]))}</span><span>📅 {E(time_marathi(p["date"]))}</span></div><figure class="article-figure"><img src="{img(p)}" alt="{E(p["title"])}" width="960" height="540"><figcaption>प्रतीकात्मक, संगणकनिर्मित चित्र</figcaption></figure>{bar}<div class="article-body">{"".join(body)}{video}</div>{bar}<div class="section-head"><h2>संबंधित बातम्या</h2></div><div class="related-grid">{"".join(card(q) for q in related)}</div></article><aside><div class="side-panel sidebar-box"><div class="panel-title">ताज्या बातम्या</div><div class="panel-content">{"".join(latest(q) for q in POSTS[:9])}</div></div><div class="side-panel"><div class="panel-title">लोकहित विशेष</div><div class="panel-content"><p>शेती, पाणी, रोजगार आणि शासन योजनांची माहिती</p><a class="admin-link" href="{U(CATEGORY_PATH["दुष्काळ विशेष"])}">सर्व लेख पहा</a></div></div></aside></div></div>'
- write(article_path(p)+'index.html',shell(content,p['title'],p['description'],article_path(p),A(p['image']),'article',p['date'],p.get('updated') or p['date']))
+ write(article_path(p)+'index.html',shell(content,p['title'],p['description'],article_path(p),absolute_image(p),'article',p['date'],p.get('updated') or p['date']))
 # Category pages
 for cat,slug in PAGES:
  path='vibhag/'+slug+'/'
@@ -191,10 +195,8 @@ for cat,slug in PAGES:
  write(path+'index.html',shell(content,cat+' बातम्या',cat+' विभागातील ताज्या मराठी बातम्या',path,active=path))
 # latest index
 path='tajya-batmya/'
-latest_content=f'<div class="container">{breadcrumbs(["ताज्या बातम्या"])}<div id="sheet-news-latest" class="news-grid" style="margin-bottom:20px"></div><div class="section-head"><h2>ताज्या बातम्या</h2></div><div class="news-grid">'+''.join(card(p) for p in POSTS)+'</div></div>'
+latest_content=f'<div class="container">{breadcrumbs(["ताज्या बातम्या"])}<div class="section-head"><h2>ताज्या बातम्या</h2></div><div class="news-grid">'+''.join(card(p) for p in POSTS)+'</div></div>'
 write(path+'index.html',shell(latest_content,'ताज्या बातम्या','लोकहित महाराष्ट्रच्या सर्व बातम्या',path,active=path))
-sheet_article='<div class="container"><div class="content-layout"><article class="article" id="sheet-article-root"><p class="article-summary">बातमी उघडत आहे...</p></article></div></div>'
-write('batmi/sheet/index.html',shell(sheet_article,'लोकहित महाराष्ट्र बातमी','Google Sheet मधील ताज्या मराठी बातम्या','batmi/sheet/'))
 
 # Search page
 path='shodh/'
