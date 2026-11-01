@@ -6,7 +6,7 @@
  const status=(id,txt,bad=false)=>{const e=$(id);if(e){e.textContent=txt;e.classList.toggle('error',bad)}};
  const previewOnly=()=>!api()?.canPublish();
  const saveBtnIds=['menu-save','slider-save','breaking-save','settings-save'];
- const refreshPermissions=()=>{const demo=previewOnly();$('cms-demo-banner').hidden=!demo;saveBtnIds.forEach(id=>{const b=$(id);if(b){b.disabled=demo;b.title=demo?'हा डेमो मोड आहे; GitHub access आवश्यक आहे':''}})};
+ const refreshPermissions=()=>{const demo=previewOnly();$('cms-demo-banner').hidden=!demo;saveBtnIds.forEach(id=>{const b=$(id);if(b){b.disabled=demo;b.title=demo?'हा डेमो मोड आहे; अधिकृत Server access आवश्यक आहे':''}})};
  const safePath=s=>/^[a-z0-9_/-]*$/i.test(s) && !s.includes('..') && !s.startsWith('/') && !s.includes('//');
  function setTab(name){
   mode=name;
@@ -89,13 +89,13 @@
  }
  async function saveLayout(section,newData,buttonId,statusId,message){
   if(previewOnly()){status(statusId,'डेमो मोडमध्ये बदल जतन करता येत नाहीत.',true);return}
-  const button=$(buttonId);button.disabled=true;status(statusId,'GitHub वर प्रकाशित करत आहे…');
+  const button=$(buttonId);button.disabled=true;status(statusId,'Server वर प्रकाशित करत आहे…');
   try{
    // Read the current remote layout before each save to preserve other settings.
    const current=await api().readJson('content/layout.json');
    const merged={...current.data,...newData,version:2};
    await api().writeJson('content/layout.json',merged,message);
-   layout=merged;status(statusId,'✅ बदल जतन झाले. GitHub Pages ने नवीन आवृत्ती प्रकाशित केल्यानंतर वेबसाइटवर दिसतील.');
+   layout=merged;status(statusId,'✅ बदल जतन झाले. Server वर नवीन आवृत्ती प्रकाशित झाल्यावर वेबसाइटवर दिसतील.');
   }catch(err){status(statusId,'प्रकाशन अयशस्वी: '+err.message,true)}
   finally{button.disabled=previewOnly()}
  }
@@ -130,8 +130,8 @@
   saveLayout('breaking',{breaking:{enabled:$('breaking-enabled').checked,mode,custom}},'breaking-save','breaking-status','Update scrolling breaking-news headlines');
  });
  $('settings-form').addEventListener('submit',async ev=>{
-  ev.preventDefault();if(previewOnly()){status('settings-status','प्रकाशनासाठी अधिकृत GitHub प्रवेश आवश्यक आहे.',true);return}
-  const btn=$('settings-save');btn.disabled=true;status('settings-status','साइट सेटिंग्ज GitHub वर प्रकाशित करत आहे…');
+  ev.preventDefault();if(previewOnly()){status('settings-status','प्रकाशनासाठी अधिकृत Server प्रवेश आवश्यक आहे.',true);return}
+  const btn=$('settings-save');btn.disabled=true;status('settings-status','साइट सेटिंग्ज Server वर प्रकाशित करत आहे…');
   try{
    const current=await api().readJson('site.json'),update={...current.data};
    settingKeys.forEach(k=>update[k]=String($('setting-'+k).value||'').trim());
