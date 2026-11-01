@@ -231,6 +231,7 @@ function renderList(){
     author:$('author').value.trim(),video:$('video').value.trim(),
     origin:current?.origin||null,featured:$('featured').checked,status:$('post-status').value};
    const result=await api('/post','PUT',{article,image});
+   unmarkDeletedOnBrowser(result.slug);
    const saved={...current,...article,slug:result.slug,date:current?.date||new Date().toISOString(),status:result.status,origin:'drive'};
    mergeNews([saved]);current=saved;
    $('slug').value=result.slug;$('slug').disabled=true;$('delete').hidden=false;
@@ -242,10 +243,39 @@ function renderList(){
   }catch(e){status('जतन अयशस्वी: '+e.message,true)}
   finally{$('publish').disabled=false}
  }
+ function markDeletedOnBrowser(slug){
+  try{
+   const key='lokhit-deleted-slugs-v1';
+   const data=JSON.parse(localStorage.getItem(key)||'{}');
+   data[slug]=Date.now();
+   for(const [id,ts] of Object.entries(data)){
+    if(Date.now()-Number(ts)>30*86400000)delete data[id];
+   }
+   localStorage.setItem(key,JSON.stringify(data));
+  }catch(e){}
+  document.dispatchEvent(new CustomEvent('lokhit:news-deleted',{detail:{slug}}));
+ }
+ function unmarkDeletedOnBrowser(slug){
+  try{
+   const key='lokhit-deleted-slugs-v1';
+   const data=JSON.parse(localStorage.getItem(key)||'{}');
+   if(data[slug]){delete data[slug];localStorage.setItem(key,JSON.stringify(data))}
+  }catch(e){}
+ }
  async function remove(){
-  if(!loggedIn||!current||!confirm('ही बातमी कायमची काढायची?'))return;
-  try{await api('/post?slug='+encodeURIComponent(current.slug),'DELETE');newPost();await loadPosts();status('✅ बातमी काढली.')}
-  catch(e){status('बातमी काढता आली नाही: '+e.message,true)}
+  if(!loggedIn||!current||!confirm('ही बातमी वेबसाइटवरून कायमची हटवायची?'))return;
+  const slug=current.slug;
+  const button=$('delete');button.disabled=true;
+  status('बातमी हटवली जात आहे…');
+  try{
+   const result=await api('/post?slug='+encodeURIComponent(slug),'DELETE');
+   if(!result?.deleted)throw Error('Server ने Delete ची पुष्टी दिली नाही.');
+   markDeletedOnBrowser(slug);
+   records=records.filter(p=>p.slug!==slug);
+   newPost();renderList();
+   status('✅ बातमी हटवली. वेबसाइटवरही तिची लिंक व यादी लपवली जाईल. GitHub फाइल पुढील Sync मध्ये काढली जाईल.');
+  }catch(e){status('बातमी काढता आली नाही: '+e.message,true)}
+  finally{button.disabled=false}
  }
  function preview(){const box=$('live-preview');box.replaceChildren();let note=document.createElement('p');note.className='preview-note';note.textContent='पूर्वावलोकन — ही माहिती अजून प्रकाशित केलेली नाही.';let h=document.createElement('h2');h.textContent=$('title').value;let desc=document.createElement('strong');desc.textContent=$('description').value;box.append(note,h,desc);for(const para of $('body').value.split(/\n\s*\n/).filter(Boolean)){const p=document.createElement('p');p.textContent=para;box.appendChild(p)}box.hidden=false;box.scrollIntoView({behavior:'smooth',block:'start'})}
  // Controlled publishing bridge for the CMS tabs; credentials remain private in this closure.
