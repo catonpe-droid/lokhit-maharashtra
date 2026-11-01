@@ -154,6 +154,14 @@
     updateMenu(data.layout);
     updateBreaking(data.layout,items);
     updateSlider(data.layout,items);
+    // Existing articles remain on GitHub Pages: include their metadata when
+    // a saved slider selection points to one of those earlier news stories.
+    if(Array.isArray(data.layout.slider)&&data.layout.slider.length){
+     fetch(base+'posts-index.json',{cache:'force-cache'})
+      .then(r=>r.ok?r.json():[])
+      .then(oldPosts=>{if(Array.isArray(oldPosts))updateSlider(data.layout,[...items,...oldPosts])})
+      .catch(()=>{});
+    }
    }
    if(data?.site)updateSite(data.site);
   }catch(err){console.warn('Lokhit news feed display error',err)}
