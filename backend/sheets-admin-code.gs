@@ -176,24 +176,25 @@ function githubPublished_(){
    .map(x=>({...x,id:String(x.id||x.slug),status:"published",origin:"github"})):[];
  }catch(e){return []}
 }
-function allNews_(includeDeleted){
+function driveNews_(includeDeleted){
  const folder=cmsFolder_(),files=folder.getFiles(),news=[];
  while(files.hasNext()&&news.length<500){
   const file=files.next(),name=file.getName();
   if(!/^post-[a-z0-9_-]{3,115}\.json$/i.test(name))continue;
   try{
    const p=JSON.parse(file.getBlob().getDataAsString("UTF-8"));
-   if(p&&p.id)news.push(p);
+   if(p&&p.slug)news.push(p);
   }catch(e){}
- }
- const seen=new Set(news.map(x=>x.slug));
- for(const item of githubPublished_()){
-  if(!seen.has(item.slug)){news.push(item);seen.add(item.slug)}
  }
  return news.filter(x=>includeDeleted||x.status!=="deleted")
   .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
 }
-function listNews(token){session_(token);return {posts:allNews_()};}
+function listNews(token){
+ session_(token);
+ // The GitHub editor retrieves pre-existing published stories from its own /cms-export.json.
+ // Only return new or edited Drive articles here: no slow GitHub fetch on editor load.
+ return {posts:driveNews_(true)};
+}
 function saveNews(token,raw,image){
  const editor=session_(token);
  if(!raw||typeof raw!=="object")throw Error("बातमीचा मजकूर द्या.");
@@ -244,10 +245,16 @@ function deleteNews(token,slug){
  return {deleted:true,slug:safeSlug};
 }
 function publicFeed_(){
- const all=allNews_(true);
- const posts=all.filter(x=>x.status==="published").slice(0,500);
- const deletedSlugs=all.filter(x=>x.status==="deleted").map(x=>x.slug).filter(Boolean);
- return {ok:true,posts,deletedSlugs,layout:jsonCmsRead_("layout.json",true),site:jsonCmsRead_("site.json",true)};
+ // Reads only the published Drive changes. Old articles/menu are already in GitHub HTML,
+ // avoiding external requests and slow work on every reader's page visit.
+ const all=driveNews_(true);
+ return {
+  ok:true,
+  posts:all.filter(x=>x.status==="published").slice(0,100),
+  deletedSlugs:all.filter(x=>x.status==="deleted").map(x=>x.slug).filter(Boolean),
+  layout:jsonCmsRead_("layout.json",false),
+  site:jsonCmsRead_("site.json",false)
+ };
 }
 function readCmsJson(token,path){
  session_(token);
