@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="mr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#a5091d">
+<title>लोकहित महाराष्ट्र | News Studio</title>
+<link rel="stylesheet" href="../../assets/css/studio.css">
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+</head><body>
+<header class="studio-header"><a class="brand" href="../../"><img src="../../assets/img/logo.webp" alt=""><span><strong>लोकहित महाराष्ट्र</strong><small>News Studio · संपादकीय व्यवस्थापन</small></span></a>
+<nav><a href="../../" target="_blank" rel="noopener">🌐 वेबसाइट</a><a href="../direct/">Advanced Admin</a></nav></header>
+<main class="studio-container">
+<section class="studio-banner"><div><h1>📰 बातमी प्रकाशन केंद्र</h1><p>WordPress-सारखे Rich Editing · अनेक फोटो · YouTube · बातमी Preview · Draft / Publish</p></div><div id="server-status" role="status">Server जोडणी तपासत आहे…</div></section>
+<div class="studio-layout">
+<aside class="studio-sidebar">
+<div class="sidebar-header"><strong>बातम्या व्यवस्थापन</strong><button id="new-post" type="button" class="button primary small">+ नवीन</button></div>
+<input type="search" id="filter-posts" placeholder="शीर्षक / विभाग शोधा…" aria-label="बातम्या शोधा">
+<div class="sidebar-tabs"><button type="button" class="active" data-filter="all">सर्व</button><button type="button" data-filter="published">Published</button><button type="button" data-filter="draft">Drafts</button></div>
+<div id="post-list" class="post-list"><p class="muted">Server जोडल्यावर बातम्यांची यादी दिसेल.</p></div>
+<p class="hint">Server बंद असतानाही टेस्ट मसुदा लिहिता व Preview पाहता येईल. प्रत्यक्ष प्रकाशनासाठी ANIK API ची सुरक्षित जोडणी आवश्यक आहे.</p>
+</aside>
+<div class="studio-main">
+<form id="studio-form" autocomplete="off">
+<div class="editor-heading"><div><h2 id="editor-title">नवीन बातमी</h2><span class="muted" id="edit-label">नवीन लेख</span></div><div class="status-actions"><button type="button" id="save-local" class="button ghost">💾 Local Draft</button><button type="button" id="preview" class="button ghost">👁 Preview</button><button type="button" id="publish" class="button primary">🚀 Publish</button></div></div>
+<div class="field"><label for="headline">बातमीचा मुख्य मथळा *</label><input id="headline" maxlength="180" required placeholder="आकर्षक, स्पष्ट मराठी मथळा"></div>
+<div class="field"><label for="summary">बातमीचा सारांश / SEO Description *</label><textarea id="summary" rows="2" maxlength="300" required placeholder="१ ते २ वाक्ये (WhatsApp आणि Google वर दिसणारा सारांश)"></textarea></div>
+<div class="field"><label>पूर्ण बातमी (WordPress सारखा Editor) *</label>
+<div class="editor-tools"><span>मजकूर निवडून <b>B</b>, <i>I</i>, Heading, List, Link वापरा. फोटो किंवा YouTube हवे त्या परिच्छेदात घाला.</span>
+<button type="button" id="insert-photo">🖼️ फोटो घाला</button><button type="button" id="insert-video">▶ YouTube घाला</button></div>
+<div id="toolbar">
+<select class="ql-header" aria-label="Heading"><option selected></option><option value="2">Heading 2</option><option value="3">Heading 3</option></select>
+<button class="ql-bold" aria-label="Bold"></button><button class="ql-italic" aria-label="Italic"></button><button class="ql-underline" aria-label="Underline"></button><button class="ql-strike" aria-label="Strikethrough"></button>
+<button class="ql-list" value="ordered" aria-label="Numbered list"></button><button class="ql-list" value="bullet" aria-label="Bullet list"></button>
+<button class="ql-blockquote" aria-label="Quote"></button><button class="ql-link" aria-label="Link"></button>
+<button class="ql-clean" aria-label="Clear formatting"></button>
+</div><div id="rich-editor" aria-label="पूर्ण बातमीचा मजकूर"></div><input id="inline-photo-input" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+<small class="hint">एका बातमीत जास्तीत जास्त ८ फोटो मजकुरात घालता येतील. प्रत्येक फोटो JPEG स्वरूपात आपोआप छोटा होईल.</small></div>
+<div class="options-grid">
+<div class="field"><label for="category">विभाग</label><select id="category"><option>महाराष्ट्र</option><option>मराठवाडा</option><option>विदर्भ</option><option>पश्चिम महाराष्ट्र</option><option>कोकण</option><option>दुष्काळ विशेष</option><option>शेती</option><option>शासन योजना</option><option>पशुसंवर्धन</option><option>पाणी</option><option>रोजगार</option><option>राजकारण</option><option>समाज</option><option>ग्रामविकास</option><option>महिला व विकास</option><option>अर्थकारण</option><option>शिक्षण</option><option>आरोग्य</option><option>विश्लेषण</option><option>व्हिडिओ</option></select></div>
+<div class="field"><label for="status">प्रकाशन स्थिती</label><select id="status"><option value="published">Published</option><option value="draft">Draft — वेबसाइटवर दाखवू नका</option></select></div>
+<div class="field"><label for="author">लेखक</label><input id="author" maxlength="90" value="लोकहित महाराष्ट्र डिजिटल डेस्क"></div>
+<div class="field"><label for="tags">Tags (कॉमा देऊन)</label><input id="tags" maxlength="200" placeholder="दुष्काळ, शेती, महाराष्ट्र"></div>
+<div class="field"><label for="video">अतिरिक्त YouTube लिंक (लेखाच्या शेवटी)</label><input id="video" type="url" placeholder="https://www.youtube.com/watch?v=..."></div>
+<div class="field"><label for="photo">मुख्य फोटो / WhatsApp Thumbnail</label><input id="photo" type="file" accept="image/jpeg,image/png,image/webp"><small class="hint">Edit करताना फोटो बदलला नाही तर जुना तसाच राहील.</small><img id="cover-preview" alt="मुख्य फोटो" class="cover-image" hidden></div>
+</div>
+<div class="featured"><label><input type="checkbox" id="featured"> ही बातमी Homepage वर Featured दाखवा</label></div>
+<div class="status-actions bottom"><button type="button" id="delete" class="button danger" hidden>🗑️ Delete</button><button type="button" id="save-draft" class="button ghost">Draft म्हणून जतन</button><button type="button" id="save-publish" class="button primary">🚀 बातमी प्रकाशित करा</button></div>
+<p id="notice" role="status" aria-live="polite" class="notice"></p>
+<div id="live-box" hidden class="live-box"><strong>✅ Live HTML व फोटो तयार आहेत</strong><a id="live-url" target="_blank" rel="noopener"></a><button type="button" id="copy-url" class="button ghost small">📋 लिंक कॉपी</button></div>
+</form></div></div></main>
+<dialog id="preview-modal"><div class="dialog-top"><strong>बातमी Preview</strong><button type="button" id="close-preview" class="button small">✕ बंद</button></div><article id="article-preview"></article></dialog>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+<script src="../../assets/js/studio.js" defer></script>
+</body></html>
