@@ -1,6 +1,28 @@
 (function(){
  const qs=(s)=>document.querySelector(s);const date=document.querySelector('#today-date');if(date)date.textContent=new Date().toLocaleDateString('mr-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
  const nav=qs('#nav-toggle'); if(nav){nav.addEventListener('click',()=>{const el=qs('#nav-links'); const open=el.classList.toggle('open');nav.setAttribute('aria-expanded',String(open));});}
+ const hero=document.getElementById('hero-slider');
+ if(hero){
+  const slides=Array.from(hero.querySelectorAll('.hero-slide')),dots=Array.from(hero.querySelectorAll('[data-slide-to]'));let active=0,clock=null,startX=null;
+  const delay=Math.max(3000,Math.min(15000,Number(hero.dataset.interval)||6000));
+  const show=(i)=>{
+   if(!slides.length)return;
+   active=(i+slides.length)%slides.length;
+   slides.forEach((slide,n)=>{const on=n===active;slide.classList.toggle('is-active',on);slide.setAttribute('aria-hidden',String(!on));slide.tabIndex=on?0:-1});
+   dots.forEach((dot,n)=>{const on=n===active;dot.classList.toggle('is-active',on);dot.setAttribute('aria-current',String(on))});
+  };
+  const stop=()=>{if(clock!==null){clearInterval(clock);clock=null}};
+  const start=()=>{stop();if(slides.length>1&&!document.hidden&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){clock=setInterval(()=>show(active+1),delay)}};
+  hero.querySelector('.hero-prev')?.addEventListener('click',()=>{show(active-1);start()});
+  hero.querySelector('.hero-next')?.addEventListener('click',()=>{show(active+1);start()});
+  dots.forEach((dot,n)=>dot.addEventListener('click',()=>{show(n);start()}));
+  hero.addEventListener('mouseenter',stop);hero.addEventListener('mouseleave',start);
+  hero.addEventListener('focusin',stop);hero.addEventListener('focusout',e=>{if(!hero.contains(e.relatedTarget))start()});
+  hero.addEventListener('touchstart',e=>{startX=e.touches[0]?.clientX??null},{passive:true});
+  hero.addEventListener('touchend',e=>{if(startX===null)return;let d=(e.changedTouches[0]?.clientX??startX)-startX;if(Math.abs(d)>55){show(active+(d<0?1:-1));start()}startX=null},{passive:true});
+  document.addEventListener('visibilitychange',()=>document.hidden?stop():start());
+  show(0);start();
+ }
  function notify(msg){let el=qs('#toast');if(!el){el=document.createElement('div');el.id='toast';el.className='toast';document.body.appendChild(el)}el.textContent=msg;el.classList.add('visible');setTimeout(()=>el.classList.remove('visible'),2500)}
  document.querySelectorAll('[data-share]').forEach(btn=>btn.addEventListener('click',async()=>{
   const link=location.href, title=document.title.replace(' | लोकहित महाराष्ट्र',''); const t=btn.dataset.share;
