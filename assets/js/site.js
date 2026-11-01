@@ -14,8 +14,8 @@
  }
  const hero=document.getElementById('hero-slider');
  if(hero){
-  const slides=Array.from(hero.querySelectorAll('.hero-slide')),dots=Array.from(hero.querySelectorAll('[data-slide-to]'));let active=0,clock=null,startX=null;
-  const delay=Math.max(3000,Math.min(15000,Number(hero.dataset.interval)||6000));
+  let slides=Array.from(hero.querySelectorAll('.hero-slide')),dots=Array.from(hero.querySelectorAll('[data-slide-to]'));let active=0,clock=null,startX=null;
+  let delay=Math.max(3000,Math.min(15000,Number(hero.dataset.interval)||6000));
   const show=(i)=>{
    if(!slides.length)return;
    active=(i+slides.length)%slides.length;
@@ -24,9 +24,22 @@
   };
   const stop=()=>{if(clock!==null){clearInterval(clock);clock=null}};
   const start=()=>{stop();if(slides.length>1&&!document.hidden&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){clock=setInterval(()=>show(active+1),delay)}};
-  hero.querySelector('.hero-prev')?.addEventListener('click',()=>{show(active-1);start()});
-  hero.querySelector('.hero-next')?.addEventListener('click',()=>{show(active+1);start()});
-  dots.forEach((dot,n)=>dot.addEventListener('click',()=>{show(n);start()}));
+  hero.addEventListener('click',event=>{
+   const target=event.target.closest('button');
+   if(!target)return;
+   if(target.classList.contains('hero-prev'))show(active-1);
+   else if(target.classList.contains('hero-next'))show(active+1);
+   else if(target.hasAttribute('data-slide-to'))show(Number(target.dataset.slideTo));
+   else return;
+   start();
+  });
+  document.addEventListener('lokhit:hero-updated',()=>{
+   stop();
+   slides=Array.from(hero.querySelectorAll('.hero-slide'));
+   dots=Array.from(hero.querySelectorAll('[data-slide-to]'));
+   delay=Math.max(3000,Math.min(15000,Number(hero.dataset.interval)||6000));
+   show(0);start();
+  });
   hero.addEventListener('mouseenter',stop);hero.addEventListener('mouseleave',start);
   hero.addEventListener('focusin',stop);hero.addEventListener('focusout',e=>{if(!hero.contains(e.relatedTarget))start()});
   hero.addEventListener('touchstart',e=>{startX=e.touches[0]?.clientX??null},{passive:true});
