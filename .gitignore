@@ -1,0 +1,4 @@
+# TinaCMS build dependencies
+node_modules/
+.tina/
+.tina-cache/
