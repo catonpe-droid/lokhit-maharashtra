@@ -9,6 +9,7 @@ on:
       - 'admin/**'
       - 'build.py'
       - 'rich_renderer.py'
+      - 'tina_markdown.py'
       - 'tests/**'
       - 'site.json'
       - '.github/workflows/pages.yml'
@@ -36,7 +37,7 @@ jobs:
       - name: Validate site and CMS JavaScript
         run: |
           node --check assets/js/studio.js
-          python -m py_compile rich_renderer.py
+          python -m py_compile rich_renderer.py tina_markdown.py
           python -m unittest discover -s tests -v
           node --check assets/js/admin.js
           node --check admin/test/publisher.js
