@@ -1,0 +1,15 @@
+{
+  "name": "lokhit-maharashtra-tina-editor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Git-backed TinaCloud editor for Lokhit Maharashtra's existing static Python news site",
+  "scripts": {
+    "tina:build": "tinacms build",
+    "tina:dev": "tinacms dev",
+    "tina:version": "tinacms --version"
+  },
+  "dependencies": {
+    "tinacms": "^3.15.0",
+    "@tinacms/cli": "^3.0.0"
+  }
+}
