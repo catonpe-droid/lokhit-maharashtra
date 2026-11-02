@@ -1,8 +1,12 @@
-# CURRENT RECOMMENDED THEME — V5 Layout Manager (2 November 2026)
+# CURRENT RECOMMENDED THEME — V6 Blogger-Only Links (2 November 2026)
 
-**Choose [blogger-theme-layout-v5.xml](./blogger-theme-layout-v5.xml) for testing the new Layout controls.** It retains the article/Share UI fixes from V4 and adds 14 Blogger Layout gadget sections. Full instructions: [LAYOUT-GUIDE-MARATHI.md](./LAYOUT-GUIDE-MARATHI.md).
+**Use [blogger-theme-blogger-only-v6.xml](./blogger-theme-blogger-only-v6.xml)** for new theme installations after backup. It retains V5's Layout Manager and V4 article share controls, while replacing 20 static news link destinations with actual Blogger article permalinks, converting category links (e.g. `vibhag/marathwada/`) to Blogger `/search/label/...` URLs, rewriting old GitHub article/menu URLs in user-configured gadgets at runtime, and rendering Blogger-native category grids when needed.
 
-This V5 file passed basic XML tag / entity and JS syntax checks. **It has not yet been tested after installation on Blogger.** Do not reimport or delete the existing 21 published posts. Back up the current theme, upload V5, and check Dashboard → Layout and one sample article before other changes.
+**Blogspot Pages:** the blog currently contains 21 Posts and **0 Pages**, so About, Contact, Live TV and legal pages cannot be complete until the [12-page cleaned import](./pages-import-clean.xml) is imported. V6 maps their links to Blogger `/p/...` routes and will discover the actual page permalinks from Blogger's pages feed after import. Do not assume guessed page URLs work before import. The page import file has been cleaned of duplicate GitHub tickers and site wrappers.
+
+**Install order:** back up current Blogger Theme; upload V6 through Theme → Restore → Upload; verify the Blogger Marathwada menu link and a news article; then separately import Pages through Settings → Manage blog → Import content (once, with backup) and check About / Contact / Live TV. **Do not reimport the 21 existing Posts.** The original GitHub Pages site remains unmodified and direct GitHub URLs remain reachable; only Blogger-origin navigation changes.
+
+**Validation:** local XML structure, known entities, and inline JavaScript syntax pass. Actual installation on Blogger and page-import behavior are NOT yet live-verified.
 
 ---
 
