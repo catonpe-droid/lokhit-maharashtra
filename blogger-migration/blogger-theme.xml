@@ -39,20 +39,39 @@
 <script type="text/javascript">
 //<![CDATA[
 (function(){
- var original="https://catonpe-droid.github.io/lokhit-maharashtra/", originalTitles={"pawar_drought_visit":"शरद पवार शेतकऱ्यांच्या बांधावर, तुळशी गावात भेट; 50 लाखांची मदतही दिली, दुष्काळ परिस्थितीबाबत मोदींना सांगणार","employment-and-drought-planning":"शेतमजुरांसाठी रोजगार हमीची माहिती गावात पोहोचणे का आवश्यक?","women-self-help-groups-drought":"दुष्काळात महिला बचतगटांची भूमिका : माहिती, रोजगार आणि आधार","tanker-request-village-process":"टँकर मागणीपासून तक्रारीपर्यंत : ग्रामपंचायतीने कोणती माहिती ठेवावी?","rabi-sowing-water-budget":"रब्बी पेरणीपूर्वी पाण्याचा हिशेब करा : दुष्काळात निर्णय कसा घ्यावा?","drip-irrigation-water-saving":"ठिबक सिंचन आणि पाणी बचत : मर्यादित पाण्यातील शेतीसाठी पर्याय","village-water-conservation":"गावातील जलसंधारण : उन्हाळ्याआधी कोणती कामे परिणामकारक ठरू शकतात?","loan-waiver-vs-restructuring":"कर्जमाफी, कर्जपुनर्गठन आणि हप्त्यांना मुदतवाढ : फरक नेमका काय?","livestock-water-fodder-crisis":"पशुधन विकण्याची वेळ का येते? पाणी आणि चाऱ्याच्या टंचाईचा दुहेरी फटका","silage-making-safety":"मुरघास बनवताना शेतकऱ्यांनी लक्षात ठेवाव्यात पाच महत्त्वाच्या बाबी","fodder-crop-planning":"पाणी उपलब्ध असलेल्या भागात चारा पिकांचे नियोजन कसे करावे?","fake-relief-links-warning":"शेतकरी मदतीच्या नावाखाली फसवणूक टाळा : अर्ज आणि ई-केवायसीचे नियम","vk-number-ekyc-relief":"नैसर्गिक आपत्ती मदतीसाठी ‘विशिष्ट क्रमांक’ आणि ई-केवायसी कशी होते?","crop-loss-panchnama-guide":"पीकनुकसानीचा पंचनामा : शेतकऱ्यांनी कोणती काळजी घ्यावी?","october-water-conservation-rules":"१६ ऑक्टोबरपासून पाणी बचतीवर भर : राज्यव्यापी नियोजनाचा अर्थ","drought-employment-relief-plan":"दुष्काळी काळात रोजगार, अन्नधान्य, पाणी आणि चाऱ्याचा संयुक्त आराखडा","central-team-drought-survey":"केंद्रीय पाहणी पथकाने घेतला दुष्काळी परिस्थितीचा आढावा","silage-subsidy-cattle-owners":"मुरघास खरेदीसाठी अनुदान : पात्र पशुपालकांनी कोणती माहिती तपासावी?","mission-murghas-maharashtra":"मिशन मुरघास : हिरवा चारा टिकवण्यासाठी राज्यभर प्रयत्न","marathwada-water-tankers":"मराठवाड्यात पाण्याची कसरत : गावनिहाय टँकर नियोजनाला प्राधान्य","maharashtra-drought-265-305-talukas":"महाराष्ट्रातील दुष्काळाचे बदलते चित्र : २६५ ते ३०५ तालुक्यांचा प्रवास","news-20261101140808-d5n1":"ddd","news-20261101145637-r5d3":"NEWS BATMI"};
- function mapLinks(){
-  fetch('/feeds/posts/default?alt=json&max-results=500',{credentials:'same-origin'}).then(function(r){if(!r.ok)throw Error('posts feed inaccessible');return r.json()}).then(function(result){
-   var entries=(result.feed&&result.feed.entry)||[], titleUrl={};
-   entries.forEach(function(e){var title=e.title&&e.title.$t||'';var alternate=(e.link||[]).find(function(l){return l.rel==='alternate'&&l.type==='text/html'});if(alternate)titleUrl[title]=alternate.href;});
-   document.querySelectorAll('a[href]').forEach(function(a){
-    var path;try{path=new URL(a.href).pathname;}catch(e){return;}
-    var after=path.split('/batmi/')[1];if(!after)return;
-    var slug=decodeURIComponent(after.split('/')[0]);
-    if(originalTitles[slug]&&titleUrl[originalTitles[slug]])a.href=titleUrl[originalTitles[slug]];
+ var original="https://catonpe-droid.github.io/lokhit-maharashtra/";
+ var originalTitles={};
+ var pageTitles={"about":"About Us","contact":"Contact Us","advertise":"Advertising & Partnerships","privacy-policy":"Privacy Policy","terms":"Terms & Conditions","disclaimer":"Disclaimer","grievance":"Grievance Redressal","cookie-policy":"Cookie Policy","editorial-policy":"Editorial Policy","corrections":"Corrections Policy","live-tv":"YouTube Live TV | लोकहित महाराष्ट्र","video":"व्हिडिओ बातम्या"};
+ function pathOf(a){try{return new URL(a.href).pathname;}catch(e){return '';}}
+ function run(){
+  fetch('/feeds/posts/default?alt=json&max-results=500',{credentials:'same-origin'}).then(function(r){if(!r.ok)throw Error('feed not available');return r.json()}).then(function(result){
+   var entries=(result.feed&&result.feed.entry)||[], links={};
+   entries.forEach(function(e){var title=e.title&&e.title.$t||'',l=(e.link||[]).find(function(x){return x.rel==='alternate'&&x.type==='text/html'});if(l)links[title]=l.href;});
+   document.querySelectorAll('a[href]').forEach(function(a){var after=pathOf(a).split('/batmi/')[1];if(!after)return;var slug=decodeURIComponent(after.split('/')[0]);if(originalTitles[slug]&&links[originalTitles[slug]])a.href=links[originalTitles[slug]];});
+   var grid=document.getElementById('homepage-latest-grid'),known=new Set(Object.values(originalTitles));
+   if(!grid)return;
+   entries.slice().reverse().forEach(function(e){
+    var title=e.title&&e.title.$t||'';if(!title||known.has(title)||!links[title])return;
+    var a=document.createElement('a');a.className='news-card';a.href=links[title];
+    var img=document.createElement('img');img.loading='lazy';img.alt=title;
+    var markup=e.content&&e.content.$t||'',found=markup.match(/<img[^>]+src=["']([^"']+)/i);
+    img.src=(e.media$thumbnail&&e.media$thumbnail.url)||(found&&found[1])||original+'assets/img/logo.webp';
+    var box=document.createElement('div');box.className='card-body';
+    var tag=document.createElement('span');tag.className='category-kicker';
+    var label=(e.category||[]).find(function(c){return c.scheme==='http://www.blogger.com/atom/ns#';});
+    tag.textContent=label&&label.term||'ताज्या बातम्या';
+    var h=document.createElement('h3');h.textContent=title;
+    var p=document.createElement('p');p.textContent=(e.summary&&e.summary.$t||'').replace(/<[^>]*>/g,'').slice(0,155);
+    box.append(tag,h,p);a.append(img,box);grid.prepend(a);
    });
-  }).catch(function(e){console.warn('Link mapping unavailable; original article links retained',e);});
+  }).catch(function(e){console.warn('Lokhit feed sync disabled:',e);});
+  fetch('/feeds/pages/default?alt=json&max-results=100',{credentials:'same-origin'}).then(function(r){if(!r.ok)throw Error('pages feed not available');return r.json()}).then(function(data){
+   var pages=(data.feed&&data.feed.entry)||[],links={};
+   pages.forEach(function(e){var l=(e.link||[]).find(function(a){return a.rel==='alternate'&&a.type==='text/html'});if(l)links[e.title&&e.title.$t||'']=l.href;});
+   document.querySelectorAll('a[href]').forEach(function(a){var path=pathOf(a),slug=path.split('/lokhit-maharashtra/')[1];if(!slug)return;slug=slug.split('/')[0];if(pageTitles[slug]&&links[pageTitles[slug]])a.href=links[pageTitles[slug]];});
+  }).catch(function(){});
  }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mapLinks);else mapLinks();
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
 })();
 //]]>
 </script>
