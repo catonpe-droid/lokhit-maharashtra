@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   tina-check:
@@ -38,3 +38,25 @@ jobs:
           test -s tina/tina-lock.json
           test -s docs/tina-editor/index.html
           echo 'Tina schema and editor assets were generated successfully.'
+      - name: Save generated TinaCloud schema and locked npm dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tina/tina-lock.json package-lock.json
+          if git diff --cached --quiet; then
+            echo "Tina lockfile and npm dependencies already up to date."
+            exit 0
+          fi
+          git commit -m "Track TinaCloud schema lock and npm dependencies [skip ci]"
+          for n in 1 2 3 4; do
+            git pull --rebase origin main
+            if git push origin HEAD:main; then
+              echo "TinaCloud schema lock pushed."
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Could not push generated Tina lockfile" >&2
+          exit 1
