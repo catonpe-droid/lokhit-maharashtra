@@ -59,6 +59,7 @@ jobs:
             exit 0
           fi
           git commit -m "Publish TinaCMS editor and schema [skip ci]"
+          git restore --worktree .
           for n in 1 2 3 4; do
             git pull --rebase origin main
             if git push origin HEAD:main; then
