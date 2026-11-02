@@ -732,4 +732,47 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 //]]>
 </script>
+<script type="text/javascript">
+//<![CDATA[
+
+/* Render native Blogger Pages (About, Contact, policies, Live TV) in same branded layout. */
+(function(){
+ 'use strict';
+ if(!/^\/p\/[^/]+\.html$/.test(location.pathname))return;
+ function getPage(posts){
+   return posts.find(function(p){
+     return (p.link||[]).some(function(l){
+       if(l.rel!=='alternate'||l.type!=='text/html')return false;
+       try{return new URL(l.href).pathname===location.pathname;}catch(e){return false;}
+     });
+   });
+ }
+ function render(data){
+   var entry=getPage((data.feed&&data.feed.entry)||[]);
+   if(!entry)return;
+   var article=entry.content&&entry.content.$t||'';
+   if(!article)return;
+   var main=document.getElementById('lokhit-blog-content');
+   if(!main)return;
+   var fallback=document.getElementById('lokhit-article-fallback');
+   if(!fallback){fallback=document.createElement('div');fallback.id='lokhit-article-fallback';main.appendChild(fallback);}
+   var native=document.getElementById('lokhit-native');
+   var holder=document.createElement('div');holder.className='container lk-blogger-page';holder.innerHTML=article;
+   var existing=holder.querySelector('.plain-page,.live-tv-section,.section-head,.empty-state');
+   if(!existing&&article.trim()){
+     var content=document.createElement('div');content.className='plain-page';content.innerHTML=article;
+     holder.replaceChildren(content);
+   }
+   fallback.replaceChildren(holder);
+   if(native)native.style.display='none';
+ }
+ function load(){
+  fetch('/feeds/pages/default?alt=json&max-results=100',{credentials:'same-origin'})
+  .then(function(r){if(!r.ok)throw Error('Page feed unavailable');return r.json();})
+  .then(render).catch(function(e){console.warn('Blogger page fallback unavailable',e)});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);else load();
+})();
+//]]>
+</script>
 </body></html>
