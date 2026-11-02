@@ -3,6 +3,7 @@
 import html, json, os, pathlib, re, shutil, datetime, urllib.parse, xml.etree.ElementTree as ET, hashlib, urllib.request
 from email.utils import format_datetime
 from rich_renderer import render_rich
+from tina_markdown import render_markdown
 ROOT=pathlib.Path(__file__).resolve().parent
 OUT=ROOT/'docs'
 CFG=json.loads((ROOT/'site.json').read_text(encoding='utf8'))
@@ -215,26 +216,14 @@ def youtube_id(text):
   if m:return m.group(1)
  return None
 for p in POSTS:
- body=[];body_yts=[]
  if isinstance(p.get('rich_delta'),list):
+  # Legacy Quill Studio documents retain their rich Delta support.
   body=render_rich(p['rich_delta'],U)
  else:
-  for para in re.split(r'\n\s*\n',p.get('body','')):
-   para=para.strip()
-   if not para:continue
-   if para.startswith('### '):body.append('<h3>'+E(para[4:])+'</h3>');continue
-   if para.startswith('## '):body.append('<h2>'+E(para[3:])+'</h2>');continue
-   if para.startswith('# '):body.append('<h2>'+E(para[2:])+'</h2>');continue
-   vid=youtube_id(para)
-   if vid:body_yts.append(vid)
-   if re.match(r'^[-*] ',para):
-    items=[re.sub(r'\*\*([^*]+)\*\*',r'<strong>\1</strong>',E(line[2:])) for line in para.split('\n') if line.startswith(('- ','* '))]
-    body.append('<ul>'+''.join('<li>'+item+'</li>' for item in items)+'</ul>')
-    continue
-   safe=re.sub(r'\*\*([^*\n]+)\*\*',r'<strong>\1</strong>',E(para))
-   safe=re.sub(r'(?<!\*)\*([^*\n]+)\*(?!\*)',r'<em>\1</em>',safe)
-   body.append('<p>'+safe.replace('\n','<br>')+'</p>')
- yvid=youtube_id(p.get('video','')) or (body_yts[0] if body_yts else None)
+  # TinaCMS stores formatted news text as Markdown inside the same JSON body.
+  # Raw HTML is never trusted or rendered as executable markup.
+  body=render_markdown(p.get('body',''),U)
+ yvid=youtube_id(p.get('video',''))
  video=f'<div class="video-embed"><iframe src="https://www.youtube-nocookie.com/embed/{yvid}" title="संबंधित YouTube व्हिडिओ" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>' if yvid else ''
  bar='<div class="share-bar"><strong>ही बातमी शेअर करा :</strong><button class="share-btn share-wa" data-share="wa">WhatsApp</button><button class="share-btn share-fb" data-share="fb">Facebook</button><button class="share-btn share-x" data-share="x">X</button><button class="share-btn share-tg" data-share="tg">Telegram</button><button class="share-btn share-copy" data-share="copy">लिंक कॉपी</button><button class="share-btn share-native" data-share="native">इतर</button></div>'
  related=[q for q in POSTS if q['slug']!=p['slug'] and q['category']==p['category']][:2] or [q for q in POSTS if q['slug']!=p['slug']][:2]
