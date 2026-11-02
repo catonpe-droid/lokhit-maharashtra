@@ -50,6 +50,8 @@ jobs:
             exit 0
           fi
           git commit -m "Track TinaCloud schema lock and npm dependencies [skip ci]"
+          # Python build may modify tracked preview files: reset only unstaged output.
+          git restore --worktree .
           for n in 1 2 3 4; do
             git pull --rebase origin main
             if git push origin HEAD:main; then
