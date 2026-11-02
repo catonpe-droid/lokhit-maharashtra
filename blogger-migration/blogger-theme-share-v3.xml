@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html b:css="false" b:js="false" b:defaultwidgetversion="2" b:layoutsVersion="3" lang="mr" xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.google.com/2005/gml/b" xmlns:data="http://www.google.com/2005/gml/data" xmlns:expr="http://www.google.com/2005/gml/expr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="theme-color" content="#b60013"/>
+<title><data:view.title.escaped/></title><meta name="description" content="महाराष्ट्र, मराठवाडा, शेती, दुष्काळ, शासन योजना आणि ग्रामीण विकासाच्या बातम्या व माहिती."/>
+<link expr:href="data:view.url.canonical" rel="canonical"/><meta property="og:site_name" content="लोकहित महाराष्ट्र"/><meta property="og:locale" content="mr_IN"/><meta name="twitter:card" content="summary_large_image"/>
+<b:if cond="data:view.isSingleItem"><meta expr:content="data:view.title.escaped" property="og:title"/><meta expr:content="data:view.url.canonical" property="og:url"/>
+<b:if cond="data:view.featuredImage"><meta expr:content="data:view.featuredImage" property="og:image"/><meta expr:content="data:view.featuredImage" name="twitter:image"/></b:if>
+<b:else/><meta property="og:title" content="लोकहित महाराष्ट्र"/><meta property="og:image" content="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/logo.webp"/></b:if>
+<link rel="icon" type="image/png" href="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/favicon.png"/>
+<link rel="stylesheet" type="text/css" href="https://catonpe-droid.github.io/lokhit-maharashtra/assets/css/style.css"/>
+<b:skin><![CDATA[/* Exact original CSS is loaded from the existing GitHub site. */]]></b:skin>
+</head>
+<body data-base="/">
+
+<div class="utility"><div class="container"><span><span id="today-date">महाराष्ट्राचा डिजिटल आवाज</span> · स्वतंत्र मराठी न्यूज पोर्टल</span><div class="utility-links"><a href="https://catonpe-droid.github.io/lokhit-maharashtra/about/">About Us</a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/contact/">Contact</a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/advertise/">Advertise</a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/privacy-policy/">Privacy Policy</a></div></div></div>
+<header class="brand-header"><div class="container brand-inner"><a href="/" class="identity" aria-label="लोकहित महाराष्ट्र मुखपृष्ठ"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/logo.webp" alt="लोकहित महाराष्ट्र लोगो" class="site-logo" width="112" height="112"/><div><div class="brand-title">लोकहित <span>महाराष्ट्र</span></div><div class="brand-tagline">जनहिताच्या बातम्या, महाराष्ट्राचा डिजिटल आवाज</div></div></a><div class="brand-actions"><a class="icon-btn" href="/search" aria-label="बातमी शोधा">⌕ शोधा</a><a class="live-nav-cta" href="https://catonpe-droid.github.io/lokhit-maharashtra/live-tv/">🔴 Live TV</a><a class="admin-link" href="https://www.blogger.com/" rel="nofollow">🔒 प्रशासन</a></div></div></header>
+<nav class="nav" aria-label="मुख्य मेनू"><div class="container nav-inner"><button id="nav-toggle" class="hamburger" aria-expanded="false" aria-controls="nav-links" aria-label="मेनू उघडा">☰</button><div class="nav-links" id="nav-links"><a class="active" href="/">मुख्यपृष्ठ</a><a class="" href="/search">ताज्या बातम्या</a><a class="" href="/search/label/%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%B0%E0%A4%BE%E0%A4%B7%E0%A5%8D%E0%A4%9F%E0%A5%8D%E0%A4%B0">महाराष्ट्र</a><a class="" href="/search/label/%E0%A4%AE%E0%A4%B0%E0%A4%BE%E0%A4%A0%E0%A4%B5%E0%A4%BE%E0%A4%A1%E0%A4%BE">मराठवाडा</a><a class="" href="/search/label/%E0%A4%B5%E0%A4%BF%E0%A4%A6%E0%A4%B0%E0%A5%8D%E0%A4%AD">विदर्भ</a><a class="" href="/search/label/%E0%A4%A6%E0%A5%81%E0%A4%B7%E0%A5%8D%E0%A4%95%E0%A4%BE%E0%A4%B3%20%E0%A4%B5%E0%A4%BF%E0%A4%B6%E0%A5%87%E0%A4%B7">दुष्काळ विशेष</a><a class="" href="/search/label/%E0%A4%B6%E0%A5%87%E0%A4%A4%E0%A5%80">शेती</a><a class="" href="/search/label/%E0%A4%B6%E0%A4%BE%E0%A4%B8%E0%A4%A8%20%E0%A4%AF%E0%A5%8B%E0%A4%9C%E0%A4%A8%E0%A4%BE">शासन योजना</a><a class="" href="/search/label/%E0%A4%AA%E0%A4%B6%E0%A5%81%E0%A4%B8%E0%A4%82%E0%A4%B5%E0%A4%B0%E0%A5%8D%E0%A4%A7%E0%A4%A8">पशुसंवर्धन</a><a class="" href="/search/label/%E0%A4%B0%E0%A4%BE%E0%A4%9C%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A4%A3">राजकारण</a><a class="" href="https://catonpe-droid.github.io/lokhit-maharashtra/video/">व्हिडिओ</a><a class="" href="https://catonpe-droid.github.io/lokhit-maharashtra/live-tv/">🔴 Live TV</a><a class="" href="/search/label/%E0%A4%B5%E0%A4%BF%E0%A4%B6%E0%A5%8D%E0%A4%B2%E0%A5%87%E0%A4%B7%E0%A4%A3">विश्लेषण</a></div></div></nav>
+
+<b:if cond="data:view.isHomepage">
+<main><div class="container"><div class="search-strip live-ticker"><span class="breaking-label"><span class="on-air-dot"></span> BREAKING NEWS</span><div class="ticker-window" aria-label="ब्रेकिंग न्यूज"><div class="ticker-move"><div class="ticker-segment"><span class="ticker-item"><span class="ticker-star" aria-hidden="true">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/pawar_drought_visit/">शरद पवार शेतकऱ्यांच्या बांधावर, तुळशी गावात भेट; 50 लाखांची मदतही दिली, दुष्काळ परिस्थितीबाबत मोदींना सांगणार</a></span><span class="ticker-item"><span class="ticker-star" aria-hidden="true">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/employment-and-drought-planning/">शेतमजुरांसाठी रोजगार हमीची माहिती गावात पोहोचणे का आवश्यक?</a></span><span class="ticker-item"><span class="ticker-star" aria-hidden="true">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/women-self-help-groups-drought/">दुष्काळात महिला बचतगटांची भूमिका : माहिती, रोजगार आणि आधार</a></span><span class="ticker-item"><span class="ticker-star" aria-hidden="true">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/tanker-request-village-process/">टँकर मागणीपासून तक्रारीपर्यंत : ग्रामपंचायतीने कोणती माहिती ठेवावी?</a></span><span class="ticker-item"><span class="ticker-star" aria-hidden="true">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/rabi-sowing-water-budget/">रब्बी पेरणीपूर्वी पाण्याचा हिशेब करा : दुष्काळात निर्णय कसा घ्यावा?</a></span><span class="ticker-item"><span class="ticker-star" aria-hidden="true">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/drip-irrigation-water-saving/">ठिबक सिंचन आणि पाणी बचत : मर्यादित पाण्यातील शेतीसाठी पर्याय</a></span><span class="ticker-item"><span class="ticker-star" aria-hidden="true">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/village-water-conservation/">गावातील जलसंधारण : उन्हाळ्याआधी कोणती कामे परिणामकारक ठरू शकतात?</a></span><span class="ticker-item"><span class="ticker-star" aria-hidden="true">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/loan-waiver-vs-restructuring/">कर्जमाफी, कर्जपुनर्गठन आणि हप्त्यांना मुदतवाढ : फरक नेमका काय?</a></span></div><div class="ticker-segment" aria-hidden="true" inert="inert"><span class="ticker-item"><span class="ticker-star">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/pawar_drought_visit/">शरद पवार शेतकऱ्यांच्या बांधावर, तुळशी गावात भेट; 50 लाखांची मदतही दिली, दुष्काळ परिस्थितीबाबत मोदींना सांगणार</a></span><span class="ticker-item"><span class="ticker-star">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/employment-and-drought-planning/">शेतमजुरांसाठी रोजगार हमीची माहिती गावात पोहोचणे का आवश्यक?</a></span><span class="ticker-item"><span class="ticker-star">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/women-self-help-groups-drought/">दुष्काळात महिला बचतगटांची भूमिका : माहिती, रोजगार आणि आधार</a></span><span class="ticker-item"><span class="ticker-star">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/tanker-request-village-process/">टँकर मागणीपासून तक्रारीपर्यंत : ग्रामपंचायतीने कोणती माहिती ठेवावी?</a></span><span class="ticker-item"><span class="ticker-star">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/rabi-sowing-water-budget/">रब्बी पेरणीपूर्वी पाण्याचा हिशेब करा : दुष्काळात निर्णय कसा घ्यावा?</a></span><span class="ticker-item"><span class="ticker-star">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/drip-irrigation-water-saving/">ठिबक सिंचन आणि पाणी बचत : मर्यादित पाण्यातील शेतीसाठी पर्याय</a></span><span class="ticker-item"><span class="ticker-star">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/village-water-conservation/">गावातील जलसंधारण : उन्हाळ्याआधी कोणती कामे परिणामकारक ठरू शकतात?</a></span><span class="ticker-item"><span class="ticker-star">◆</span><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/loan-waiver-vs-restructuring/">कर्जमाफी, कर्जपुनर्गठन आणि हप्त्यांना मुदतवाढ : फरक नेमका काय?</a></span></div></div></div><button class="ticker-toggle" type="button" aria-label="ब्रेकिंग न्यूज पट्टी थांबवा" aria-pressed="false" title="Pause / Play">Ⅱ</button><a class="search-btn" href="/search" aria-label="शोधा">⌕</a></div></div><div class="container"><section class="page-section hero-layout"><div class="hero-slider" id="hero-slider" aria-roledescription="carousel" aria-label="मुख्य बातम्या" data-interval="6000"><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/maharashtra-drought-265-305-talukas/" class="hero-main hero-slide is-active" data-slide-index="0" aria-hidden="false" tabindex="0"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-01.webp" alt="महाराष्ट्रातील दुष्काळाचे बदलते चित्र : २६५ ते ३०५ तालुक्यांचा प्रवास" fetchpriority="high"/><div class="hero-content"><span class="tag">दुष्काळ विशेष</span><h1>महाराष्ट्रातील दुष्काळाचे बदलते चित्र : २६५ ते ३०५ तालुक्यांचा प्रवास</h1><p>सप्टेंबरमधील दुष्काळ घोषणेनंतर ऑक्टोबरमध्ये चारा नियोजनाचे आव्हान अधिक ठळक झाले आहे.</p><div class="meta">📅 01-11-2026 · लोकहित महाराष्ट्र डिजिटल डेस्क</div></div></a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/marathwada-water-tankers/" class="hero-main hero-slide " data-slide-index="1" aria-hidden="true" tabindex="-1"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-02.webp" alt="मराठवाड्यात पाण्याची कसरत : गावनिहाय टँकर नियोजनाला प्राधान्य" fetchpriority="auto"/><div class="hero-content"><span class="tag">मराठवाडा</span><h1>मराठवाड्यात पाण्याची कसरत : गावनिहाय टँकर नियोजनाला प्राधान्य</h1><p>पिण्याचे पाणी आणि जनावरांची गरज यांच्यातील तफावत संकट वाढवू शकते.</p><div class="meta">📅 01-11-2026 · लोकहित महाराष्ट्र डिजिटल डेस्क</div></div></a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/livestock-water-fodder-crisis/" class="hero-main hero-slide " data-slide-index="2" aria-hidden="true" tabindex="-1"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-13.webp" alt="पशुधन विकण्याची वेळ का येते? पाणी आणि चाऱ्याच्या टंचाईचा दुहेरी फटका" fetchpriority="auto"/><div class="hero-content"><span class="tag">मराठवाडा</span><h1>पशुधन विकण्याची वेळ का येते? पाणी आणि चाऱ्याच्या टंचाईचा दुहेरी फटका</h1><p>ग्रामीण अर्थव्यवस्थेसाठी जनावरे म्हणजे महत्त्वाचा उत्पन्नाचा आधार.</p><div class="meta">📅 01-11-2026 · लोकहित महाराष्ट्र डिजिटल डेस्क</div></div></a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/drip-irrigation-water-saving/" class="hero-main hero-slide " data-slide-index="3" aria-hidden="true" tabindex="-1"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-16.webp" alt="ठिबक सिंचन आणि पाणी बचत : मर्यादित पाण्यातील शेतीसाठी पर्याय" fetchpriority="auto"/><div class="hero-content"><span class="tag">शेती</span><h1>ठिबक सिंचन आणि पाणी बचत : मर्यादित पाण्यातील शेतीसाठी पर्याय</h1><p>पीक, जमीन आणि खर्च यांना अनुरूप सिंचन प्रणाली निवडणे महत्त्वाचे.</p><div class="meta">📅 01-11-2026 · लोकहित महाराष्ट्र डिजिटल डेस्क</div></div></a><button class="hero-arrow hero-prev" type="button" aria-label="मागील स्लाइड">‹</button><button class="hero-arrow hero-next" type="button" aria-label="पुढील स्लाइड">›</button><div class="hero-dots"><button type="button" class="hero-dot is-active" aria-label="बातमी स्लाइड 1" aria-current="true" data-slide-to="0"></button><button type="button" class="hero-dot " aria-label="बातमी स्लाइड 2" aria-current="false" data-slide-to="1"></button><button type="button" class="hero-dot " aria-label="बातमी स्लाइड 3" aria-current="false" data-slide-to="2"></button><button type="button" class="hero-dot " aria-label="बातमी स्लाइड 4" aria-current="false" data-slide-to="3"></button></div></div><div class="hero-stack"><a class="stack-card" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/pawar_drought_visit/"><img src="https://lh3.googleusercontent.com/d/1XVlwOovkEmitWpzknNu-H1YtoY6uINiN" alt="" loading="lazy"/><div><h3>शरद पवार शेतकऱ्यांच्या बांधावर, तुळशी गावात भेट; 50 लाखांची मदतही दिली, दुष्काळ परिस्थितीबाबत मोदींना सांगणार</h3><span class="meta">01-11-2026</span></div></a><a class="stack-card" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/employment-and-drought-planning/"><img src="https://lh3.googleusercontent.com/d/1ECCi1E20cNndUdv4l-fcwKpTM79nZ9uu" alt="" loading="lazy"/><div><h3>शेतमजुरांसाठी रोजगार हमीची माहिती गावात पोहोचणे का आवश्यक?</h3><span class="meta">01-11-2026</span></div></a><a class="stack-card" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/women-self-help-groups-drought/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-19.webp" alt="" loading="lazy"/><div><h3>दुष्काळात महिला बचतगटांची भूमिका : माहिती, रोजगार आणि आधार</h3><span class="meta">01-11-2026</span></div></a><a class="stack-card" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/tanker-request-village-process/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-18.webp" alt="" loading="lazy"/><div><h3>टँकर मागणीपासून तक्रारीपर्यंत : ग्रामपंचायतीने कोणती माहिती ठेवावी?</h3><span class="meta">01-11-2026</span></div></a></div><div class="hero-latest side-panel"><div class="panel-title">ताज्या बातम्या <a href="/search">सर्व पहा ›</a></div><div class="panel-content"><a class="latest-item" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/drip-irrigation-water-saving/"><span class="latest-dot">•</span><span>ठिबक सिंचन आणि पाणी बचत : मर्यादित पाण्यातील शेतीसाठी पर्याय</span></a><a class="latest-item" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/village-water-conservation/"><span class="latest-dot">•</span><span>गावातील जलसंधारण : उन्हाळ्याआधी कोणती कामे परिणामकारक ठरू शकतात?</span></a><a class="latest-item" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/loan-waiver-vs-restructuring/"><span class="latest-dot">•</span><span>कर्जमाफी, कर्जपुनर्गठन आणि हप्त्यांना मुदतवाढ : फरक नेमका काय?</span></a><a class="latest-item" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/livestock-water-fodder-crisis/"><span class="latest-dot">•</span><span>पशुधन विकण्याची वेळ का येते? पाणी आणि चाऱ्याच्या टंचाईचा दुहेरी फटका</span></a><a class="latest-item" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/silage-making-safety/"><span class="latest-dot">•</span><span>मुरघास बनवताना शेतकऱ्यांनी लक्षात ठेवाव्यात पाच महत्त्वाच्या बाबी</span></a><a class="latest-item" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/fodder-crop-planning/"><span class="latest-dot">•</span><span>पाणी उपलब्ध असलेल्या भागात चारा पिकांचे नियोजन कसे करावे?</span></a></div></div></section><section class="page-section"><div class="section-head"><h2>ताज्या बातम्या</h2><a href="/search">सर्व बातम्या ›</a></div><div class="news-grid" id="homepage-latest-grid"><a class="news-card" data-article-slug="pawar_drought_visit" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/pawar_drought_visit/"><img src="https://lh3.googleusercontent.com/d/1XVlwOovkEmitWpzknNu-H1YtoY6uINiN" alt="शरद पवार शेतकऱ्यांच्या बांधावर, तुळशी गावात भेट; 50 लाखांची मदतही दिली, दुष्काळ परिस्थितीबाबत मोदींना सांगणार" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">दुष्काळ विशेष</span><h3>शरद पवार शेतकऱ्यांच्या बांधावर, तुळशी गावात भेट; 50 लाखांची मदतही दिली, दुष्काळ परिस्थितीबाबत मोदींना सांगणार</h3><p>सरकारकडून शेतकऱ्यांना जमेल ती मदत त्याकाळी आम्ही केल्याची आठवण सांगत शरद पवारांनीही स्वत: देखील तुळशी गावातील पाणीटंचाई जाणून घेत थेट 50 लाख रुपयांची मदत देऊ केली</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="employment-and-drought-planning" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/employment-and-drought-planning/"><img src="https://lh3.googleusercontent.com/d/1ECCi1E20cNndUdv4l-fcwKpTM79nZ9uu" alt="शेतमजुरांसाठी रोजगार हमीची माहिती गावात पोहोचणे का आवश्यक?" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">रोजगार</span><h3>शेतमजुरांसाठी रोजगार हमीची माहिती गावात पोहोचणे का आवश्यक?</h3><p>दुष्काळी काळात शेतीबाहेरील उत्पन्नाचा नियमित पर्याय महत्त्वाचा. AAHE</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="women-self-help-groups-drought" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/women-self-help-groups-drought/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-19.webp" alt="दुष्काळात महिला बचतगटांची भूमिका : माहिती, रोजगार आणि आधार" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">महिला व विकास</span><h3>दुष्काळात महिला बचतगटांची भूमिका : माहिती, रोजगार आणि आधार</h3><p>ग्रामीण महिलांच्या संस्थात्मक सहभागातून गरजू कुटुंबांना दिशा मिळू शकते.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="tanker-request-village-process" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/tanker-request-village-process/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-18.webp" alt="टँकर मागणीपासून तक्रारीपर्यंत : ग्रामपंचायतीने कोणती माहिती ठेवावी?" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">ग्रामविकास</span><h3>टँकर मागणीपासून तक्रारीपर्यंत : ग्रामपंचायतीने कोणती माहिती ठेवावी?</h3><p>गावनिहाय पाणीटंचाईचा लेखाजोखा ठेवल्यास मदतीत गती येऊ शकते.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a></div></section><section class="page-section"><div class="section-head"><h2>दुष्काळ विशेष</h2><a href="/search/label/%E0%A4%A6%E0%A5%81%E0%A4%B7%E0%A5%8D%E0%A4%95%E0%A4%BE%E0%A4%B3%20%E0%A4%B5%E0%A4%BF%E0%A4%B6%E0%A5%87%E0%A4%B7">सर्व बातम्या ›</a></div><div class="news-grid"><a class="news-card" data-article-slug="pawar_drought_visit" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/pawar_drought_visit/"><img src="https://lh3.googleusercontent.com/d/1XVlwOovkEmitWpzknNu-H1YtoY6uINiN" alt="शरद पवार शेतकऱ्यांच्या बांधावर, तुळशी गावात भेट; 50 लाखांची मदतही दिली, दुष्काळ परिस्थितीबाबत मोदींना सांगणार" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">दुष्काळ विशेष</span><h3>शरद पवार शेतकऱ्यांच्या बांधावर, तुळशी गावात भेट; 50 लाखांची मदतही दिली, दुष्काळ परिस्थितीबाबत मोदींना सांगणार</h3><p>सरकारकडून शेतकऱ्यांना जमेल ती मदत त्याकाळी आम्ही केल्याची आठवण सांगत शरद पवारांनीही स्वत: देखील तुळशी गावातील पाणीटंचाई जाणून घेत थेट 50 लाख रुपयांची मदत देऊ केली</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="village-water-conservation" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/village-water-conservation/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-15.webp" alt="गावातील जलसंधारण : उन्हाळ्याआधी कोणती कामे परिणामकारक ठरू शकतात?" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">पाणी</span><h3>गावातील जलसंधारण : उन्हाळ्याआधी कोणती कामे परिणामकारक ठरू शकतात?</h3><p>पाणी साठा, गाळ काढणे आणि जलस्रोतांची दुरुस्ती यांचे वेळेवर नियोजन आवश्यक.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="livestock-water-fodder-crisis" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/livestock-water-fodder-crisis/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-13.webp" alt="पशुधन विकण्याची वेळ का येते? पाणी आणि चाऱ्याच्या टंचाईचा दुहेरी फटका" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">मराठवाडा</span><h3>पशुधन विकण्याची वेळ का येते? पाणी आणि चाऱ्याच्या टंचाईचा दुहेरी फटका</h3><p>ग्रामीण अर्थव्यवस्थेसाठी जनावरे म्हणजे महत्त्वाचा उत्पन्नाचा आधार.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="october-water-conservation-rules" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/october-water-conservation-rules/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-07.webp" alt="१६ ऑक्टोबरपासून पाणी बचतीवर भर : राज्यव्यापी नियोजनाचा अर्थ" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">पाणी</span><h3>१६ ऑक्टोबरपासून पाणी बचतीवर भर : राज्यव्यापी नियोजनाचा अर्थ</h3><p>पिण्याच्या पाण्याला सर्वोच्च प्राधान्य देण्याची भूमिका स्पष्ट.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a></div></section><section class="page-section drought-banner"><div><h2>🌾 दुष्काळ विशेष : माहिती, मदत आणि मार्गदर्शन</h2><p>पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी</p></div><a href="/search/label/%E0%A4%A6%E0%A5%81%E0%A4%B7%E0%A5%8D%E0%A4%95%E0%A4%BE%E0%A4%B3%20%E0%A4%B5%E0%A4%BF%E0%A4%B6%E0%A5%87%E0%A4%B7">सर्व बातम्या पहा →</a></section><section class="page-section live-tv-section"><div class="section-head"><h2><span class="on-air-dot"></span> YouTube Live TV</h2><a href="https://catonpe-droid.github.io/lokhit-maharashtra/live-tv/">Live TV पान उघडा ›</a></div><div class="tv-layout"><div class="tv-frame"><iframe src="https://www.youtube-nocookie.com/embed/live_stream?channel=UCbcCOCo2JeLRK48puKro1pQ" title="YouTube channel video player" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen"></iframe></div><div class="tv-info"><div class="tv-eyebrow">बाह्य YouTube प्रक्षेपण</div><h3>DD Sahyadri News (Prasar Bharati)</h3><p>हे DD Sahyadri News (Prasar Bharati) या बाह्य YouTube चॅनेलचे प्रक्षेपण आहे; लोकहित महाराष्ट्रचे स्वतःचे प्रक्षेपण नाही. कार्यक्रम लाइव्ह उपलब्ध असताना प्लेअर चालेल.</p><a class="tv-watch-link" href="https://www.youtube.com/@ddsahyadrinews/live" target="_blank" rel="noopener noreferrer">YouTube वर चॅनेल उघडा ↗</a><div class="tv-status-note">टीप: YouTube वर सध्या लाइव्ह प्रसारण नसल्यास व्हिडिओ उपलब्ध नसेल.</div></div></div></section><section class="page-section"><div class="section-head"><h2>महाराष्ट्र</h2><a href="/search/label/%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%B0%E0%A4%BE%E0%A4%B7%E0%A5%8D%E0%A4%9F%E0%A5%8D%E0%A4%B0">सर्व बातम्या ›</a></div><div class="news-grid"><a class="news-card" data-article-slug="central-team-drought-survey" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/central-team-drought-survey/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-05.webp" alt="केंद्रीय पाहणी पथकाने घेतला दुष्काळी परिस्थितीचा आढावा" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">महाराष्ट्र</span><h3>केंद्रीय पाहणी पथकाने घेतला दुष्काळी परिस्थितीचा आढावा</h3><p>पिकांचे नुकसान, पिण्याचे पाणी आणि पशुखाद्य या घटकांचा संयुक्त अभ्यास.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a></div></section><section class="page-section"><div class="section-head"><h2>शेती</h2><a href="/search/label/%E0%A4%B6%E0%A5%87%E0%A4%A4%E0%A5%80">सर्व बातम्या ›</a></div><div class="news-grid"><a class="news-card" data-article-slug="rabi-sowing-water-budget" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/rabi-sowing-water-budget/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-17.webp" alt="रब्बी पेरणीपूर्वी पाण्याचा हिशेब करा : दुष्काळात निर्णय कसा घ्यावा?" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">शेती</span><h3>रब्बी पेरणीपूर्वी पाण्याचा हिशेब करा : दुष्काळात निर्णय कसा घ्यावा?</h3><p>उपलब्ध ओलावा आणि पाणी नसेल तर पेरणीची जोखीम वाढू शकते.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="drip-irrigation-water-saving" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/drip-irrigation-water-saving/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-16.webp" alt="ठिबक सिंचन आणि पाणी बचत : मर्यादित पाण्यातील शेतीसाठी पर्याय" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">शेती</span><h3>ठिबक सिंचन आणि पाणी बचत : मर्यादित पाण्यातील शेतीसाठी पर्याय</h3><p>पीक, जमीन आणि खर्च यांना अनुरूप सिंचन प्रणाली निवडणे महत्त्वाचे.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="fodder-crop-planning" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/fodder-crop-planning/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-11.webp" alt="पाणी उपलब्ध असलेल्या भागात चारा पिकांचे नियोजन कसे करावे?" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">शेती</span><h3>पाणी उपलब्ध असलेल्या भागात चारा पिकांचे नियोजन कसे करावे?</h3><p>दुष्काळाच्या काळात मर्यादित पाण्यातील चारा उत्पादनाला योग्य दिशा देणे आवश्यक.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="crop-loss-panchnama-guide" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/crop-loss-panchnama-guide/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-08.webp" alt="पीकनुकसानीचा पंचनामा : शेतकऱ्यांनी कोणती काळजी घ्यावी?" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">शेती</span><h3>पीकनुकसानीचा पंचनामा : शेतकऱ्यांनी कोणती काळजी घ्यावी?</h3><p>नुकसान नोंद अचूक राहण्यासाठी क्षेत्र, पीक आणि कागदपत्रांची पडताळणी आवश्यक.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a></div></section><section class="page-section"><div class="section-head"><h2>शासन योजना</h2><a href="/search/label/%E0%A4%B6%E0%A4%BE%E0%A4%B8%E0%A4%A8%20%E0%A4%AF%E0%A5%8B%E0%A4%9C%E0%A4%A8%E0%A4%BE">सर्व बातम्या ›</a></div><div class="news-grid"><a class="news-card" data-article-slug="fake-relief-links-warning" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/fake-relief-links-warning/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-10.webp" alt="शेतकरी मदतीच्या नावाखाली फसवणूक टाळा : अर्ज आणि ई-केवायसीचे नियम" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">शासन योजना</span><h3>शेतकरी मदतीच्या नावाखाली फसवणूक टाळा : अर्ज आणि ई-केवायसीचे नियम</h3><p>खोटी लिंक, शुल्क आणि बनावट हमी यापासून सतर्क राहा.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="vk-number-ekyc-relief" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/vk-number-ekyc-relief/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-09.webp" alt="नैसर्गिक आपत्ती मदतीसाठी ‘विशिष्ट क्रमांक’ आणि ई-केवायसी कशी होते?" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">शासन योजना</span><h3>नैसर्गिक आपत्ती मदतीसाठी ‘विशिष्ट क्रमांक’ आणि ई-केवायसी कशी होते?</h3><p>मदत मंजुरीनंतर लाभार्थ्यांसाठी पुढे येणारे महत्त्वाचे टप्पे समजून घ्या.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="silage-subsidy-cattle-owners" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/silage-subsidy-cattle-owners/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-04.webp" alt="मुरघास खरेदीसाठी अनुदान : पात्र पशुपालकांनी कोणती माहिती तपासावी?" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">शासन योजना</span><h3>मुरघास खरेदीसाठी अनुदान : पात्र पशुपालकांनी कोणती माहिती तपासावी?</h3><p>विविध जिल्ह्यांत मुरघास उपलब्धतेसाठी जाहीर योजनांची अंमलबजावणी महत्त्वाची.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a></div></section><section class="page-section"><div class="section-head"><h2>पशुसंवर्धन</h2><a href="/search/label/%E0%A4%AA%E0%A4%B6%E0%A5%81%E0%A4%B8%E0%A4%82%E0%A4%B5%E0%A4%B0%E0%A5%8D%E0%A4%A7%E0%A4%A8">सर्व बातम्या ›</a></div><div class="news-grid"><a class="news-card" data-article-slug="silage-making-safety" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/silage-making-safety/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-12.webp" alt="मुरघास बनवताना शेतकऱ्यांनी लक्षात ठेवाव्यात पाच महत्त्वाच्या बाबी" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">पशुसंवर्धन</span><h3>मुरघास बनवताना शेतकऱ्यांनी लक्षात ठेवाव्यात पाच महत्त्वाच्या बाबी</h3><p>हवाबंद साठवण, स्वच्छता आणि पशुवैद्यकीय सल्ला ही सुरक्षिततेची गुरुकिल्ली.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="mission-murghas-maharashtra" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/mission-murghas-maharashtra/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-03.webp" alt="मिशन मुरघास : हिरवा चारा टिकवण्यासाठी राज्यभर प्रयत्न" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">पशुसंवर्धन</span><h3>मिशन मुरघास : हिरवा चारा टिकवण्यासाठी राज्यभर प्रयत्न</h3><p>दुष्काळात पशुधनाला दर्जेदार चारा मिळावा म्हणून मुरघास निर्मितीवर भर.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a></div></section><section class="page-section"><div class="section-head"><h2>अधिक बातम्या</h2><a href="/search">सर्व बातम्या ›</a></div><div class="news-grid"><a class="news-card" data-article-slug="fodder-crop-planning" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/fodder-crop-planning/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-11.webp" alt="पाणी उपलब्ध असलेल्या भागात चारा पिकांचे नियोजन कसे करावे?" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">शेती</span><h3>पाणी उपलब्ध असलेल्या भागात चारा पिकांचे नियोजन कसे करावे?</h3><p>दुष्काळाच्या काळात मर्यादित पाण्यातील चारा उत्पादनाला योग्य दिशा देणे आवश्यक.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="fake-relief-links-warning" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/fake-relief-links-warning/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-10.webp" alt="शेतकरी मदतीच्या नावाखाली फसवणूक टाळा : अर्ज आणि ई-केवायसीचे नियम" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">शासन योजना</span><h3>शेतकरी मदतीच्या नावाखाली फसवणूक टाळा : अर्ज आणि ई-केवायसीचे नियम</h3><p>खोटी लिंक, शुल्क आणि बनावट हमी यापासून सतर्क राहा.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="vk-number-ekyc-relief" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/vk-number-ekyc-relief/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-09.webp" alt="नैसर्गिक आपत्ती मदतीसाठी ‘विशिष्ट क्रमांक’ आणि ई-केवायसी कशी होते?" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">शासन योजना</span><h3>नैसर्गिक आपत्ती मदतीसाठी ‘विशिष्ट क्रमांक’ आणि ई-केवायसी कशी होते?</h3><p>मदत मंजुरीनंतर लाभार्थ्यांसाठी पुढे येणारे महत्त्वाचे टप्पे समजून घ्या.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a><a class="news-card" data-article-slug="crop-loss-panchnama-guide" href="https://catonpe-droid.github.io/lokhit-maharashtra/batmi/crop-loss-panchnama-guide/"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/story-08.webp" alt="पीकनुकसानीचा पंचनामा : शेतकऱ्यांनी कोणती काळजी घ्यावी?" width="480" height="270" loading="lazy"/><div class="card-body"><span class="category-kicker">शेती</span><h3>पीकनुकसानीचा पंचनामा : शेतकऱ्यांनी कोणती काळजी घ्यावी?</h3><p>नुकसान नोंद अचूक राहण्यासाठी क्षेत्र, पीक आणि कागदपत्रांची पडताळणी आवश्यक.</p><div class="meta"><span>📅 01-11-2026</span><span>लोकहित डेस्क</span></div></div></a></div></section></div></main>
+</b:if>
+<main id="lokhit-blog-content" class="blogger-main">
+<b:section class="main" id="main" maxwidgets="1" showaddelement="no">
+<b:widget id="Blog1" locked="true" mobile="yes" visible="true" title="Lokhit Maharashtra News" type="Blog" version="2">
+<b:includable id="main" var="top">
+<b:if cond="not data:view.isHomepage">
+<b:if cond="data:view.isSingleItem">
+<div class="container page-section" id="lokhit-native">
+<b:loop values="data:posts" var="post">
+<div class="content-layout">
+<article class="article blogger-post-article"><h1><data:post.title/></h1>
+<div class="article-body blogger-post-original"><data:post.body/></div></article>
+</div>
+</b:loop>
+</div>
+<b:else/>
+<div class="container page-section"><div class="section-head"><h2><data:view.title.escaped/></h2></div>
+<div class="news-grid"><b:loop values="data:posts" var="post"><a class="news-card" expr:href="data:post.url"><div class="card-body"><h3><data:post.title/></h3><p><data:post.snippet/></p></div></a></b:loop></div></div>
+</b:if>
+</b:if>
+</b:includable>
+</b:widget>
+</b:section>
+<div id="lokhit-article-fallback"></div>
+</main>
+
+<footer class="footer"><div class="container"><div class="footer-grid"><div><div class="footer-brand"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/logo.webp" alt="" class="footer-logo"/>लोकहित महाराष्ट्र</div><p>जनहिताच्या बातम्या, महाराष्ट्राचा डिजिटल आवाज. महाराष्ट्र, दुष्काळ, शेती, योजना आणि ग्रामीण विकासाविषयी मराठी माहिती.</p><small>डिजिटल न्यूज व जनमाहिती पोर्टल. हे कोणत्याही शासकीय कार्यालयाचे अधिकृत संकेतस्थळ नाही.</small></div><div><h3>विभाग</h3><a href="/search/label/%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%B0%E0%A4%BE%E0%A4%B7%E0%A5%8D%E0%A4%9F%E0%A5%8D%E0%A4%B0">महाराष्ट्र</a><a href="/search/label/%E0%A4%AE%E0%A4%B0%E0%A4%BE%E0%A4%A0%E0%A4%B5%E0%A4%BE%E0%A4%A1%E0%A4%BE">मराठवाडा</a><a href="/search/label/%E0%A4%A6%E0%A5%81%E0%A4%B7%E0%A5%8D%E0%A4%95%E0%A4%BE%E0%A4%B3%20%E0%A4%B5%E0%A4%BF%E0%A4%B6%E0%A5%87%E0%A4%B7">दुष्काळ विशेष</a><a href="/search/label/%E0%A4%B6%E0%A5%87%E0%A4%A4%E0%A5%80">शेती</a><a href="/search/label/%E0%A4%B6%E0%A4%BE%E0%A4%B8%E0%A4%A8%20%E0%A4%AF%E0%A5%8B%E0%A4%9C%E0%A4%A8%E0%A4%BE">शासन योजना</a></div><div><h3>Information</h3><a href="https://catonpe-droid.github.io/lokhit-maharashtra/about/">About Us</a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/contact/">Contact</a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/editorial-policy/">Editorial Policy</a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/corrections/">Corrections Policy</a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/advertise/">Advertise</a></div><div><h3>Legal &amp; Policies</h3><a href="https://catonpe-droid.github.io/lokhit-maharashtra/privacy-policy/">Privacy Policy</a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/terms/">Terms &amp; Conditions</a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/disclaimer/">Disclaimer</a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/grievance/">Grievance Redressal</a><a href="https://catonpe-droid.github.io/lokhit-maharashtra/cookie-policy/">Cookie Policy</a></div></div><div class="footer-bottom"><span>© २०२६ लोकहित महाराष्ट्र. सर्व हक्क राखीव.</span><span>माहितीतील त्रुटी निदर्शनास आणण्यासाठी संपर्क पृष्ठ वापरा.</span></div></div></footer>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/js/site.js" defer="defer"></script>
+<script type="text/javascript">
+//<![CDATA[
+(function(){
+ var original="https://catonpe-droid.github.io/lokhit-maharashtra/";
+ var originalTitles={};
+ var pageTitles={"about":"About Us","contact":"Contact Us","advertise":"Advertising & Partnerships","privacy-policy":"Privacy Policy","terms":"Terms & Conditions","disclaimer":"Disclaimer","grievance":"Grievance Redressal","cookie-policy":"Cookie Policy","editorial-policy":"Editorial Policy","corrections":"Corrections Policy","live-tv":"YouTube Live TV | लोकहित महाराष्ट्र","video":"व्हिडिओ बातम्या"};
+ function pathOf(a){try{return new URL(a.href).pathname;}catch(e){return '';}}
+ function run(){
+  fetch('/feeds/posts/default?alt=json&max-results=500',{credentials:'same-origin'}).then(function(r){if(!r.ok)throw Error('feed not available');return r.json()}).then(function(result){
+   var entries=(result.feed&&result.feed.entry)||[], links={};
+   entries.forEach(function(e){var title=e.title&&e.title.$t||'',l=(e.link||[]).find(function(x){return x.rel==='alternate'&&x.type==='text/html'});if(l)links[title]=l.href;});
+   document.querySelectorAll('a[href]').forEach(function(a){var after=pathOf(a).split('/batmi/')[1];if(!after)return;var slug=decodeURIComponent(after.split('/')[0]);if(originalTitles[slug]&&links[originalTitles[slug]])a.href=links[originalTitles[slug]];});
+   var grid=document.getElementById('homepage-latest-grid'),known=new Set(Object.values(originalTitles));
+   if(!grid)return;
+   entries.slice().reverse().forEach(function(e){
+    var title=e.title&&e.title.$t||'';if(!title||known.has(title)||!links[title])return;
+    var a=document.createElement('a');a.className='news-card';a.href=links[title];
+    var img=document.createElement('img');img.loading='lazy';img.alt=title;
+    var markup=e.content&&e.content.$t||'',found=markup.match(/<img[^>]+src=["']([^"']+)/i);
+    img.src=(e.media$thumbnail&&e.media$thumbnail.url)||(found&&found[1])||original+'assets/img/logo.webp';
+    var box=document.createElement('div');box.className='card-body';
+    var tag=document.createElement('span');tag.className='category-kicker';
+    var label=(e.category||[]).find(function(c){return c.scheme==='http://www.blogger.com/atom/ns#';});
+    tag.textContent=label&&label.term||'ताज्या बातम्या';
+    var h=document.createElement('h3');h.textContent=title;
+    var p=document.createElement('p');p.textContent=(e.summary&&e.summary.$t||'').replace(/<[^>]*>/g,'').slice(0,155);
+    box.append(tag,h,p);a.append(img,box);grid.prepend(a);
+   });
+  }).catch(function(e){console.warn('Lokhit feed sync disabled:',e);});
+  fetch('/feeds/pages/default?alt=json&max-results=100',{credentials:'same-origin'}).then(function(r){if(!r.ok)throw Error('pages feed not available');return r.json()}).then(function(data){
+   var pages=(data.feed&&data.feed.entry)||[],links={};
+   pages.forEach(function(e){var l=(e.link||[]).find(function(a){return a.rel==='alternate'&&a.type==='text/html'});if(l)links[e.title&&e.title.$t||'']=l.href;});
+   document.querySelectorAll('a[href]').forEach(function(a){var path=pathOf(a),slug=path.split('/lokhit-maharashtra/')[1];if(!slug)return;slug=slug.split('/')[0];if(pageTitles[slug]&&links[pageTitles[slug]])a.href=links[pageTitles[slug]];});
+  }).catch(function(){});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
+})();
+//]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+
+(function() {
+ function htmlEl(tag,classes){var el=document.createElement(tag);if(classes)el.className=classes;return el;}
+ function render(raw,title){
+  var wrapper=htmlEl('div');wrapper.innerHTML=raw||'';
+  var existing=wrapper.querySelector('article.article');
+  var root=document.getElementById('lokhit-native')||document.getElementById('lokhit-article-fallback');
+  if(!root)return;
+  var parent=htmlEl('div','container');
+  var crumbs=wrapper.querySelector('.breadcrumbs');
+  if(crumbs)parent.appendChild(crumbs);
+  var layout=htmlEl('div','content-layout');
+  if(existing){
+   var origLayout=existing.closest('.content-layout');
+   var aside=origLayout&&origLayout.querySelector('aside');
+   layout.appendChild(existing);
+   if(aside)layout.appendChild(aside);
+  }else{
+   var article=htmlEl('article','article');
+   var h1=htmlEl('h1');h1.textContent=title||document.title;article.appendChild(h1);
+   var body=htmlEl('div','article-body');body.innerHTML=raw||'';article.appendChild(body);
+   layout.appendChild(article);
+  }
+  parent.appendChild(layout);root.replaceChildren(parent);
+  var native=document.getElementById('lokhit-blog-content');
+  if(native&&native.contains(root)&&root.id==='lokhit-article-fallback'){
+    var w=document.getElementById('lokhit-native');if(w)w.style.display='none';
+  }
+ }
+ function isArticlePath(){return /^\/[0-9]{4}\/[0-9]{2}\/[^/]+\.html$/.test(location.pathname);}
+ function run(){
+  if(!isArticlePath())return;
+  var rendered=document.querySelector('#lokhit-native .blogger-post-original');
+  if(rendered&&rendered.innerHTML.trim()){render(rendered.innerHTML,document.title);return;}
+  fetch('/feeds/posts/default?alt=json&max-results=150').then(function(r){if(!r.ok)throw Error('News feed unavailable');return r.json();}).then(function(data){
+    var entries=(data.feed&&data.feed.entry)||[];
+    var match=entries.find(function(e){return (e.link||[]).some(function(a){if(a.rel!=='alternate')return false;try{return new URL(a.href).pathname===location.pathname;}catch(err){return false;}});});
+    if(!match){return;}
+    render(match.content&&match.content.$t||'',match.title&&match.title.$t||'');
+  }).catch(function(e){console.error('Lokhit article fallback',e);});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
+})();
+//]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+
+/* Shared article presentation – centrally maintained in Blogger theme.
+   Applies to imported clean posts and new Blogger posts; never edits post bodies. */
+(function(){
+ 'use strict';
+ if(!/^\/\d{4}\/\d{2}\/[^/]+\.html$/.test(location.pathname))return;
+ var store=null, loading=false;
+ function elt(tag,cls,text){
+   var el=document.createElement(tag);
+   if(cls)el.className=cls;
+   if(text!==undefined)el.textContent=text;
+   return el;
+ }
+ function button(text, kind){
+   var b=elt('button','share-btn share-'+kind,text);
+   b.type='button';b.setAttribute('data-share',kind);
+   b.setAttribute('aria-label',text+' — ही बातमी शेअर करा');
+   b.style.cursor='pointer';
+   return b;
+ }
+ function bar(){
+   var box=elt('div','share-bar');
+   box.appendChild(elt('strong','', 'ही बातमी शेअर करा :'));
+   [['WhatsApp','wa'],['Facebook','fb'],['X','x'],['Telegram','tg'],['लिंक कॉपी','copy'],['इतर','native']]
+    .forEach(function(pair){box.appendChild(button(pair[0],pair[1]));});
+   return box;
+ }
+ function ownUrl(e){
+   var a=(e.link||[]).find(function(x){return x.rel==='alternate' && x.type==='text/html';});
+   if(!a)return '';
+   try{var url=new URL(a.href);return url.hostname===location.hostname?url.href:'';}catch(err){return '';}
+ }
+ function photo(e){
+   var content=e.content&&e.content.$t||'';
+   var box=elt('div');box.innerHTML=content;
+   var img=box.querySelector('.article-figure img, img');
+   if(img){var src=img.getAttribute('src');if(/^https:\/\//i.test(src||''))return src;}
+   var thumbnail=e.media$thumbnail&&e.media$thumbnail.url;
+   return /^https:\/\//i.test(thumbnail||'')?thumbnail:'https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/logo.webp';
+ }
+ function dateOf(e){
+   var d=new Date((e.published&&e.published.$t)||'');
+   if(isNaN(d.getTime()))return '';
+   return d.toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\//g,'-');
+ }
+ function card(e){
+   var url=ownUrl(e);if(!url)return null;
+   var a=elt('a','news-card');a.href=url;
+   var img=elt('img');img.src=photo(e);img.alt='';img.loading='lazy';
+   var bd=elt('div','card-body');
+   var label=(e.category||[]).find(function(x){return x.scheme==='http://www.blogger.com/atom/ns#';});
+   bd.appendChild(elt('span','category-kicker',label?label.term:'ताज्या बातम्या'));
+   bd.appendChild(elt('h3','',e.title&&e.title.$t||''));
+   var note=e.summary&&e.summary.$t||'';
+   var p=elt('div');p.innerHTML=note;
+   bd.appendChild(elt('p','',p.textContent.slice(0,140)));
+   bd.appendChild(elt('div','meta',dateOf(e)));
+   a.appendChild(img);a.appendChild(bd);return a;
+ }
+ function decorate(a){
+   if(!a || a.getAttribute('data-lokhit-share-v3')==='1')return;
+   a.setAttribute('data-lokhit-share-v3','1');
+   var body=a.querySelector('.article-body');
+   if(!body){
+     body=elt('div','article-body');
+     while(a.children.length>1)body.appendChild(a.children[1]);
+     a.appendChild(body);
+   }
+   // Clean posts already contain summary/photo; move those to the article position
+   // from the original GitHub layout, rather than rendering them as body paragraphs.
+   var summary=body.querySelector(':scope > .article-summary');
+   if(summary)a.insertBefore(summary,body);
+   var figure=body.querySelector(':scope > .article-figure');
+   if(figure)a.insertBefore(figure,body);
+   var meta=a.querySelector(':scope > .meta');
+   if(!meta){
+     meta=elt('div','meta');
+     meta.appendChild(elt('span','', '✍ लोकहित महाराष्ट्र डिजिटल डेस्क'));
+     var d=document.querySelector('meta[property="article:published_time"]');
+     if(d&&d.content)meta.appendChild(elt('span','', '📅 '+new Date(d.content).toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata'})));
+     a.insertBefore(meta,figure||body);
+   }
+   // If an imported article already includes buttons, leave them unchanged.
+   var bars=Array.from(a.querySelectorAll(':scope > .share-bar'));
+   if(bars.length===0){
+     a.insertBefore(bar(),body);
+     body.insertAdjacentElement('afterend',bar());
+   }else if(bars.length===1){
+     body.insertAdjacentElement('afterend',bar());
+   }
+ }
+ function fillNews(a,feed){
+   if(!feed || a.getAttribute('data-lokhit-related-v3')==='1')return;
+   a.setAttribute('data-lokhit-related-v3','1');
+   var present=a.querySelector('.related-grid');
+   var items=(feed.entry||[]).filter(function(e){return ownUrl(e)&&new URL(ownUrl(e)).pathname!==location.pathname;});
+   if(!present){
+     var head=elt('div','section-head');head.appendChild(elt('h2','', 'संबंधित बातम्या'));
+     var grid=elt('div','related-grid');
+     items.slice(0,4).forEach(function(e){var c=card(e);if(c)grid.appendChild(c);});
+     if(grid.children.length){a.appendChild(head);a.appendChild(grid);}
+   }
+   var layout=a.closest('.content-layout');
+   if(layout&&!layout.querySelector('aside')){
+     var aside=elt('aside');
+     var panel=elt('div','side-panel sidebar-box');
+     panel.appendChild(elt('div','panel-title', 'ताज्या बातम्या'));
+     var content=elt('div','panel-content');
+     (feed.entry||[]).filter(function(e){return ownUrl(e);}).slice(0,9).forEach(function(e){
+       var link=elt('a','latest-item');link.href=ownUrl(e);
+       link.appendChild(elt('span','latest-dot','•'));
+       link.appendChild(elt('span','',e.title&&e.title.$t||''));content.appendChild(link);
+     });
+     panel.appendChild(content);aside.appendChild(panel);layout.appendChild(aside);
+   }
+ }
+ function show(){
+   var a=document.querySelector('#lokhit-article-fallback article.article') ||
+         document.querySelector('#lokhit-native article.article');
+   if(!a)return;
+   decorate(a);
+   if(store)fillNews(a,store);
+ }
+ function load(){
+   if(loading)return;loading=true;
+   fetch('/feeds/posts/default?alt=json&max-results=150',{credentials:'same-origin'})
+    .then(function(r){if(!r.ok)throw Error('Blogger feed unavailable');return r.json();})
+    .then(function(data){store=data.feed||null;show();})
+    .catch(function(e){console.warn('Latest news not loaded:',e);});
+ }
+ function boot(){
+   var root=document.getElementById('lokhit-article-fallback');
+   if(root)new MutationObserver(function(){show();}).observe(root,{childList:true});
+   show();load();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
+//]]>
+</script>
+</body></html>
