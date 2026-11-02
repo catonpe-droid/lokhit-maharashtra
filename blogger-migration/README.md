@@ -1,15 +1,18 @@
-# CURRENT RECOMMENDED THEME — V6 Blogger-Only Links (2 November 2026)
+# FINAL V7 — use this one file (2 November 2026)
 
-**Use [blogger-theme-blogger-only-v6.xml](./blogger-theme-blogger-only-v6.xml)** for new theme installations after backup. It retains V5's Layout Manager and V4 article share controls, while replacing 20 static news link destinations with actual Blogger article permalinks, converting category links (e.g. `vibhag/marathwada/`) to Blogger `/search/label/...` URLs, rewriting old GitHub article/menu URLs in user-configured gadgets at runtime, and rendering Blogger-native category grids when needed.
+**Current consolidated Theme:** [LOKHIT-MAHARASHTRA-FINAL-V7.xml](./LOKHIT-MAHARASHTRA-FINAL-V7.xml).
 
-**Blogspot Pages:** the blog currently contains 21 Posts and **0 Pages**, so About, Contact, Live TV and legal pages cannot be complete until the [12-page cleaned import](./pages-import-clean.xml) is imported. V6 maps their links to Blogger `/p/...` routes and will discover the actual page permalinks from Blogger's pages feed after import. Do not assume guessed page URLs work before import. The page import file has been cleaned of duplicate GitHub tickers and site wrappers.
+**Clean native Blogger Pages import:** [pages-import-clean.xml](./pages-import-clean.xml).
 
-**Install order:** back up current Blogger Theme; upload V6 through Theme → Restore → Upload; verify the Blogger Marathwada menu link and a news article; then separately import Pages through Settings → Manage blog → Import content (once, with backup) and check About / Contact / Live TV. **Do not reimport the 21 existing Posts.** The original GitHub Pages site remains unmodified and direct GitHub URLs remain reachable; only Blogger-origin navigation changes.
+**Single installation guide:** [INSTALL-FINAL-V7-MARATHI.md](./INSTALL-FINAL-V7-MARATHI.md).
 
-**Validation:** local XML structure, known entities, and inline JavaScript syntax pass. Actual installation on Blogger and page-import behavior are NOT yet live-verified.
+V7 includes: 14 Blogger Layout regions, six preconfigured LinkList controls for Homepage Sections/Menu/Ticker/Slider/Side Cards/Footer, current Blogger article permalinks, Blogger label category routes, share controls, related news and sidebar, dynamic Homepage cards, and responsive featured Blogger post images.
+
+Image sharpness depends on the original uploaded resolution. The existing Sunil Tatkare post is sourced from a roughly 438px-wide image; requesting 1600px cannot create lost image detail. New high-res image upload is best.
+
+**Testing limits:** local XML structure/entity/JavaScript parsing checks passed; actual Blogger import/upload remains to be tested. No changes made to Blogger account. The GitHub Pages main branch is unchanged. Do not reimport 22 posts.
 
 ---
-
 # लोकहित महाराष्ट्र — Blogger migration preview (2 November 2026)
 
 ## What has been created
