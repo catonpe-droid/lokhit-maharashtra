@@ -145,9 +145,9 @@ body#layout .lk-config-slot .widget{display:block!important;visibility:visible!i
 <!-- Editable Blogger layout region: LkHomeTop -->
 <b:section id="LkHomeTop" class="sidebar" preferred="yes" maxwidgets="6" showaddelement="yes"></b:section>
 <!-- Editable Blogger layout region: LkHomeAfterSlider -->
-<b:section id="LkLkHomeAfterSlider" class="sidebar" preferred="yes" maxwidgets="8" showaddelement="yes"></b:section>
+<b:section id="LkHomeAfterSlider" class="sidebar" preferred="yes" maxwidgets="8" showaddelement="yes"></b:section>
 <!-- Editable Blogger layout region: LkHomeAfterLatest -->
-<b:section id="LkLkHomeAfterLatest" class="sidebar" preferred="yes" maxwidgets="8" showaddelement="yes"></b:section>
+<b:section id="LkHomeAfterLatest" class="sidebar" preferred="yes" maxwidgets="8" showaddelement="yes"></b:section>
 <!-- Editable Blogger layout region: LkHomeBottom -->
 <b:section id="LkHomeBottom" class="sidebar" preferred="yes" maxwidgets="10" showaddelement="yes"></b:section>
 <!-- Editable Blogger layout region: LkHomeSidebar -->
@@ -188,7 +188,7 @@ body#layout .lk-config-slot .widget{display:block!important;visibility:visible!i
 <footer class="footer">
 <div class="lk-config-slot lk-zone-footer">
 <!-- Editable Blogger layout region: LkFooterLinks -->
-<b:section id="LkLkFooterLinks" class="sidebar" preferred="yes" maxwidgets="1" showaddelement="yes">
+<b:section id="LkFooterLinks" class="sidebar" preferred="yes" maxwidgets="1" showaddelement="yes">
 <b:widget id="LinkList6" locked="false" title="Footer / Legal Links" type="LinkList" version="1" visible="true">
 <b:widget-settings>
 <b:widget-setting name="sorting">NONE</b:widget-setting>
@@ -205,7 +205,7 @@ body#layout .lk-config-slot .widget{display:block!important;visibility:visible!i
 </b:widget>
 </b:section>
 <!-- Editable Blogger layout region: LkFooterContent -->
-<b:section id="LkLkFooterContent" class="sidebar" preferred="yes" maxwidgets="5" showaddelement="yes"></b:section>
+<b:section id="LkFooterContent" class="sidebar" preferred="yes" maxwidgets="5" showaddelement="yes"></b:section>
 </div>
 <div class="container"><div class="footer-grid"><div><div class="footer-brand"><img src="https://catonpe-droid.github.io/lokhit-maharashtra/assets/img/logo.webp" alt="" class="footer-logo"/>लोकहित महाराष्ट्र</div><p>जनहिताच्या बातम्या, महाराष्ट्राचा डिजिटल आवाज. महाराष्ट्र, दुष्काळ, शेती, योजना आणि ग्रामीण विकासाविषयी मराठी माहिती.</p><small>डिजिटल न्यूज व जनमाहिती पोर्टल. हे कोणत्याही शासकीय कार्यालयाचे अधिकृत संकेतस्थळ नाही.</small></div><div><h3>विभाग</h3><a href="/search/label/%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%B0%E0%A4%BE%E0%A4%B7%E0%A5%8D%E0%A4%9F%E0%A5%8D%E0%A4%B0">महाराष्ट्र</a><a href="/search/label/%E0%A4%AE%E0%A4%B0%E0%A4%BE%E0%A4%A0%E0%A4%B5%E0%A4%BE%E0%A4%A1%E0%A4%BE">मराठवाडा</a><a href="/search/label/%E0%A4%A6%E0%A5%81%E0%A4%B7%E0%A5%8D%E0%A4%95%E0%A4%BE%E0%A4%B3%20%E0%A4%B5%E0%A4%BF%E0%A4%B6%E0%A5%87%E0%A4%B7">दुष्काळ विशेष</a><a href="/search/label/%E0%A4%B6%E0%A5%87%E0%A4%A4%E0%A5%80">शेती</a><a href="/search/label/%E0%A4%B6%E0%A4%BE%E0%A4%B8%E0%A4%A8%20%E0%A4%AF%E0%A5%8B%E0%A4%9C%E0%A4%A8%E0%A4%BE">शासन योजना</a></div><div><h3>Information</h3><a href="/p/about-us.html">About Us</a><a href="/p/contact-us.html">Contact</a><a href="/p/editorial-policy.html">Editorial Policy</a><a href="/p/corrections-policy.html">Corrections Policy</a><a href="/p/advertising-partnerships.html">Advertise</a></div><div><h3>Legal &amp; Policies</h3><a href="/p/privacy-policy.html">Privacy Policy</a><a href="/p/terms-and-conditions.html">Terms &amp; Conditions</a><a href="/p/disclaimer.html">Disclaimer</a><a href="/p/grievance-redressal.html">Grievance Redressal</a><a href="/p/cookie-policy.html">Cookie Policy</a></div></div><div class="footer-bottom"><span>© २०२६ लोकहित महाराष्ट्र. सर्व हक्क राखीव.</span><span>माहितीतील त्रुटी निदर्शनास आणण्यासाठी संपर्क पृष्ठ वापरा.</span></div></div></footer>
 
