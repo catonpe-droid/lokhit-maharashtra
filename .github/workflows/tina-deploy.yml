@@ -1,0 +1,71 @@
+name: Publish TinaCMS Editor
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Serialize with the existing Python site publisher to avoid Git conflicts.
+concurrency:
+  group: lokhit-root-sync
+  cancel-in-progress: false
+
+jobs:
+  publish-tina-editor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
+      TINA_BRANCH: main
+      NODE_OPTIONS: --max-old-space-size=4096
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Check TinaCloud build secret
+        shell: bash
+        run: |
+          if [ -z "$TINA_TOKEN" ]; then
+            echo "::error::Add TinaCloud read-only Content Token as the repository Actions secret TINA_TOKEN. See TINA-SETUP-MARATHI.md."
+            exit 1
+          fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install TinaCMS
+        run: npm install --no-audit --no-fund
+      - name: Build existing Marathi news website
+        run: python build.py
+      - name: Build isolated TinaCloud editor
+        run: npx tinacms build --content=local --skip-cloud-checks --skip-search-index
+      - name: Verify generated admin and TinaCloud schema
+        run: |
+          test -s docs/tina-editor/index.html
+          test -s tina/tina-lock.json
+      - name: Publish ONLY isolated editor assets and TinaCloud schema
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p tina-editor
+          cp -a docs/tina-editor/. tina-editor/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tina/tina-lock.json tina-editor/ package-lock.json
+          if git diff --cached --quiet; then
+            echo "TinaCMS editor already published."
+            exit 0
+          fi
+          git commit -m "Publish TinaCMS editor and schema [skip ci]"
+          for n in 1 2 3 4; do
+            git pull --rebase origin main
+            if git push origin HEAD:main; then
+              echo "Tina Editor published to /lokhit-maharashtra/tina-editor/"
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Tina editor push conflict; inspect Actions and rerun." >&2
+          exit 1
