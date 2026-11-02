@@ -1,0 +1,40 @@
+name: Validate TinaCMS editor and generate schema
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tina/**'
+      - 'package.json'
+      - '.github/workflows/tina-validate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tina-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install TinaCMS without modifying site source
+        run: npm install --no-audit --no-fund
+      - name: Build existing static HTML first
+        run: python build.py
+      - name: Compile Tina schema locally without remote TinaCloud checks
+        env:
+          TINA_BRANCH: main
+          TINA_TOKEN: local-schema-check-only
+          NODE_OPTIONS: --max-old-space-size=4096
+        run: npx tinacms build --content=local --skip-cloud-checks --skip-search-indexing
+      - name: Verify schema and isolated editor artifacts
+        run: |
+          test -s tina/tina-lock.json
+          test -s docs/tina-editor/index.html
+          echo 'Tina schema and editor assets were generated successfully.'
