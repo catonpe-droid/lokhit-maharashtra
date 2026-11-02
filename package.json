@@ -10,6 +10,6 @@
   },
   "dependencies": {
     "tinacms": "^3.15.0",
-    "@tinacms/cli": "^3.0.0"
+    "@tinacms/cli": "^4.0.2"
   }
 }
