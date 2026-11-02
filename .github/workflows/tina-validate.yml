@@ -32,7 +32,7 @@ jobs:
           TINA_BRANCH: main
           TINA_TOKEN: local-schema-check-only
           NODE_OPTIONS: --max-old-space-size=4096
-        run: npx tinacms build --content=local --skip-cloud-checks --skip-search-indexing
+        run: npx tinacms build --content=local --skip-cloud-checks --skip-search-index
       - name: Verify schema and isolated editor artifacts
         run: |
           test -s tina/tina-lock.json
