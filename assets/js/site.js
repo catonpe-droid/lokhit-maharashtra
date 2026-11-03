@@ -145,3 +145,105 @@
  }
  function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 })();
+
+
+/* LOKHIT BLOGGER CMS BRIDGE — v1.0 (blogspot only, no theme upload required) */
+(function(){
+  'use strict';
+  // GitHub Pages continues to run its own original UI. This bridge is Blogger-only.
+  if (location.hostname !== 'lokhitmaharashtraserver.blogspot.com') return;
+  const base = location.origin;
+  const label = name => '/search/label/' + encodeURIComponent(name);
+  // Edits to this list can be deployed through GitHub without replacing Blogger's theme.
+  const groups = {
+    LkMenuSettings: [
+      ['मुख्यपृष्ठ','/'], ['ताज्या बातम्या','/search'],
+      ['महाराष्ट्र',label('महाराष्ट्र')], ['मराठवाडा',label('मराठवाडा')],
+      ['विदर्भ',label('विदर्भ')], ['दुष्काळ विशेष',label('दुष्काळ विशेष')],
+      ['शेती',label('शेती')], ['शासन योजना',label('शासन योजना')],
+      ['पशुसंवर्धन',label('पशुसंवर्धन')], ['राजकारण',label('राजकारण')],
+      ['व्हिडिओ','/p/video-news.html'], ['🔴 Live TV','/p/live-tv.html'],
+      ['विश्लेषण',label('विश्लेषण')]
+    ],
+    LkTickerSettings: [
+      ['शरद पवार शेतकऱ्यांच्या बांधावर; 50 लाखांची मदत','/2026/11/50.html'],
+      ['सुनील तटकरे यांची राजकीय प्रतिक्रिया','/2026/11/Suniltatkarenews.html'],
+      ['महाराष्ट्रातील दुष्काळ विशेष बातम्या',label('दुष्काळ विशेष')]
+    ],
+    LkSliderSettings: [
+      ['सुनील तटकरे','/2026/11/Suniltatkarenews.html'],
+      ['शरद पवार','/2026/11/50.html'],
+      ['दुष्काळाचे बदलते चित्र','/2026/10/_36.html'],
+      ['ठिबक सिंचन','/2026/10/_9.html']
+    ],
+    LkFeaturedCards: [
+      ['शेतकरी मदत','/2026/10/_2.html'],
+      ['पीकनुकसान पंचनामा','/2026/10/_05.html'],
+      ['मुरघास','/2026/10/_41.html']
+    ],
+    LkHomepageSettings: [
+      ['ताज्या बातम्या | 12','/search'],
+      ['दुष्काळ विशेष | 4',label('दुष्काळ विशेष')],
+      ['दुष्काळ मदत बॅनर','#lk-drought-banner'],
+      ['🔴 Live TV','#lk-live-tv'],
+      ['महाराष्ट्र | 4',label('महाराष्ट्र')],
+      ['शेती | 4',label('शेती')],
+      ['शासन योजना | 4',label('शासन योजना')],
+      ['पशुसंवर्धन | 4',label('पशुसंवर्धन')],
+      ['अधिक बातम्या | 6','/search']
+    ],
+    LkFooterLinks: [
+      ['About Us','/p/about-us.html'], ['Contact Us','/p/contact-us.html'],
+      ['Privacy Policy','/p/privacy-policy.html'],
+      ['Terms','/p/terms-and-conditions.html'],
+      ['Disclaimer','/p/disclaimer.html'],
+      ['Grievance','/p/grievance-redressal.html']
+    ]
+  };
+  // The existing Blogger theme already has the renderer for these Link List
+  // configurations. Feed-driven cards continue to come from Blogger posts.
+  function insertSettings(id, rows) {
+    let section = document.getElementById(id);
+    // A genuine Blogger widget always takes priority over our fallback.
+    if (section && section.querySelector('.widget a[href], .widget-content a[href]')) return false;
+    if (!section) {
+      section = document.createElement('div');
+      section.id = id;
+      section.hidden = true;
+      document.body.appendChild(section);
+    }
+    const widget = document.createElement('div');
+    widget.className = 'widget LinkList lk-github-fallback';
+    widget.hidden = true;
+    const content = document.createElement('div');
+    content.className = 'widget-content';
+    const ul = document.createElement('ul');
+    rows.forEach(([title, href]) => {
+      if (!title || !href) return;
+      let url;
+      try { url = new URL(href, base); } catch { return; }
+      if (url.origin !== base) return;
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = url.href;
+      a.textContent = title;
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+    content.appendChild(ul);
+    widget.appendChild(content);
+    section.appendChild(widget);
+    return true;
+  }
+  function install() {
+    if (!document.getElementById('nav-links')) return;
+    let count = 0;
+    for (const id in groups) if (insertSettings(id, groups[id])) count++;
+    document.documentElement.setAttribute('data-lokhit-cms-bridge', 'v1');
+    document.documentElement.setAttribute('data-lokhit-cms-groups', String(count));
+  }
+  // This file is defer-loaded; execute synchronously before DOMContentLoaded,
+  // when the theme's own renderer reads the settings sections.
+  if (document.getElementById('nav-links')) install();
+  else if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
+})();
