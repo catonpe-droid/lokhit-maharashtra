@@ -7,6 +7,7 @@ on:
       - 'assets/**'
       - 'backend/**'
       - 'admin/**'
+      - 'news-submit/**'
       - 'build.py'
       - 'rich_renderer.py'
       - 'tina_markdown.py'
@@ -36,6 +37,9 @@ jobs:
           python-version: '3.12'
       - name: Validate site and CMS JavaScript
         run: |
+          node --check news-submit/publisher.js
+          node --check --input-type=module < backend/secret-publisher-worker.js
+          node backend/test-secret-publisher.mjs
           node --check assets/js/studio.js
           python -m py_compile rich_renderer.py tina_markdown.py
           python -m unittest discover -s tests -v
