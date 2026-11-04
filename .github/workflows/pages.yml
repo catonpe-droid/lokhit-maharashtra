@@ -48,6 +48,7 @@ jobs:
           node --check assets/js/pin-admin.js
           node --check assets/js/cms.js
           node --check assets/js/site.js
+          node --check assets/js/local-weather.js
           node --check assets/js/sheets-public.js
           node --check --input-type=commonjs < backend/sheets-admin-code.gs
           node --check assets/js/google-admin.js
@@ -59,7 +60,12 @@ jobs:
           node --check --input-type=module < backend/worker.js
           node backend/test-worker.mjs
       - name: Build Marathi news portal and all article pages
-        run: python build.py
+        run: |
+          python build.py
+          test -f docs/assets/js/local-weather.js
+          grep -q 'id="lk-weather"' docs/index.html
+          grep -q 'local-weather.js' docs/index.html
+          grep -q 'weather-city-list' docs/index.html
       - name: Sync finished website to repository root
         shell: bash
         run: |
