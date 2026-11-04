@@ -62,6 +62,10 @@ for name,slug in DEFAULT_PAGES:
 CATEGORY_PATH={name:'vibhag/'+slug+'/' for name,slug in PAGES}
 HOME_SECTIONS=LAYOUT.get('homepage',{}) if isinstance(LAYOUT.get('homepage'),dict) else {}
 def home_enabled(name,default=True):return HOME_SECTIONS.get(name,{}).get('enabled',default) is not False
+def news_count(value,default=4):
+ try:return max(1,min(12,int(value)))
+ except (ValueError,TypeError):return default
+def home_count(name,default=4):return news_count(HOME_SECTIONS.get(name,{}).get('count',default),default)
 def category_label(name):
  for c in LAYOUT.get('categories',[]) if isinstance(LAYOUT.get('categories'),list) else []:
   if isinstance(c,dict) and c.get('name')==name:return str(c.get('label') or name).strip()[:65] or name
@@ -160,11 +164,11 @@ def write(path,content):
  target=OUT/path
  target.parent.mkdir(parents=True,exist_ok=True)
  target.write_text(content,encoding='utf8')
-def section(title,items,see=None,grid_id=''):
+def section(title,items,see=None,grid_id='',limit=4):
  if not items:return ''
  see=see or CATEGORY_PATH.get(title,'tajya-batmya/')
  grid_attr=' id="'+E(grid_id)+'"' if grid_id else ''
- return f'<section class="page-section"><div class="section-head"><h2>{E(title)}</h2><a href="{U(see)}">सर्व बातम्या ›</a></div><div class="news-grid"{grid_attr}>'+''.join(card(p) for p in items[:4])+'</div></section>'
+ return f'<section class="page-section"><div class="section-head"><h2>{E(title)}</h2><a href="{U(see)}">सर्व बातम्या ›</a></div><div class="news-grid"{grid_attr}>'+''.join(card(p) for p in items[:news_count(limit)])+'</div></section>'
 def card(p):
  return f'<a class="news-card" data-article-slug="{E(p["slug"])}" href="{U(article_path(p))}"><img src="{img(p)}" alt="{E(p["title"])}" width="480" height="270" loading="lazy"><div class="card-body"><span class="category-kicker">{E(p["category"])}</span><h3>{E(p["title"])}</h3><p>{E(p["description"])}</p><div class="meta"><span>📅 {E(time_marathi(p["date"]))}</span><span>लोकहित डेस्क</span></div></div></a>'
 def stack(p):return f'<a class="stack-card" href="{U(article_path(p))}"><img src="{img(p)}" alt="" loading="lazy"><div><h3>{E(p["title"])}</h3><span class="meta">{E(time_marathi(p["date"]))}</span></div></a>'
@@ -322,10 +326,10 @@ other_posts=[p for p in POSTS if not lead or p['slug']!=lead['slug']]
 home=f'<div class="container"><section class="page-section hero-layout">{hero}<div class="hero-stack">'+''.join(stack(p) for p in other_posts[:4])+f'</div><div class="hero-latest side-panel"><div class="panel-title">ताज्या बातम्या <a href="{U("tajya-batmya/")}">सर्व पहा ›</a></div><div class="panel-content">'+''.join(latest(p) for p in POSTS[5:11])+'</div></div></section>'
 # Homepage blocks and categories are now managed from the secret News Admin.
 if home_enabled('latest',True):
- home+=section(str(HOME_SECTIONS.get('latest',{}).get('title') or 'ताज्या बातम्या')[:65],POSTS[:4],'tajya-batmya/',grid_id='homepage-latest-grid')
+ home+=section(str(HOME_SECTIONS.get('latest',{}).get('title') or 'ताज्या बातम्या')[:65],POSTS,'tajya-batmya/',grid_id='homepage-latest-grid',limit=home_count('latest'))
 if home_enabled('gov_links',True):home+=govt_home_section()
 if home_enabled('drought_news',True):
- home+=section(str(HOME_SECTIONS.get('drought_news',{}).get('title') or 'दुष्काळ विशेष')[:65],[p for p in POSTS if p['category'] in ('दुष्काळ विशेष','मराठवाडा','पाणी')][:4],CATEGORY_PATH.get('दुष्काळ विशेष','tajya-batmya/'))
+ home+=section(str(HOME_SECTIONS.get('drought_news',{}).get('title') or 'दुष्काळ विशेष')[:65],[p for p in POSTS if p['category'] in ('दुष्काळ विशेष','मराठवाडा','पाणी')],CATEGORY_PATH.get('दुष्काळ विशेष','tajya-batmya/'),limit=home_count('drought_news'))
 if home_enabled('drought_banner',False):
  banner=HOME_SECTIONS.get('drought_banner',{})
  title=str(banner.get('title') or 'दुष्काळ विशेष : माहिती, मदत आणि मार्गदर्शन')[:130]
@@ -341,8 +345,11 @@ for item in category_blocks[:20]:
  if cat not in CATEGORY_PATH:continue
  title=str(item.get('title') or category_label(cat))[:65]
  items=[p for p in POSTS if p.get('category')==cat]
- if items:home+=section(title,items,CATEGORY_PATH[cat])
-if home_enabled('more',True):home+=section(str(HOME_SECTIONS.get('more',{}).get('title') or 'अधिक बातम्या')[:65],POSTS[10:14],'tajya-batmya/')
+ if items:home+=section(title,items,CATEGORY_PATH[cat],limit=news_count(item.get('count',4)))
+if home_enabled('more',True):
+ # Avoid an empty "more news" module when the site has fewer than 11 posts.
+ offset=10 if len(POSTS)>10 else min(4,max(0,len(POSTS)-1))
+ home+=section(str(HOME_SECTIONS.get('more',{}).get('title') or 'अधिक बातम्या')[:65],POSTS[offset:],'tajya-batmya/',limit=home_count('more'))
 home+='</div>'
 write('index.html',shell(home,'ताज्या बातम्या आणि महाराष्ट्राचे अपडेट्स',CFG['description']))
 # Articles
