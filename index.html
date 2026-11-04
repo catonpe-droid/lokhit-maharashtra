@@ -93,7 +93,8 @@
   <div id="weather-status" role="status" aria-live="polite" hidden></div>
   <div class="lk-w-controls">
     <form class="lk-w-search" id="weather-search-form" autocomplete="off">
-      <label for="weather-search">शहर शोधा</label><input id="weather-search" type="search" placeholder="शहर लिहा, उदा. Latur, Pune" minlength="2" maxlength="80" aria-label="शहराचे नाव इंग्रजीत शोधा">
+      <label for="weather-search">शहर शोधा</label><input id="weather-search" type="search" list="weather-city-list" placeholder="शहर लिहा, उदा. Latur, Pune" minlength="2" maxlength="80" aria-label="शहराचे नाव इंग्रजीत शोधा">
+      <datalist id="weather-city-list"><option value="Aurangabad" label="छत्रपती संभाजीनगर"></option><option value="Pune" label="पुणे"></option><option value="Mumbai" label="मुंबई"></option><option value="Nagpur" label="नागपूर"></option><option value="Latur" label="लातूर"></option><option value="Beed" label="बीड"></option><option value="Solapur" label="सोलापूर"></option><option value="Nashik" label="नाशिक"></option></datalist>
       <button class="lk-w-button lk-w-button-primary" type="submit">शोधा</button>
     </form>
     <div class="lk-w-actions">
