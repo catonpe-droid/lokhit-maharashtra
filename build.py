@@ -388,7 +388,7 @@ for p in POSTS[:25]:
  items+=f'<item><title>{E(p["title"])}</title><link>{E(article_url(p))}</link><guid>{E(article_url(p))}</guid><description>{E(p["description"])}</description><pubDate>{E(pub)}</pubDate></item>'
 write('rss.xml',f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>{E(CFG["name"])}</title><link>{E(URL)}</link><description>{E(CFG["description"])}</description><language>mr-IN</language>{items}</channel></rss>')
 # copy assets and browser admin into publish root
-for folder in ['assets','admin']:
+for folder in ['assets','admin','news-submit']:
  dest=OUT/folder
  if dest.exists():shutil.rmtree(dest)
  shutil.copytree(ROOT/folder,dest)
