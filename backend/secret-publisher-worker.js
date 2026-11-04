@@ -109,7 +109,7 @@ async function publish(env, request) {
   let description = clean(input.description,300);
   if(!description) description = body.replace(/[#*_~\[\]]/g,"").replace(/\s+/g," ").slice(0,180);
   if(title.length<8 || body.length<30) fail("योग्य शीर्षक आणि किमान ३० अक्षरांची बातमी लिहा.");
-  if(!CATEGORIES.has(category)) fail("बातमीचा योग्य विभाग निवडा.");
+  if(!(await isAllowedCategory(env,category))) fail("बातमीचा योग्य विभाग निवडा.");
   const photo = validateImage(input.photo);
   const now = new Date().toISOString();
   const nonce = Array.from(crypto.getRandomValues(new Uint8Array(5)),b=>b.toString(16).padStart(2,"0")).join("");
