@@ -248,6 +248,10 @@
     const all=new Set([...names,selected].filter(Boolean));
     return [...all];
   }
+  function newsCount(value,defaultCount=4){
+    const number=Number.parseInt(value,10);
+    return Number.isFinite(number)?Math.max(1,Math.min(12,number)):defaultCount;
+  }
   function homeCategoryRow(obj={}){
     const div=document.createElement('div');div.className='row-card homecat-card';
     const select=document.createElement('select');select.dataset.blockField='category';
@@ -256,9 +260,14 @@
     }
     if(obj.category)select.value=obj.category;
     const title=fieldInput(obj.title||obj.category,'मुखपृष्ठावर दिसणारे शीर्षक',65);title.dataset.blockField='title';
+    const count=document.createElement('input');
+    count.type='number';count.min='1';count.max='12';count.step='1';
+    count.value=String(newsCount(obj.count));
+    count.dataset.blockField='count';count.title='या विभागात किती बातम्या दाखवायच्या';
+    count.setAttribute('aria-label','बातम्यांची संख्या');
     const show=document.createElement('label');show.className='check';
     const checked=document.createElement('input');checked.type='checkbox';checked.checked=obj.enabled!==false;checked.dataset.blockField='enabled';show.append(checked,document.createTextNode('दाखवा'));
-    div.append(select,title,show,rowActions(div));
+    div.append(select,title,count,show,rowActions(div));
     return div;
   }
   function renderHomeControls(){
@@ -267,6 +276,9 @@
     $('home-latest-title').value=homepage.latest?.title||'ताज्या बातम्या';
     $('home-drought-news-title').value=homepage.drought_news?.title||'दुष्काळ विशेष';
     $('home-more-title').value=homepage.more?.title||'अधिक बातम्या';
+    $('home-latest-count').value=newsCount(homepage.latest?.count);
+    $('home-drought-news-count').value=newsCount(homepage.drought_news?.count);
+    $('home-more-count').value=newsCount(homepage.more?.count);
     $('home-banner-title').value=homepage.drought_banner?.title||'दुष्काळ विशेष : माहिती, मदत आणि मार्गदर्शन';
     $('home-banner-desc').value=homepage.drought_banner?.description||'पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी';
     $('home-category-items').replaceChildren();
@@ -288,15 +300,16 @@
   }
   function newHomeData(){
     return {
-      latest:{enabled:$('home-latest').checked,title:$('home-latest-title').value.trim()},
+      latest:{enabled:$('home-latest').checked,title:$('home-latest-title').value.trim(),count:newsCount($('home-latest-count').value)},
       gov_links:{enabled:$('home-gov-links').checked},
-      drought_news:{enabled:$('home-drought-news').checked,title:$('home-drought-news-title').value.trim()},
+      drought_news:{enabled:$('home-drought-news').checked,title:$('home-drought-news-title').value.trim(),count:newsCount($('home-drought-news-count').value)},
       drought_banner:{enabled:$('home-drought-banner').checked,title:$('home-banner-title').value.trim(),description:$('home-banner-desc').value.trim()},
       live_tv:{enabled:$('home-live-tv').checked},
-      more:{enabled:$('home-more').checked,title:$('home-more-title').value.trim()},
+      more:{enabled:$('home-more').checked,title:$('home-more-title').value.trim(),count:newsCount($('home-more-count').value)},
       category_blocks:[...$('home-category-items').children].map(row=>({
         category:row.querySelector('[data-block-field="category"]').value,
         title:row.querySelector('[data-block-field="title"]').value.trim(),
+        count:newsCount(row.querySelector('[data-block-field="count"]').value),
         enabled:row.querySelector('[data-block-field="enabled"]').checked
       })).filter(item=>!!item.category).slice(0,20)
     };
