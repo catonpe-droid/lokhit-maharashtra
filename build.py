@@ -125,7 +125,7 @@ def shell(content,title,desc,path='',image=None,kind='website',published=None,mo
  ticker_copy=''.join(f'<span class="ticker-item"><span class="ticker-star">◆</span>{item}</span>' for item in items)
  breakbar=(f'<div class="container"><div class="search-strip live-ticker"><span class="breaking-label"><span class="on-air-dot"></span> BREAKING NEWS</span><div class="ticker-window" aria-label="ब्रेकिंग न्यूज"><div class="ticker-move"><div class="ticker-segment">{ticker}</div><div class="ticker-segment" aria-hidden="true" inert>{ticker_copy}</div></div></div><button class="ticker-toggle" type="button" aria-label="ब्रेकिंग न्यूज पट्टी थांबवा" aria-pressed="false" title="Pause / Play">Ⅱ</button><a class="search-btn" href="{U("shodh/")}" aria-label="शोधा">⌕</a></div></div>' if items and ticker_settings.get('enabled',True) else '')
  meta=ld_head(title,desc,A(path),image,kind,published,modified)
- return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#b60013"><link rel="icon" type="image/png" href="{U('assets/img/favicon.png')}"><link rel="manifest" href="{U('manifest.webmanifest')}"><link rel="alternate" type="application/rss+xml" title="लोकहित महाराष्ट्र बातम्या" href="{U('rss.xml')}"><link rel="stylesheet" href="{U('assets/css/style.css')}">{meta}</head><body data-base="{E(BASE)}">
+ return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#b60013"><link rel="icon" type="image/png" href="{U('assets/img/favicon.png')}"><link rel="manifest" href="{U('manifest.webmanifest')}"><link rel="alternate" type="application/rss+xml" title="लोकहित महाराष्ट्र बातम्या" href="{U('rss.xml')}"><link rel="stylesheet" href="{U('assets/css/style.css')}?v=20261104-gov2">{meta}{GOV_STYLE if path in ("", "shasakiy-duve/") else ""}</head><body data-base="{E(BASE)}">
 <div class="utility"><div class="container"><span><span id="today-date">महाराष्ट्राचा डिजिटल आवाज</span> · स्वतंत्र मराठी न्यूज पोर्टल</span><div class="utility-links">{quick}<a href="{U('privacy-policy/')}">Privacy Policy</a></div></div></div>
 <header class="brand-header"><div class="container brand-inner"><a href="{U()}" class="identity" aria-label="लोकहित महाराष्ट्र मुखपृष्ठ"><img src="{U('assets/img/logo.webp')}" alt="लोकहित महाराष्ट्र लोगो" class="site-logo" width="112" height="112"><div><div class="brand-title">लोकहित <span>महाराष्ट्र</span></div><div class="brand-tagline">{E(CFG['tagline'])}</div></div></a><div class="brand-actions"><a class="icon-btn" href="{U('shodh/')}" aria-label="बातमी शोधा">⌕ शोधा</a><a class="live-nav-cta" href="{U('live-tv/')}">🔴 Live TV</a><a class="admin-link" href="{U('admin/')}" rel="nofollow">🔒 प्रशासन</a></div></div></header>
 <nav class="nav" aria-label="मुख्य मेनू"><div class="container nav-inner"><button id="nav-toggle" class="hamburger" aria-expanded="false" aria-controls="nav-links" aria-label="मेनू उघडा">☰</button><div class="nav-links" id="nav-links" style="display:contents">{nav}</div></div></nav>
@@ -149,6 +149,76 @@ def breadcrumbs(parts):return '<div class="breadcrumbs"><a href="'+U()+'">मु
 
 # Curated official public-service links. External portals remain operated by their owners.
 GOV_GROUPS = [{"id":"seva","title":"नागरिक सेवा व शासन निर्णय","icon":"🏛️","sites":[["महाराष्ट्र शासन","सर्व विभाग, घोषणा व शासन सेवा","https://www.maharashtra.gov.in/"],["आपले सरकार","उत्पन्न, जात, रहिवासी व इतर दाखले","https://aaplesarkar.mahaonline.gov.in/"],["शासन निर्णय (GR)","विभागनिहाय सरकारी निर्णय व परिपत्रके","https://gr.maharashtra.gov.in/1145/Government-Resolutions"],["आपले सरकार तक्रार निवारण","नागरिकांच्या तक्रारी व पाठपुरावा","https://grievances.maharashtra.gov.in/"],["महाराष्ट्र RTI ऑनलाइन","माहिती अधिकार अर्ज व प्रथम अपील","https://rtionline.maharashtra.gov.in/"],["भारत सरकार सेवा पोर्टल","केंद्र व राज्य शासनाच्या सेवा शोधा","https://services.india.gov.in/"],["भारताचे राष्ट्रीय पोर्टल","केंद्र सरकारची माहिती व सेवा","https://www.india.gov.in/"]]},{"id":"land","title":"जमीन व महसूल","icon":"📜","sites":[["महाभूलेख – ७/१२ व ८अ","जमिनीचे ऑनलाइन उतारे पाहा","https://bhulekh.mahabhumi.gov.in/"],["महाभूमी","जमीन अभिलेख, ई-फेरफार व इतर सेवा","https://mahabhumi.gov.in/mahabhumilink"],["डिजिटल सातबारा","डिजिटल स्वाक्षरीत सातबारा उतारा","https://digitalsatbara.mahabhumi.gov.in/"],["नोंदणी व मुद्रांक विभाग","मालमत्ता नोंदणीसंबंधी माहिती","https://igrmaharashtra.gov.in/"]]},{"id":"agri","title":"शेती, शेतकरी व पशुपालन","icon":"🌾","sites":[["महाराष्ट्र कृषी विभाग","शेतीसंबंधी योजना व शासकीय सूचना","https://krishi.maharashtra.gov.in/"],["महाडीबीटी शेतकरी","कृषी योजनांसाठी अर्ज व अर्जस्थिती","https://mahadbt.maharashtra.gov.in/Farmer/AgriLogin/AgriLogin"],["पीएम किसान","शेतकरी लाभार्थी माहिती व ई-केवायसी","https://pmkisan.gov.in/"],["पीकविमा – PMFBY","पीकविमा अर्ज व पॉलिसी स्थिती","https://pmfby.gov.in/"],["पशुसंवर्धन विभाग","पशुधन, दुग्धविकास व विभागीय योजना","https://dahd.maharashtra.gov.in/"],["भारतीय हवामान विभाग","हवामान अंदाज, पाऊस व इशारे","https://mausam.imd.gov.in/"]]},{"id":"women","title":"महिला, बचत गट व सामाजिक योजना","icon":"👩‍🌾","sites":[["महिला व बालविकास विभाग","महिला, बालकल्याण व संबंधित योजना","https://womenchild.maharashtra.gov.in/"],["उमेद – ग्रामीण जीवनोन्नती अभियान","महिला बचत गट व ग्रामीण उपजीविका","https://rdd.maharashtra.gov.in/en/maharashtra-state-rural-livelihood-mission/"],["महाDBT योजना","शिष्यवृत्ती, निवृत्तीवेतन व इतर लाभ","https://mahadbt.maharashtra.gov.in/"],["महाDBT 2.0","२०२६–२७ शैक्षणिक वर्षातील अर्जांसाठी पोर्टल","https://mahadbt2.maharashtra.gov.in/"]]},{"id":"education","title":"शिक्षण, युवक व रोजगार","icon":"🎓","sites":[["महास्वयंम","नोकरी, कौशल्य प्रशिक्षण व स्वयंरोजगार","https://www.mahaswayam.gov.in/"],["राष्ट्रीय शिष्यवृत्ती पोर्टल","केंद्र शासनाच्या शिष्यवृत्ती व अर्ज","https://scholarships.gov.in/"],["डिजिलॉकर","अधिकृत डिजिटल कागदपत्रे उपलब्ध करा","https://www.digilocker.gov.in/"]]},{"id":"welfare","title":"कामगार, रेशन व जनसेवा","icon":"🤝","sites":[["ई-श्रम","असंघटित कामगारांसाठी नोंदणी","https://eshram.gov.in/"],["बांधकाम कामगार मंडळ","बांधकाम कामगार नोंदणी व कल्याण योजना","https://www.mahabocw.in/"],["रेशनकार्ड व्यवस्थापन","रेशनकार्ड अर्ज व संबंधित सेवा","https://rcms.mahafood.gov.in/"],["केंद्रीय तक्रार निवारण – CPGRAMS","केंद्र व सार्वजनिक सेवांवरील तक्रारी","https://pgportal.gov.in/"]]},{"id":"ngo","title":"स्वयंसेवी संस्था व नोंदणी","icon":"🏢","sites":[["एनजीओ दर्पण – NITI Aayog","संस्थांसाठी दर्पण नोंदणी व युनिक आयडी","https://ngodarpan.gov.in/"],["धर्मादाय आयुक्त, महाराष्ट्र","विश्वस्त संस्था नोंदणी व माहिती","https://charity.aurionprosolutions.com/"]]}]
+GOV_STYLE = r'''<style id="gov-style-20261104">
+/* Lokhit government links • polished accessible directory • 2026-11-04 */
+.gov-home,.gov-directory{--gd-ink:#183148;--gd-deep:#102b43;--gd-muted:#647487;--gd-border:#e3e9ec;--gd-accent:#ae112c;font-family:'Mukta','Noto Sans Devanagari',system-ui,sans-serif}
+.gov-home{padding:26px 27px 28px!important;background:#fff!important;border:1px solid var(--gd-border)!important;border-radius:16px!important;box-shadow:0 12px 36px rgba(17,44,65,.055)!important}
+.gov-home .section-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:18px!important;margin:0 0 9px!important;border:0!important;padding:0!important;flex-wrap:wrap!important}
+.gov-home .section-head h2{margin:0!important;padding:0!important;background:none!important;color:var(--gd-deep)!important;border:0!important;box-shadow:none!important;font-size:clamp(23px,2.4vw,29px)!important;line-height:1.32!important;letter-spacing:0!important}
+.gov-home .section-head a{display:inline-flex!important;align-items:center!important;justify-content:center!important;background:var(--gd-accent)!important;color:#fff!important;padding:9px 15px!important;border-radius:9px!important;text-decoration:none!important;font-size:15px!important;font-weight:800!important;white-space:nowrap!important}
+.gov-home .section-head a:hover{background:#850d24!important}
+.gov-home .gov-intro{color:#657487!important;font-size:16px!important;margin:0 0 20px!important;line-height:1.7!important}
+.gov-link-grid,.gov-home .gov-link-grid,.gov-directory .gov-link-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important;align-items:stretch!important}
+.gov-directory .gov-link-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.gov-link-card,.gov-home .gov-link-card,.gov-directory .gov-link-card{box-sizing:border-box!important;display:flex!important;align-items:flex-start!important;flex-direction:row!important;gap:12px!important;min-width:0!important;min-height:108px!important;margin:0!important;padding:17px 14px!important;border:1px solid var(--gd-border)!important;border-radius:12px!important;background:#fff!important;text-decoration:none!important;white-space:normal!important;box-shadow:0 2px 6px rgba(30,55,79,.03)!important;position:relative!important;transition:transform .18s,box-shadow .18s,border-color .18s!important}
+.gov-link-card:hover{transform:translateY(-3px)!important;border-color:#c4d1da!important;box-shadow:0 10px 25px rgba(24,48,70,.11)!important}
+.gov-link-card:focus-visible{outline:3px solid #d05b5c!important;outline-offset:3px!important}
+.gov-link-icon{display:flex!important;align-items:center!important;justify-content:center!important;flex:0 0 42px!important;width:42px!important;height:42px!important;border-radius:10px!important;background:#eaf1f3!important;color:#193c4c!important;font-size:20px!important;line-height:1!important}
+.gov-link-copy{display:block!important;min-width:0!important;flex:1 1 auto!important}
+.gov-link-copy strong{display:block!important;max-width:100%!important;margin:0!important;color:var(--gd-deep)!important;font-size:17px!important;font-weight:800!important;line-height:1.35!important;overflow-wrap:break-word!important}
+.gov-link-copy small{display:block!important;margin-top:5px!important;color:var(--gd-muted)!important;font-size:13.5px!important;font-weight:500!important;line-height:1.55!important;overflow-wrap:break-word!important}
+.gov-link-arrow{flex:0 0 auto!important;margin-left:auto!important;color:var(--gd-accent)!important;font-size:17px!important;font-weight:800!important}
+.gov-directory{padding-bottom:34px!important}
+.gov-directory .breadcrumbs{margin:18px 0 15px!important}
+.gov-directory .gov-page-heading{position:relative!important;padding:32px 34px!important;margin:12px 0 22px!important;background:linear-gradient(115deg,#102b43,#204c5c)!important;border:0!important;border-radius:16px!important;box-shadow:0 12px 35px rgba(15,42,63,.12)!important;overflow:hidden!important}
+.gov-page-heading:after{content:"";position:absolute;right:-48px;top:-65px;width:250px;height:250px;border:32px solid rgba(255,255,255,.045);border-radius:50%;pointer-events:none}
+.gov-directory .gov-page-heading h1{margin:0 0 8px!important;color:#fff!important;font-size:clamp(27px,3.4vw,38px)!important;line-height:1.27!important;position:relative;z-index:1}
+.gov-directory .gov-page-heading p{margin:0!important;color:#dce9eb!important;max-width:750px!important;font-size:17px!important;line-height:1.7!important;position:relative;z-index:1}
+.gov-directory .gov-search-row{display:flex!important;align-items:center!important;gap:14px!important;margin:0 0 16px!important;flex-wrap:wrap!important}
+.gov-directory .gov-search-label{position:relative;display:flex!important;align-items:center!important;flex:1 1 420px!important;max-width:760px!important;background:#fff!important;border:1px solid #cfd8df!important;border-radius:11px!important;min-height:52px!important}
+.gov-directory .gov-search-label .gov-search-icon{position:absolute;left:16px;color:#6a7b89;font-size:23px;pointer-events:none}
+.gov-directory .gov-search-label input{width:100%!important;background:transparent!important;color:var(--gd-deep)!important;padding:12px 15px 12px 46px!important;border:0!important;outline:0!important;font:600 16px 'Mukta',sans-serif!important}
+.gov-directory .gov-search-label:focus-within{border-color:var(--gd-accent)!important;box-shadow:0 0 0 3px rgba(174,17,44,.09)}
+.gov-directory .gov-result-count{color:#52687a;font-size:14px;font-weight:800;background:#e8eef0;padding:9px 15px;border-radius:20px}
+.gov-directory .gov-category-nav{display:flex!important;flex-wrap:wrap!important;gap:9px!important;margin:0 0 24px!important;padding:0!important;border:0!important;overflow:visible!important}
+.gov-directory .gov-category-nav a{display:inline-flex!important;align-items:center!important;gap:4px!important;color:#214056!important;border:1px solid #dbe3e8!important;background:#fff!important;padding:9px 14px!important;border-radius:30px!important;font-size:14px!important;font-weight:800!important;text-decoration:none!important;white-space:normal!important}
+.gov-directory .gov-category-nav a:hover{color:var(--gd-accent)!important;background:#fff7f8!important;border-color:#d7b5bf!important}
+.gov-directory .gov-directory-section{background:#fff!important;border:1px solid var(--gd-border)!important;border-radius:15px!important;padding:21px 22px 24px!important;margin:0 0 20px!important;scroll-margin-top:20px!important;box-shadow:0 4px 22px rgba(16,42,62,.035)!important}
+.gov-directory-section h2,.gov-directory .gov-directory-section h2{font-size:21px!important;line-height:1.4!important;color:var(--gd-deep)!important;font-weight:800!important;padding:0 0 12px!important;margin:0 0 17px!important;border:0!important;border-bottom:1px solid var(--gd-border)!important;background:transparent!important}
+.gov-directory .gov-disclaimer{margin-top:25px!important;padding:18px 22px!important;background:#f8fafb!important;border:1px solid #d9e4e8!important;border-left:4px solid var(--gd-accent)!important;border-radius:9px!important;color:#536779!important;font-size:14.5px!important;line-height:1.7!important}
+.gov-directory .gov-empty{background:#fff;padding:22px;border:1px dashed #cbd7e1;border-radius:12px;text-align:center;color:#5b7180}
+.gov-directory .gov-empty[hidden]{display:none!important}
+@media(max-width:1180px){.gov-home .gov-link-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.gov-directory .gov-link-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:800px){.gov-home .gov-link-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.gov-home{padding:20px!important}.gov-directory .gov-page-heading{padding:24px!important}.gov-directory .gov-directory-section{padding:18px!important}}
+@media(max-width:580px){.gov-home .gov-link-grid,.gov-directory .gov-link-grid{grid-template-columns:1fr!important}.gov-home .section-head{align-items:flex-start!important}.gov-home .section-head a{width:100%!important}.gov-home{padding:17px 15px!important}.gov-link-card{min-height:92px!important;padding:13px 12px!important}.gov-link-icon{width:38px!important;height:38px!important;flex-basis:38px!important}.gov-link-copy strong{font-size:16px!important}.gov-directory .gov-page-heading{padding:22px 18px!important;border-radius:12px!important}.gov-directory .gov-page-heading h1{font-size:27px!important}.gov-directory .gov-page-heading p{font-size:15.5px!important}.gov-directory .gov-category-nav{flex-wrap:wrap!important;overflow:visible!important}.gov-directory .gov-category-nav a{font-size:13px!important;padding:7px 10px!important}.gov-directory .gov-directory-section{padding:15px 13px!important}.gov-directory .gov-directory-section h2{font-size:19px!important}}
+@media(prefers-reduced-motion:reduce){.gov-link-card{transition:none!important}}
+</style>'''
+GOV_SCRIPT = r'''
+<script>
+(function(){
+ var input=document.getElementById('gov-search');
+ if(!input)return;
+ var cards=[].slice.call(document.querySelectorAll('.gov-directory .gov-link-card'));
+ var groups=[].slice.call(document.querySelectorAll('.gov-directory .gov-directory-section'));
+ var count=document.getElementById('gov-result-count');
+ var empty=document.getElementById('gov-no-results');
+ function update(){
+  var q=(input.value||'').trim().toLocaleLowerCase('mr').normalize('NFKC');
+  var shown=0;
+  cards.forEach(function(card){
+   var match=!q||card.textContent.toLocaleLowerCase('mr').normalize('NFKC').indexOf(q)>=0;
+   card.hidden=!match;card.style.display=match?'':'none';if(match)shown++;
+  });
+  groups.forEach(function(group){group.hidden=!group.querySelector('.gov-link-card:not([hidden])');});
+  if(count)count.textContent=shown+' दुवे उपलब्ध';
+  if(empty)empty.hidden=shown>0;
+ }
+ input.addEventListener('input',update);
+ update();
+})();
+</script>
+'''
+
 def gov_card(site, icon):
  name,details,url=site
  return (f'<a class="gov-link-card" href="{E(url)}" target="_blank" rel="noopener noreferrer external" aria-label="{E(name)} - नवीन टॅबमध्ये उघडा">'
@@ -166,8 +236,10 @@ def govt_directory_page():
  sections=''.join(f'<section class="gov-directory-section" id="gov-{E(group["id"])}"><h2>{E(group["icon"])} {E(group["title"])}</h2><div class="gov-link-grid">'
                   +''.join(gov_card(site,group['icon']) for site in group['sites'])+'</div></section>' for group in GOV_GROUPS)
  return (f'<div class="container gov-directory">{breadcrumbs(["शासकीय दुवे"])}<div class="gov-page-heading"><h1>🏛️ महत्त्वाच्या शासकीय वेबसाइट्स</h1><p>महाराष्ट्र आणि केंद्र शासनाच्या विविध सेवांसाठी उपयुक्त अधिकृत दुव्यांचे संकलन.</p></div>'
+         f'<div class="gov-search-row"><label class="gov-search-label" for="gov-search"><span class="gov-search-icon" aria-hidden="true">⌕</span><input type="search" id="gov-search" autocomplete="off" placeholder="शासकीय सेवा शोधा — उदा. सातबारा, किसान, शिष्यवृत्ती"/></label><span class="gov-result-count" id="gov-result-count">{sum(len(g["sites"]) for g in GOV_GROUPS)} दुवे उपलब्ध</span></div>'
          f'<nav class="gov-category-nav" aria-label="शासकीय दुव्यांचे विभाग">{chips}</nav>{sections}'
-         f'<p class="gov-disclaimer">सूचना: लोकहित महाराष्ट्र हे स्वतंत्र वृत्त व जनमाहिती पोर्टल आहे; शासकीय संकेतस्थळ नाही. बाह्य संकेतस्थळांवरील योजना, अर्ज, पात्रता, शुल्क आणि तारखा संबंधित शासकीय विभागाकडून तपासा. सर्व दुवे नवीन टॅबमध्ये उघडतात.</p></div>')
+         f'<div class="gov-empty" id="gov-no-results" hidden>या नावाने कोणताही दुवा सापडला नाही. दुसरा शब्द वापरून शोधा.</div>'
+         f'<p class="gov-disclaimer">सूचना: लोकहित महाराष्ट्र हे स्वतंत्र वृत्त व जनमाहिती पोर्टल आहे; शासकीय संकेतस्थळ नाही. बाह्य संकेतस्थळांवरील योजना, अर्ज, पात्रता, शुल्क आणि तारखा संबंधित शासकीय विभागाकडून तपासा. सर्व दुवे नवीन टॅबमध्ये उघडतात.</p>{GOV_SCRIPT}</div>')
 
 # Live TV is explicitly credited to the external YouTube broadcaster.
 def live_source():
