@@ -215,7 +215,7 @@
     $('preview-dialog').showModal();
   }
 
-  let siteLayout=null,siteLayoutSha='',siteLoaded=false,siteSettingsReady=false;
+  let siteLayout=null,siteLayoutSha='',siteLoaded=false,siteSettingsReady=false,sectionCountsReady=false;
 
   const homeNames=['live_tv','drought_banner','latest','gov_links','drought_news','more'];
   const checkId={live_tv:'home-live-tv',drought_banner:'home-drought-banner',latest:'home-latest',gov_links:'home-gov-links',drought_news:'home-drought-news',more:'home-more'};
@@ -377,13 +377,16 @@
     try{
       const result=await api('/layout');
       siteLayout=result.layout;siteLayoutSha=result.sha;siteLoaded=true;renderLayout();
-      if(!siteSettingsReady){$('save-layout').disabled=true;$('layout-note').textContent='⚠️ Homepage/Category Save साठी Cloudflare Worker Code अपडेट आवश्यक आहे.';}
+      if(!siteSettingsReady || !sectionCountsReady){
+        $('save-layout').disabled=true;
+        $('layout-note').textContent='⚠️ संख्येच्या नवीन नियंत्रणांसाठी Server Worker Code एकदा अपडेट करा.';
+      }
       alertMsg('✅ मेनू, ब्रेकिंग आणि स्लायडर लोड झाले.');
     }catch(e){siteLoaded=false;alertMsg('सेटिंग्ज: '+e.message,true)}
   }
   async function saveLayout(){
     if(!ready||!siteLoaded||busy)return;
-    if(!siteSettingsReady){alertMsg('नवीन Server Code सक्रिय नाही. Cloudflare मध्ये Worker Code अपडेट केल्याशिवाय या सेटिंग्ज Save होणार नाहीत.',true);return;}
+    if(!siteSettingsReady || !sectionCountsReady){alertMsg('बातम्यांची संख्या Save करण्यासाठी Cloudflare मध्ये नवीन Server Worker Code Deploy करा. जुनी Key बदलण्याची गरज नाही.',true);return;}
     const extract=(root,kind)=>[...$(root).children].map(node=>{
       const inputs=node.querySelectorAll('[data-field]');
       if(kind==='menu')return {title:inputs[0].value.trim(),href:inputs[1].value.trim(),enabled:inputs[2].checked};
@@ -504,6 +507,7 @@
       const status=await fetch(worker+'/health',{cache:'no-store'}).then(r=>r.json());
       if(!status.ready)throw Error('Cloudflare Worker अजून Configure झालेला नाही.');
       siteSettingsReady=Array.isArray(status.features)&&status.features.includes('homepage')&&status.features.includes('categories');
+      sectionCountsReady=Array.isArray(status.features)&&status.features.includes('section-counts');
       if(!Array.isArray(status.features)||!status.features.includes('editor')) {
         alertMsg('Admin UI तयार आहे. जुनी बातमी Edit/Delete करण्यासाठी अद्ययावत Worker Code Cloudflare मध्ये Deploy करणे आवश्यक आहे.',true);
         return;
