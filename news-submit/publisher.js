@@ -2,7 +2,16 @@
 (() => {
   const $ = id => document.getElementById(id);
   const SITE = 'https://catonpe-droid.github.io/lokhit-maharashtra/';
-  const key = new URLSearchParams(location.hash.replace(/^#/,'')).get('key') || '';
+  // Read the whole #key= fragment, not URLSearchParams: a + sign in a
+  // password must remain + (URLSearchParams would silently turn it into a space).
+  function getPublishKey() {
+    const fragment = location.hash || '';
+    if(!fragment.startsWith('#key=')) return '';
+    const raw = fragment.slice(5);
+    try { return decodeURIComponent(raw).trim(); }
+    catch { return raw.trim(); }
+  }
+  const key = getPublishKey();
   let worker = '',busy = false, publishedUrl = '',previewObjectURL = '';
 
   function notice(text, kind = 'info') {
@@ -155,7 +164,10 @@
         body:JSON.stringify(data)
       });
       const output=await response.json().catch(()=>({}));
-      if(!response.ok || !output.saved) throw Error(output.error || 'बातमी जतन झाली नाही.');
+      if(!response.ok || !output.saved) {
+        if(response.status===401) throw Error('गुप्त Key जुळत नाही. Cloudflare मधील PUBLISH_KEY रीसेट करा आणि त्या नवीन Key सह #key= लिंक उघडा. Key कोणालाही पाठवू नका.');
+        throw Error(output.error || 'बातमी जतन झाली नाही.');
+      }
       if(!/^news-[a-z0-9-]{10,50}$/.test(output.slug||'')) throw Error('सर्व्हरकडून अवैध बातमी क्रमांक आला.');
       const url=SITE+'batmi/'+output.slug+'/';
       showResult(url,false);
