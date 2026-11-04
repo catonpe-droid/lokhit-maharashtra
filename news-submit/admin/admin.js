@@ -37,7 +37,15 @@
     const text=String(p?.body||'');
     if(plainMode) $('plain-body').value=text;
     else if(rich){
-      try{quill.setContents(rich,'silent')}catch{quill.setText(text+'\n','silent')}
+      try{
+        const normalized=rich.map(op=>{
+          if(op?.insert?.image && typeof op.insert.image==='string' && op.insert.image.startsWith('assets/img/')){
+            return {...op,insert:{...op.insert,image:SITE+op.insert.image}};
+          }
+          return op;
+        });
+        quill.setContents(normalized,'silent');
+      }catch{quill.setText(text+'\n','silent')}
     }else quill.setText(text+(text.endsWith('\n')?'':'\n'),'silent');
     editorChanged=false;
   }
@@ -45,7 +53,12 @@
   function articleBodyPayload(){
     if(plainMode)return {body:safeText($('plain-body').value),rich_delta:null,body_changed:editorChanged};
     const delta=quill.getContents();
-    const ops=Array.isArray(delta?.ops)?delta.ops:[];
+    const ops=(Array.isArray(delta?.ops)?delta.ops:[]).map(op=>{
+      if(typeof op?.insert?.image==='string' && op.insert.image.startsWith(SITE+'assets/img/')){
+        return {...op,insert:{...op.insert,image:op.insert.image.slice(SITE.length)}};
+      }
+      return op;
+    });
     return {body:safeText(quill.getText()),rich_delta:ops,body_changed:editorChanged};
   }
   function setBusy(state){busy=state;for(const id of ['publish','save-draft','delete','refresh','top-new','reset'])$(id).disabled=state;}
@@ -108,7 +121,7 @@
     }catch(e){alertMsg(e.message,true)}
     finally{setBusy(false)}
   }
-  function photoAsJPEG(file){
+  function photoAsJPEG(file,maxSize=920000){
     if(!file)return Promise.resolve('');
     if(file.size>12*1024*1024) return Promise.reject(Error('फोटो १२ MB पेक्षा लहान हवा.'));
     if(!['image/jpeg','image/png','image/webp'].includes(file.type))return Promise.reject(Error('JPG, PNG किंवा WebP फोटो निवडा.'));
@@ -120,7 +133,7 @@
           const c=document.createElement('canvas');c.width=w;c.height=h;
           const ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(bmp,0,0,w,h);
           const encoded=(c.toDataURL('image/jpeg',quality).split(',')[1]||'');
-          if(encoded&&encoded.length<=920000)return encoded;
+          if(encoded&&encoded.length<=maxSize)return encoded;
           w=Math.max(200,Math.round(w*.82));h=Math.max(150,Math.round(h*.82));quality=Math.max(.55,quality-.03);
         }
         throw Error('फोटो खूप मोठा आहे. दुसरा फोटो वापरा.');
@@ -224,8 +237,24 @@
       const href=$('article-url').href;try{await navigator.clipboard.writeText(href);alertMsg('✅ लिंक कॉपी झाली.')}catch{alertMsg('लिंक निवडून कॉपी करा.',true)}
     });
     if(window.Quill){
-      quill=new Quill('#rich-editor',{theme:'snow',modules:{toolbar:'#toolbar'},formats:['header','bold','italic','underline','strike','list','blockquote','link']});
+      quill=new Quill('#rich-editor',{theme:'snow',modules:{toolbar:'#toolbar'},formats:['header','bold','italic','underline','strike','list','blockquote','link','image']});
       quill.on('text-change',(delta,old,source)=>{if(source==='user')editorChanged=true});
+      $('inline-image').addEventListener('click',()=>{$('inline-file').click()});
+      $('inline-file').addEventListener('change',async()=>{
+        const f=$('inline-file').files[0];$('inline-file').value='';
+        if(!f)return;
+        const embedded=quill.getContents().ops.filter(op=>op?.insert?.image).length;
+        if(embedded>=4){alertMsg('एका बातमीत जास्तीत जास्त ४ आतील फोटो घालता येतात.',true);return}
+        try{
+          alertMsg('मजकुरासाठी फोटो तयार होत आहे…');
+          const base64=await photoAsJPEG(f,290000);
+          const position=quill.getSelection(true)?.index ?? quill.getLength()-1;
+          quill.insertEmbed(position,'image','data:image/jpeg;base64,'+base64,'user');
+          quill.insertText(position+1,'\n','user');
+          quill.setSelection(position+2,0);
+          editorChanged=true;alertMsg('✅ फोटो बातमीच्या मजकुरात जोडला.');
+        }catch(e){alertMsg('फोटो जोडता आला नाही: '+e.message,true)}
+      });
     }else{
       plainMode=true;
       $('toolbar').classList.add('hidden');$('rich-editor').classList.add('hidden');$('plain-body').classList.remove('hidden');
