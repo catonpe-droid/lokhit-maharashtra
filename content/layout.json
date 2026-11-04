@@ -220,7 +220,7 @@
       "enabled": true
     },
     "more": {
-      "enabled": false,
+      "enabled": true,
       "title": "अधिक बातम्या",
       "count": 4
     },
