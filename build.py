@@ -55,10 +55,10 @@ if isinstance(custom_categories,list) and custom_categories:
   if name and re.fullmatch(r'[a-z0-9][a-z0-9-]{1,64}',slug) and name not in [n for n,_ in categories] and slug not in [x for _,x in categories]:
    categories.append((name,slug))
  if categories:PAGES=categories
-# Keep categories used by existing articles even when an editor changes the category list.
+# Keep all legacy category routes as compatibility fallbacks, even if a
+# category is taken out of the editor list. Old links must keep working.
 for name,slug in DEFAULT_PAGES:
- if name in [x for x,_ in PAGES]:continue
- if any(p.get('category')==name for p in POSTS):PAGES.append((name,slug))
+ if name not in [x for x,_ in PAGES] and slug not in [x for _,x in PAGES]:PAGES.append((name,slug))
 CATEGORY_PATH={name:'vibhag/'+slug+'/' for name,slug in PAGES}
 HOME_SECTIONS=LAYOUT.get('homepage',{}) if isinstance(LAYOUT.get('homepage'),dict) else {}
 def home_enabled(name,default=True):return HOME_SECTIONS.get(name,{}).get('enabled',default) is not False
@@ -419,7 +419,7 @@ for slug,(title,intro,sections) in legal.items():
 index=[{k:p.get(k) for k in ['slug','title','description','category','image','date']} for p in POSTS]
 write('posts-index.json',json.dumps(index,ensure_ascii=False,indent=2))
 # Public category catalog for the simple no-login publisher; no secret data.
-write('categories.json',json.dumps([{'name':n,'label':category_label(n),'slug':slug} for n,slug in PAGES if n!='व्हिडिओ'],ensure_ascii=False,indent=2))
+write('categories.json',json.dumps([{'name':str(c['name']),'label':str(c.get('label') or c['name']),'slug':str(c['slug'])} for c in (LAYOUT.get('categories') if isinstance(LAYOUT.get('categories'),list) and LAYOUT.get('categories') else [{'name':n,'slug':slug} for n,slug in DEFAULT_PAGES]) if isinstance(c,dict) and c.get('name') and c.get('slug') and c.get('name')!='व्हिडिओ'],ensure_ascii=False,indent=2))
 # Public copy of already-published articles; lets the unchanged GitHub Editor edit older news.
 write('cms-export.json',json.dumps(POSTS,ensure_ascii=False,indent=2))
 write('manifest.webmanifest',json.dumps({'name':CFG['name'],'short_name':'लोकहित','start_url':BASE,'display':'standalone','background_color':'#ffffff','theme_color':'#b60013','icons':[{'src':U('assets/img/favicon.png'),'sizes':'192x192','type':'image/png'}]},ensure_ascii=False))
