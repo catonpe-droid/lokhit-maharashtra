@@ -23,7 +23,7 @@
     "delhi":"दिल्ली","bengaluru":"बेंगळुरू","hyderabad":"हैदराबाद"
   };
   const localName=name=>cityNames[String(name||"").trim().toLowerCase()] || String(name||"").trim();
-  const safeNumber=n=>Number.isFinite(Number(n))?Math.round(Number(n)):null;
+  const safeNumber=n=>n===null||n===undefined||n===""?null:(Number.isFinite(Number(n))?Math.round(Number(n)):null);
   const display=n=>safeNumber(n)===null?"—":new Intl.NumberFormat("mr-IN").format(safeNumber(n));
   let requestNumber=0;
   let lastLocation=null;
@@ -66,7 +66,7 @@
   }
   function renderWeather(data,place,source){
     const current=data.current||{},days=data.daily||{};
-    if(!Number.isFinite(Number(current.temperature_2m)))throw new Error("तापमान उपलब्ध नाही");
+    if(current.temperature_2m===null||current.temperature_2m===undefined||!Number.isFinite(Number(current.temperature_2m)))throw new Error("तापमान उपलब्ध नाही");
     const [symbol,condition]=info(current.weather_code,current.is_day!==0);
     $("weather-icon").textContent=symbol;
     $("weather-condition").textContent=condition;
@@ -125,7 +125,7 @@
     try{
       const geo=await loadJson(GEO,8000);
       if(lastLocation)return;
-      if(geo.latitude===undefined||geo.longitude===undefined)throw new Error("शहर उपलब्ध नाही");
+      if(geo.latitude==null||geo.longitude==null)throw new Error("शहर उपलब्ध नाही");
       await loadWeather(geo.latitude,geo.longitude,geo.city||geo.region||"तुमचा परिसर","ip");
     }catch{
       root.classList.remove("weather-loading");
