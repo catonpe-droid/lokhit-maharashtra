@@ -148,7 +148,7 @@
     $('published-heading').textContent = live ? '✅ बातमी प्रकाशित झाली!' : '✅ बातमी जतन झाली; HTML पान तयार होत आहे';
     $('published-note').textContent = live
       ? 'लिंक तयार आहे. ती WhatsApp वर पाठवू शकता.'
-      : 'GitHub Pages वर नवीन HTML उपलब्ध झाल्यावर हीच लिंक उघडेल.';
+      : 'Server वर नवीन HTML उपलब्ध झाल्यावर हीच लिंक उघडेल.';
     $('published-url').href=url;
     $('published-url').textContent=url;
     $('share-link').href='https://api.whatsapp.com/send?text=' + encodeURIComponent($('title').value.trim()+'\n'+url);
@@ -174,7 +174,7 @@
     }
     busy=true;$('publish-button').disabled=true;$('published').style.display='none';
     try {
-      notice('फोटो तयार करत आहे आणि बातमी GitHub वर सुरक्षितपणे जतन करत आहे…','info');
+      notice('फोटो तयार करत आहे आणि बातमी Server वर सुरक्षितपणे जतन करत आहे…','info');
       data.photo=await photoAsJPEG($('photo').files[0]);
       const response=await fetch(worker+'/publish',{
         method:'POST',cache:'no-store',
@@ -189,7 +189,7 @@
       if(!/^news-[a-z0-9-]{10,50}$/.test(output.slug||'')) throw Error('सर्व्हरकडून अवैध बातमी क्रमांक आला.');
       const url=SITE+'batmi/'+output.slug+'/';
       showResult(url,false);
-      notice('✅ बातमी GitHub वर जतन झाली. HTML पान प्रकाशित होत आहे…','info');
+      notice('✅ बातमी Server वर जतन झाली. HTML पान प्रकाशित होत आहे…','info');
       const live=await waitForPage(url,data.title);
       showResult(url,live);
       notice(live?'✅ HTML बातमी Live झाली. लिंक शेअर करा.':'✅ बातमी जतन झाली. HTML पान तयार होण्याची प्रक्रिया सुरू आहे. लिंक उघडून तपासा.', live?'ok':'info');
