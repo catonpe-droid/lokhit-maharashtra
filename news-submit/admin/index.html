@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="mr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#092045">
+<title>Lokhit News Studio | लोकहित महाराष्ट्र</title>
+<link rel="icon" href="../../assets/img/favicon.png">
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&display=swap');
+:root{font-family:Mukta,'Noto Sans Devanagari',system-ui,sans-serif;color:#172c43;background:#f3f6f9;--red:#b41029;--navy:#092045;--border:#dce3e9;--muted:#627386}*{box-sizing:border-box}
+body{margin:0;font-size:16px}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #ee9a2c;outline-offset:2px}
+button:disabled{opacity:.56;cursor:not-allowed}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:10px max(17px,calc((100% - 1460px)/2));display:flex;align-items:center;gap:16px;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;color:var(--navy);font-weight:800;font-size:21px}.brand img{width:47px;height:47px;object-fit:contain}
+.brand small{font-size:12px;color:var(--muted);display:block;line-height:1.1}.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--border);border-radius:8px;padding:10px 14px;background:#fff;color:var(--navy);font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;line-height:1.3}
+.btn-primary{background:var(--red);border-color:var(--red);color:#fff}.btn-primary:hover{background:#870c20}.btn-dark{background:var(--navy);border-color:var(--navy);color:#fff}.btn-danger{background:#fff;color:#a51627;border-color:#e4b8be}.btn-small{padding:7px 11px;font-size:13px}
+.wrap{max-width:1470px;margin:20px auto 55px;padding:0 18px}
+.heading{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:15px}
+.heading h1{font-size:clamp(27px,3vw,33px);color:var(--navy);margin:0 0 2px}
+.heading p{margin:0;color:var(--muted)}.state{padding:9px 14px;border:1px solid var(--border);background:#fff;border-radius:9px;font-size:14px;font-weight:800;max-width:560px}
+.state.ok{color:#12603a;background:#eff9f1;border-color:#c3e3cc}.state.bad{color:#a22030;background:#fff0f0;border-color:#f0c4c9}
+.layout{display:grid;grid-template-columns:minmax(260px,315px) minmax(480px,1fr) minmax(245px,290px);gap:15px;align-items:start}
+.panel{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 4px 19px #1b3e5a0b;min-width:0}
+.panel-head{padding:17px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}.panel-head h2{font-size:20px;margin:0}
+.side-body{padding:14px}.filter-row{display:grid;grid-template-columns:1fr;gap:8px}
+input,select,textarea{width:100%;border:1px solid #cad6df;border-radius:8px;background:#fff;padding:10px 12px;color:#183149;min-width:0}
+textarea{min-height:90px;resize:vertical}
+.filter-tabs{display:flex;gap:5px;margin:12px 0}.filter-tabs button{flex:1;background:#f2f5f8;border:1px solid #e4e9ee;border-radius:7px;padding:7px 5px;color:#475c70;font-size:13px;font-weight:800}.filter-tabs button.active{background:#e7edf4;color:#052748;border-color:#9eafc1}
+.stats{font-size:13px;color:var(--muted);margin:10px 0}.post-list{display:grid;gap:6px;max-height:70vh;overflow-y:auto}.post-item{width:100%;display:block;text-align:left;border:1px solid #e7ebf0;background:#fff;padding:11px;border-radius:9px;color:#1c354d}
+.post-item:hover,.post-item.active{border-color:#b5c7d3;background:#f5f9fc}
+.post-item strong{display:block;font-size:15px;line-height:1.4}.post-item small{font-size:12px;color:var(--muted)}
+.pager{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:12px}.pager button{padding:7px 12px}.muted{color:var(--muted);font-size:14px}
+.editor{padding:18px 22px}.editor-header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:17px}
+.editor-header h2{margin:0;font-size:23px;color:var(--navy)}
+.field{display:grid;gap:6px;margin-bottom:16px}.field>label{font-weight:800;color:#243e54}.field label small{font-weight:400}.required{color:var(--red)}
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.triple{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.ql-toolbar.ql-snow{border:1px solid #cad6df;border-radius:8px 8px 0 0;background:#f8fafc;display:flex;flex-wrap:wrap;gap:4px}
+.ql-container.ql-snow{border:1px solid #cad6df;border-top:0;border-radius:0 0 8px 8px;font-family:Mukta,sans-serif;font-size:18px}
+.ql-editor{min-height:340px;max-height:550px;overflow-y:auto;line-height:1.75;padding:18px}.ql-editor p{margin-bottom:12px}
+.ql-snow .ql-picker{font-family:Mukta,sans-serif}
+#plain-body{min-height:300px;line-height:1.7}
+.check{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:700;color:#425770}.check input{width:auto;accent-color:var(--red)}
+.upload{background:#f8fafb;border:1px dashed #c6d3de;border-radius:10px;padding:13px}
+.upload input{border:0;padding:4px 0;background:none}
+#cover-preview{max-width:100%;max-height:200px;object-fit:contain;margin-top:10px;border-radius:8px}
+.foot-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:10px;padding-top:18px;border-top:1px solid var(--border)}
+.side-settings{padding:15px}.side-settings h3{font-size:17px;margin:0 0 12px;color:var(--navy)}
+.side-settings .field{margin-bottom:13px}
+.code-box{background:#f2f5f7;border-radius:7px;padding:9px 10px;word-break:break-all;font-size:13px;color:#314c65;margin:8px 0}
+.hidden{display:none!important}.published{padding:13px;background:#edfaee;border:1px solid #a9d9b6;border-radius:10px;margin-top:14px}
+.published a{overflow-wrap:anywhere;color:#135439;font-weight:700}
+dialog{border:0;border-radius:13px;padding:24px;width:min(850px,92vw);max-height:88vh;box-shadow:0 15px 60px #1b30498a}
+dialog::backdrop{background:#162d4ca9}
+.preview-body{font-size:19px;line-height:1.8}.preview-body img{max-width:100%}
+#preview-cover{width:100%;max-height:360px;object-fit:contain}
+.notice{background:#fff7e2;border:1px solid #f2dfaa;padding:10px 13px;border-radius:8px;font-size:13px;color:#81551c;line-height:1.6}
+@media(max-width:1220px){.layout{grid-template-columns:280px minmax(390px,1fr)}.right{grid-column:2;grid-row:2}}
+@media(max-width:800px){.wrap{padding:0 9px;margin:12px auto}.topbar{padding:8px 12px}.top-actions .btn:not(.btn-primary){display:none}.brand{font-size:17px}.brand img{width:38px;height:38px}.heading{display:block}.heading h1{font-size:25px}.heading .state{margin-top:10px}.layout{grid-template-columns:1fr}.right{grid-column:auto;grid-row:auto}.post-list{max-height:250px}.editor{padding:14px}.side-body{padding:11px}.dual,.triple{grid-template-columns:1fr}.ql-editor{min-height:270px}.foot-actions button{flex:1}}
+</style>
+</head><body>
+<header class="topbar">
+ <a href="../../" class="brand"><img src="../../assets/img/logo.webp" alt="लोकहित महाराष्ट्र लोगो"><span>लोकहित महाराष्ट्र<small>NEWS ADMIN STUDIO</small></span></a>
+ <div class="top-actions"><a class="btn btn-small" href="../../" target="_blank" rel="noopener noreferrer">🌐 Website</a><a class="btn btn-small" href="../" id="simple-link">📰 Simple Form</a><button class="btn btn-primary btn-small" id="top-new" type="button">+ नवीन बातमी</button></div>
+</header>
+<main class="wrap">
+ <section class="heading"><div><h1>बातम्या व्यवस्थापन</h1><p>जुन्या बातम्या संपादित करा, नवीन प्रकाशित करा, मसुदे आणि फोटो व्यवस्थापित करा.</p></div><div id="status" class="state" role="status" aria-live="polite">सुरक्षित जोडणी तपासत आहे…</div></section>
+ <div class="layout">
+  <aside class="panel left">
+   <div class="panel-head"><h2>🗂️ सर्व बातम्या</h2><button class="btn btn-small" id="refresh" type="button">↻ Refresh</button></div>
+   <div class="side-body">
+    <div class="filter-row"><input type="search" id="search" placeholder="शीर्षक / विभाग / लेखक शोधा..." aria-label="बातमी शोधा"></div>
+    <div class="filter-tabs"><button class="active" type="button" data-status="all">सर्व</button><button type="button" data-status="published">प्रकाशित</button><button type="button" data-status="draft">मसुदे</button></div>
+    <div class="stats" id="list-info">बातम्या लोड होत आहेत…</div>
+    <div class="post-list" id="post-list"></div>
+    <div class="pager"><button class="btn btn-small" id="prev-page" type="button">‹ मागील</button><span id="page-number">1</span><button class="btn btn-small" id="next-page" type="button">पुढील ›</button></div>
+   </div>
+  </aside>
+  <section class="panel main-editor">
+   <div class="editor">
+    <div class="editor-header"><h2 id="editor-heading">📰 नवीन बातमी</h2><button type="button" class="btn btn-small" id="reset">+ नवीन</button></div>
+    <form id="post-form">
+     <div class="field"><label for="title">बातमीचे शीर्षक <span class="required">*</span></label><input id="title" minlength="8" maxlength="180" required placeholder="बातमीचे आकर्षक, अचूक शीर्षक"></div>
+     <div class="dual">
+      <div class="field"><label for="category">विभाग <span class="required">*</span></label><select id="category" required><option>महाराष्ट्र</option><option>मराठवाडा</option><option>विदर्भ</option><option>पश्चिम महाराष्ट्र</option><option>कोकण</option><option>दुष्काळ विशेष</option><option>शेती</option><option>शासन योजना</option><option>पशुसंवर्धन</option><option>पाणी</option><option>रोजगार</option><option>ग्रामविकास</option><option>महिला व विकास</option><option>अर्थकारण</option><option>राजकारण</option><option>समाज</option><option>शिक्षण</option><option>आरोग्य</option><option>विश्लेषण</option></select></div>
+      <div class="field"><label for="author">बातमीदार / लेखक</label><input id="author" maxlength="90" value="लोकहित महाराष्ट्र डिजिटल डेस्क"></div>
+     </div>
+     <div class="field"><label for="description">थोडक्यात सारांश / SEO Description</label><textarea id="description" rows="2" maxlength="300" placeholder="गुगल आणि सोशल मीडियावर दिसणारा अचूक 1–2 वाक्यांचा सारांश"></textarea><small class="muted"><span id="desc-count">0</span>/300 अक्षरे</small></div>
+     <div class="field"><label>संपूर्ण बातमी <span class="required">*</span></label>
+      <div id="toolbar"><span class="ql-formats"><select class="ql-header"><option selected></option><option value="2">Heading</option><option value="3">Subheading</option></select></span>
+      <span class="ql-formats"><button class="ql-bold" type="button"></button><button class="ql-italic" type="button"></button><button class="ql-underline" type="button"></button><button class="ql-strike" type="button"></button></span>
+      <span class="ql-formats"><button class="ql-list" value="ordered" type="button"></button><button class="ql-list" value="bullet" type="button"></button><button class="ql-blockquote" type="button"></button><button class="ql-link" type="button"></button></span>
+      <span class="ql-formats"><button class="ql-clean" type="button"></button></span></div>
+      <div id="rich-editor"></div>
+      <textarea id="plain-body" class="hidden" placeholder="बातमी येथे लिहा..."></textarea>
+      <small class="muted">Bold, headings, bullets, link, paragraphs उपलब्ध. बाह्य HTML सुरक्षितपणे मजकुरात रूपांतरित केले जाते.</small>
+     </div>
+     <div class="field upload"><label for="photo">📷 मुख्य बातमीचा फोटो</label><input type="file" id="photo" accept="image/jpeg,image/png,image/webp"><small class="muted">नवीन फोटो निवडला नाही तर जुनी बातमी अपडेट केल्यानंतरही तिचा आधीचा फोटो कायम राहील.</small><img id="cover-preview" class="hidden" alt="बातमीचा फोटो"></div>
+     <div class="foot-actions"><button id="preview" class="btn" type="button">👁 Preview</button><button id="save-draft" class="btn" type="button">मसुदा Save</button><button id="publish" class="btn btn-primary" type="submit">✅ Publish / Update</button><button id="delete" class="btn btn-danger hidden" type="button">🗑 Delete</button></div>
+     <div id="published" class="published hidden"><strong id="published-title">✅ जतन झाले</strong><p id="published-note"></p><a id="article-url" target="_blank" rel="noopener noreferrer"></a><div class="foot-actions"><button type="button" id="copy-link" class="btn btn-small">📋 Copy Link</button><a id="whatsapp" class="btn btn-small" target="_blank" rel="noopener noreferrer">WhatsApp Share</a></div></div>
+    </form>
+   </div>
+  </section>
+  <aside class="panel right">
+   <div class="side-settings"><h3>⚙️ प्रकाशन सेटिंग्ज</h3>
+    <div class="field"><label for="post-status">प्रकाशन स्थिती</label><select id="post-status"><option value="published">Published — प्रकाशित</option><option value="draft">Draft — मसुदा</option></select></div>
+    <div class="field"><label class="check"><input id="featured" type="checkbox"> मुख्य बातमी (Featured)</label></div>
+    <div class="field"><label for="tags">Tags / Keywords</label><input id="tags" placeholder="शेती, दुष्काळ, मराठवाडा"><small class="muted">स्वल्पविरामाने वेगळे करा</small></div>
+    <div class="field"><label for="video">YouTube व्हिडिओ URL</label><input id="video" type="url" placeholder="https://www.youtube.com/watch?v=..."></div>
+    <div class="field"><label for="slug">बातमी URL (Slug)</label><input id="slug" disabled placeholder="बातमी Save झाल्यावर तयार होईल"></div>
+    <div class="field"><label>Published Date</label><div class="code-box" id="post-date">नवीन बातमी</div></div>
+    <div class="notice">🔐 ही गुप्त लिंकच प्रकाशनाची परवानगी आहे. ती फक्त विश्वासू संपादकांकडे ठेवा. गुप्त Key कुणालाही पाठवू नका.</div>
+    <p class="muted">जुन्या बातमीचा URL कायम राहतो. Save केल्यावर GitHub Actions पान अपडेट करते.</p>
+   </div>
+  </aside>
+ </div>
+</main>
+<dialog id="preview-dialog"><div style="display:flex;align-items:center;justify-content:space-between;gap:15px"><h2 style="margin:0">👁 बातमी पूर्वावलोकन</h2><button class="btn btn-small" type="button" id="close-preview">✕ बंद</button></div><h1 id="preview-title"></h1><p id="preview-summary" class="muted"></p><img id="preview-cover" class="hidden" alt="मुख्य फोटो"><div id="preview-body" class="preview-body"></div></dialog>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<script src="./admin.js" defer></script>
+</body></html>
