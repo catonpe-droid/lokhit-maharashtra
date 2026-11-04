@@ -19,6 +19,19 @@ button:disabled{opacity:.56;cursor:not-allowed}
 .btn-primary{background:var(--red);border-color:var(--red);color:#fff}.btn-primary:hover{background:#870c20}.btn-dark{background:var(--navy);border-color:var(--navy);color:#fff}.btn-danger{background:#fff;color:#a51627;border-color:#e4b8be}.btn-small{padding:7px 11px;font-size:13px}
 .wrap{max-width:1470px;margin:20px auto 55px;padding:0 18px}
 .heading{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:15px}
+.studio-tabs{display:flex;gap:9px;margin:13px 0 18px;flex-wrap:wrap}
+.studio-tabs button{background:#fff;border:1px solid #d7e0e7;border-radius:9px;padding:11px 18px;color:#30445c;font-weight:800}
+.studio-tabs button.active{background:#092045;color:#fff;border-color:#092045}
+.layout-settings{padding:22px 25px}
+.layout-settings h2{color:#092045;margin:0 0 10px;font-size:24px}
+.layout-settings h3{color:#092045;font-size:20px;margin:20px 0 8px}
+.layout-settings .row-card{display:grid;grid-template-columns:minmax(150px,1.25fr) minmax(150px,1.4fr) auto auto;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #e7ecf1}
+.layout-settings .slider-card{grid-template-columns:minmax(130px,1fr) minmax(140px,1.3fr) auto auto}
+.layout-settings .row-card .check{white-space:nowrap}
+.layout-settings .row-actions{display:flex;gap:4px}
+.layout-settings .row-actions button{border:1px solid #d7e0e7;border-radius:6px;padding:6px 9px;background:#f6f8fa;font-size:13px}
+.layout-settings .layout-save{position:sticky;bottom:8px;background:#fff;padding:12px;border-top:1px solid #dbe3ea;margin-top:16px;display:flex;gap:9px;align-items:center}
+@media(max-width:760px){.layout-settings{padding:14px}.layout-settings .row-card,.layout-settings .slider-card{grid-template-columns:1fr 1fr}.layout-settings .row-actions{justify-content:flex-end}.layout-settings .layout-save{flex-wrap:wrap}}
 .heading h1{font-size:clamp(27px,3vw,33px);color:var(--navy);margin:0 0 2px}
 .heading p{margin:0;color:var(--muted)}.state{padding:9px 14px;border:1px solid var(--border);background:#fff;border-radius:9px;font-size:14px;font-weight:800;max-width:560px}
 .state.ok{color:#12603a;background:#eff9f1;border-color:#c3e3cc}.state.bad{color:#a22030;background:#fff0f0;border-color:#f0c4c9}
@@ -68,7 +81,8 @@ dialog::backdrop{background:#162d4ca9}
 </header>
 <main class="wrap">
  <section class="heading"><div><h1>बातम्या व्यवस्थापन</h1><p>जुन्या बातम्या संपादित करा, नवीन प्रकाशित करा, मसुदे आणि फोटो व्यवस्थापित करा.</p></div><div id="status" class="state" role="status" aria-live="polite">सुरक्षित जोडणी तपासत आहे…</div></section>
- <div class="layout">
+ <div class="studio-tabs" role="tablist" aria-label="संपादकीय प्रशासन"><button class="active" type="button" id="tab-news" aria-selected="true">📰 बातम्या आणि संपादक</button><button id="tab-site" type="button" aria-selected="false">⚙️ मेनू, ब्रेकिंग व स्लायडर</button></div>
+ <div class="layout" id="news-layout">
   <aside class="panel left">
    <div class="panel-head"><h2>🗂️ सर्व बातम्या</h2><button class="btn btn-small" id="refresh" type="button">↻ Refresh</button></div>
    <div class="side-body">
@@ -117,6 +131,21 @@ dialog::backdrop{background:#162d4ca9}
    </div>
   </aside>
  </div>
+ <section id="layout-panel" class="panel layout-settings hidden">
+  <h2>⚙️ वेबसाइट व्यवस्थापन</h2>
+  <p class="muted">मुख्य मेनू, स्लायडर आणि Breaking News एकाच ठिकाणी बदला. जतन केल्यावर GitHub नवीन वेबसाइट Build करेल.</p>
+  <h3>☰ मुख्य मेनू</h3>
+  <div id="menu-items"></div><button id="add-menu" type="button" class="btn btn-small">+ मेनू जोडा</button>
+  <h3>⚡ Breaking News पट्टी</h3>
+  <div class="dual"><div class="field"><label for="breaking-mode">मथळ्यांचा प्रकार</label><select id="breaking-mode"><option value="latest">नवीन बातम्यांचे मथळे आपोआप</option><option value="custom">स्वतः लिहिलेले मथळे</option></select></div>
+  <div class="field"><label class="check"><input type="checkbox" id="breaking-enabled"> Breaking News पट्टी दाखवा</label></div></div>
+  <div class="field"><label for="breaking-lines">स्वतःचे मथळे (प्रत्येक ओळीत एक)</label><textarea id="breaking-lines" rows="4" placeholder="पहिला मथळा&#10;दुसरा मथळा"></textarea></div>
+  <h3>🎞️ मुख्यपृष्ठ स्लायडर</h3>
+  <p class="muted">बातमीचा Slug घाला. पहिली Featured बातमी असल्यास ती सर्वात पुढे दिसेल.</p>
+  <div id="slider-items"></div><button id="add-slide" type="button" class="btn btn-small">+ स्लाइड जोडा</button>
+  <div class="field" style="max-width:280px;margin-top:15px"><label for="slider-seconds">स्लाइड बदलण्याचा वेळ (सेकंद)</label><input type="number" id="slider-seconds" min="3" max="15" value="6"></div>
+  <div class="layout-save"><button id="save-layout" class="btn btn-primary" type="button">💾 मेनू व स्लायडर Save करा</button><button id="refresh-layout" class="btn" type="button">↻ Refresh</button><span class="muted" id="layout-note"></span></div>
+ </section>
 </main>
 <dialog id="preview-dialog"><div style="display:flex;align-items:center;justify-content:space-between;gap:15px"><h2 style="margin:0">👁 बातमी पूर्वावलोकन</h2><button class="btn btn-small" type="button" id="close-preview">✕ बंद</button></div><h1 id="preview-title"></h1><p id="preview-summary" class="muted"></p><img id="preview-cover" class="hidden" alt="मुख्य फोटो"><div id="preview-body" class="preview-body"></div></dialog>
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
