@@ -30,8 +30,24 @@
         (u.protocol === 'https:' && u.hostname !== location.hostname);
     } catch { return false; }
   }
+  async function refreshCategories() {
+    try {
+      const response = await fetch('../categories.json', {cache:'no-store'});
+      if(!response.ok) return;
+      const catalog = await response.json();
+      if(!Array.isArray(catalog)||!catalog.length)return;
+      const dropdown=$('category'),selected=dropdown.value;
+      dropdown.replaceChildren(new Option('— विभाग निवडा —',''));
+      for(const entry of catalog){
+        if(!entry||!entry.name)continue;
+        dropdown.add(new Option(entry.label||entry.name,entry.name));
+      }
+      if(selected && [...dropdown.options].some(opt=>opt.value===selected))dropdown.value=selected;
+    }catch{}
+  }
   async function init() {
     $('publish-button').disabled = true;
+    await refreshCategories();
     try {
       const response = await fetch('./config.json', {cache:'no-store'});
       if(!response.ok) throw Error('सुरक्षित प्रकाशन जोडणी उपलब्ध नाही.');
