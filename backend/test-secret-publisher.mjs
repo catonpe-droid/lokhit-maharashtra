@@ -13,6 +13,7 @@ let revision=0;const writes=[];
 function objFromBase64(s){return JSON.parse(Buffer.from(s.replace(/\s/g,""),"base64").toString("utf8"))}
 function toFile(data,sha){return {content:Buffer.from(JSON.stringify(data)).toString("base64"),sha,encoding:"base64"}}
 function store(path,item){const sha="sha"+(++revision);docs.set(path,{item,sha});return sha}
+store("content/layout.json",{version:2,menu:[{title:"मुख्यपृष्ठ",href:"",enabled:true}],slider:[],slider_seconds:6,breaking:{enabled:true,mode:"latest",custom:[]}});
 const BASE="https://api.github.com/repos/catonpe-droid/lokhit-maharashtra/";
 globalThis.fetch=async (url,options={})=>{
   assert.ok(String(url).startsWith(BASE));
@@ -154,5 +155,26 @@ let latestSha=docs.get("content/posts/"+savedSlug+".json").sha;
  const res=await worker.fetch(req("POST","/delete",KEY,{slug:savedSlug,expected_sha:latestSha}),env);
  assert.equal(res.status,200);assert.equal((await res.json()).deleted,true);
  assert.equal([...docs.keys()].filter(x=>x.startsWith("content/posts/")).length,0);
+}
+
+{
+ const unauth=await worker.fetch(req("GET","/layout"),env);
+ assert.equal(unauth.status,401);
+ const read=await worker.fetch(req("GET","/layout",KEY),env);
+ assert.equal(read.status,200);
+ const config=await read.json();assert.equal(config.layout.menu.length,1);
+ const changed={
+   ...config.layout,
+   menu:[...config.layout.menu,{title:"शेती",href:"vibhag/sheti/",enabled:true}],
+   breaking:{enabled:true,mode:"custom",custom:["महत्त्वाची कृषी बातमी"]},
+   slider_seconds:8
+ };
+ const bad=await worker.fetch(req("POST","/layout",KEY,{layout:changed,expected_sha:"stale"}),env);
+ assert.equal(bad.status,409);
+ const save=await worker.fetch(req("POST","/layout",KEY,{layout:changed,expected_sha:config.sha}),env);
+ assert.equal(save.status,200);
+ const stored=docs.get("content/layout.json").item;
+ assert.equal(stored.menu.length,2);assert.equal(stored.breaking.mode,"custom");
+ assert.equal(stored.slider_seconds,8);
 }
 console.log("Secret Publisher + Admin Studio tests passed. No live API writes.");
