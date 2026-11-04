@@ -209,7 +209,101 @@
     else{body.replaceChildren(quill.root.cloneNode(true));body.style.whiteSpace='normal';}
     $('preview-dialog').showModal();
   }
+
+  let siteLayout=null,siteLayoutSha='',siteLoaded=false;
+  function layoutRow(item={},kind='menu'){
+    const isSlide=kind==='slider';
+    const div=document.createElement('div');
+    div.className='row-card'+(isSlide?' slider-card':'');
+    const textField=(value,placeholder,max=140)=>{
+      const input=document.createElement('input');
+      input.type='text';input.value=String(value||'');input.placeholder=placeholder;input.maxLength=max;
+      return input;
+    };
+    const name=textField(isSlide?item.slug:item.title,isSlide?'बातमी Slug':'मेनूचे नाव',isSlide?115:65);
+    name.dataset.field='name';
+    const link=textField(isSlide?item.title:item.href,isSlide?'विशेष स्लायडर मथळा':'उदा. vibhag/sheti/',isSlide?160:140);
+    link.dataset.field='link';
+    const checkLabel=document.createElement('label');checkLabel.className='check';
+    const check=document.createElement('input');check.type='checkbox';check.checked=item.enabled!==false;
+    check.dataset.field='enabled';checkLabel.append(check,document.createTextNode('दाखवा'));
+    const actions=document.createElement('div');actions.className='row-actions';
+    function action(label,handler){
+      const b=document.createElement('button');b.type='button';b.textContent=label;
+      b.addEventListener('click',handler);actions.append(b);
+    }
+    action('↑',()=>{if(div.previousElementSibling)div.parentNode.insertBefore(div,div.previousElementSibling)});
+    action('↓',()=>{if(div.nextElementSibling)div.parentNode.insertBefore(div.nextElementSibling,div)});
+    action('✕',()=>div.remove());
+    div.append(name,link,checkLabel,actions);
+    return div;
+  }
+  function renderLayout(){
+    if(!siteLayout)return;
+    const menus=$('menu-items'),slides=$('slider-items');menus.replaceChildren();slides.replaceChildren();
+    (siteLayout.menu||[]).forEach(item=>menus.append(layoutRow(item,'menu')));
+    (siteLayout.slider||[]).forEach(item=>slides.append(layoutRow(item,'slider')));
+    $('breaking-enabled').checked=siteLayout.breaking?.enabled!==false;
+    $('breaking-mode').value=siteLayout.breaking?.mode==='custom'?'custom':'latest';
+    $('breaking-lines').value=Array.isArray(siteLayout.breaking?.custom)?siteLayout.breaking.custom.join('\n'):'';
+    $('slider-seconds').value=Number(siteLayout.slider_seconds)||6;
+    $('layout-note').textContent='मेनू आणि स्लायडर क्रम बदलण्यासाठी ↑ ↓ बटणे वापरा.';
+  }
+  async function loadLayout(){
+    if(!ready)return;
+    $('layout-note').textContent='सेटिंग्ज लोड करत आहे…';
+    try{
+      const result=await api('/layout');
+      siteLayout=result.layout;siteLayoutSha=result.sha;siteLoaded=true;renderLayout();
+      alertMsg('✅ मेनू, ब्रेकिंग आणि स्लायडर लोड झाले.');
+    }catch(e){siteLoaded=false;alertMsg('सेटिंग्ज: '+e.message,true)}
+  }
+  async function saveLayout(){
+    if(!ready||!siteLoaded||busy)return;
+    const extract=(root,kind)=>[...$(root).children].map(node=>{
+      const inputs=node.querySelectorAll('[data-field]');
+      if(kind==='menu')return {title:inputs[0].value.trim(),href:inputs[1].value.trim(),enabled:inputs[2].checked};
+      return {slug:inputs[0].value.trim(),title:inputs[1].value.trim(),enabled:inputs[2].checked};
+    }).filter(obj=>kind==='menu'?!!obj.title:!!obj.slug);
+    const layout={
+      ...siteLayout,
+      menu:extract('menu-items','menu'),
+      slider:extract('slider-items','slider'),
+      breaking:{
+        enabled:$('breaking-enabled').checked,
+        mode:$('breaking-mode').value,
+        custom:$('breaking-lines').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).slice(0,12)
+      },
+      slider_seconds:Math.max(3,Math.min(15,Number($('slider-seconds').value)||6))
+    };
+    if(layout.menu.length>24||layout.slider.length>12){alertMsg('जास्तीत जास्त २४ मेनू आणि १२ स्लाइड वापरता येतील.',true);return;}
+    $('save-layout').disabled=true;
+    try{
+      const result=await api('/layout','POST',{layout,expected_sha:siteLayoutSha});
+      if(!result.saved)throw Error('Save झाले नाही.');
+      siteLayout=result.layout;siteLayoutSha=result.sha;
+      renderLayout();alertMsg('✅ मेनू, ब्रेकिंग न्यूज आणि स्लायडर Save झाले. वेबसाइट Build सुरू होईल.');
+      $('layout-note').textContent='✅ जतन झाले. वेबसाइटवर बदल Build नंतर दिसतील.';
+    }catch(e){alertMsg('❌ सेटिंग्ज Save अयशस्वी: '+e.message,true)}
+    finally{$('save-layout').disabled=false;}
+  }
+  function togglePanel(site){
+    $('tab-news').classList.toggle('active',!site);
+    $('tab-site').classList.toggle('active',site);
+    $('tab-news').setAttribute('aria-selected',String(!site));
+    $('tab-site').setAttribute('aria-selected',String(site));
+    $('news-layout').classList.toggle('hidden',site);
+    $('layout-panel').classList.toggle('hidden',!site);
+    if(site&&!siteLoaded)loadLayout();
+  }
+
   function bindEvents(){
+    $('tab-news').addEventListener('click',()=>togglePanel(false));
+    $('tab-site').addEventListener('click',()=>togglePanel(true));
+    $('add-menu').addEventListener('click',()=>{if($('menu-items').children.length<24)$('menu-items').append(layoutRow({title:'',href:'',enabled:true},'menu'))});
+    $('add-slide').addEventListener('click',()=>{if($('slider-items').children.length<12)$('slider-items').append(layoutRow({slug:'',title:'',enabled:true},'slider'))});
+    $('save-layout').addEventListener('click',saveLayout);
+    $('refresh-layout').addEventListener('click',loadLayout);
     $('top-new').addEventListener('click',resetForm);$('reset').addEventListener('click',resetForm);
     $('refresh').addEventListener('click',()=>loadList().catch(e=>alertMsg(e.message,true)));
     $('post-form').addEventListener('submit',e=>{e.preventDefault();savePost($('post-status').value)});
