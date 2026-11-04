@@ -250,6 +250,15 @@ async function safeRichDelta(env,slug,value){
   }
   return output;
 }
+async function isAllowedCategory(env,category){
+  if(CATEGORIES.has(category))return true;
+  try{
+    const file=await githubRequest(env,"contents/content/layout.json?ref=main");
+    const settings=decodeGitHub(file);
+    return Array.isArray(settings.categories)&&settings.categories.some(x=>x&&x.name===category);
+  }catch{return false}
+}
+
 async function saveArticle(env,request){
   const raw=await request.text();
   if(encoder.encode(raw).byteLength>MAX_REQUEST)fail("बातमी / फोटो खूप मोठा आहे.",413);
@@ -259,7 +268,7 @@ async function saveArticle(env,request){
   if(!p||typeof p!=="object"||Array.isArray(p))fail("बातमीचा डेटा अपूर्ण आहे.");
   const title=clean(p.title,180),body=clean(p.body,50000),category=clean(p.category,80);
   if(title.length<8||body.length<30)fail("योग्य शीर्षक आणि किमान ३० अक्षरांची बातमी आवश्यक आहे.");
-  if(!CATEGORIES.has(category))fail("योग्य विभाग निवडा.");
+  if(!(await isAllowedCategory(env,category)))fail("योग्य विभाग निवडा.");
   const video=clean(p.video,400);
   if(video){
     let u;try{u=new URL(video)}catch{fail("YouTube ची योग्य URL द्या.")}
@@ -345,7 +354,40 @@ async function saveLayout(env,request){
     mode:p.breaking.mode==="custom"?"custom":"latest",
     custom:(Array.isArray(p.breaking.custom)?p.breaking.custom:[]).slice(0,12).map(x=>clean(x,170)).filter(Boolean)
   };
-  const updated={...current,version:2,menu,slider,breaking,
+  // Existing layout fields stay backward compatible; these additional settings
+  // allow a publisher to hide modules and manage new categories without code edits.
+  const categories=Array.isArray(p.categories)?p.categories.slice(0,40).map(c=>({
+    name:clean(c.name,65),label:clean(c.label||c.name,65),
+    slug:clean(c.slug,65).toLowerCase()
+  })):current.categories||[];
+  if(!Array.isArray(categories)||!categories.length)fail("किमान एक Category आवश्यक आहे.");
+  if(categories.some(c=>!c.name||!c.label||!c.slug||!/^[a-z0-9][a-z0-9-]{1,64}$/.test(c.slug))||
+    new Set(categories.map(c=>c.name)).size!==categories.length||
+    new Set(categories.map(c=>c.slug)).size!==categories.length){
+    fail("Category नावे किंवा URL slug चुकीचे/दुबार आहेत.");
+  }
+  const homeIn=p.homepage&&typeof p.homepage==="object"?p.homepage:current.homepage||{};
+  const defaults={
+    latest:{enabled:true,title:"ताज्या बातम्या"},
+    gov_links:{enabled:true},drought_news:{enabled:true,title:"दुष्काळ विशेष"},
+    drought_banner:{enabled:false,title:"दुष्काळ विशेष : माहिती, मदत आणि मार्गदर्शन",description:"पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी"},
+    live_tv:{enabled:false},more:{enabled:true,title:"अधिक बातम्या"}
+  };
+  const homepage={};
+  for(const k of Object.keys(defaults)){
+    const old=homeIn[k]&&typeof homeIn[k]==="object"?homeIn[k]:defaults[k];
+    homepage[k]={
+      enabled:old.enabled===true,
+      ...(defaults[k].title!==undefined?{title:clean(old.title||defaults[k].title,k==="drought_banner"?130:65)}:{}),
+      ...(k==="drought_banner"?{description:clean(old.description||defaults[k].description,250)}:{})
+    };
+  }
+  const choices=new Set([...categories.map(c=>c.name),...CATEGORIES]);
+  homepage.category_blocks=(Array.isArray(homeIn.category_blocks)?homeIn.category_blocks:[]).slice(0,20)
+    .filter(x=>x&&choices.has(x.category)).map(x=>({
+      category:clean(x.category,65),title:clean(x.title,65),enabled:x.enabled!==false
+    }));
+  const updated={...current,version:3,menu,slider,breaking,categories,homepage,
     slider_seconds:Math.max(3,Math.min(15,Number(p.slider_seconds)||6))};
   const result=await githubRequest(env,"contents/content/layout.json","PUT",{
     branch:"main",sha:file.sha,message:"Update menu slider breaking news via News Admin",
