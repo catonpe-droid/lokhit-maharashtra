@@ -306,7 +306,9 @@
     $('refresh-layout').addEventListener('click',loadLayout);
     $('top-new').addEventListener('click',resetForm);$('reset').addEventListener('click',resetForm);
     $('refresh').addEventListener('click',()=>loadList().catch(e=>alertMsg(e.message,true)));
-    $('post-form').addEventListener('submit',e=>{e.preventDefault();savePost($('post-status').value)});
+    // The Publish button ALWAYS publishes. Saving a draft is a separate, explicit action.
+    // Previously this inherited the selected Draft state and silently re-saved as Draft.
+    $('post-form').addEventListener('submit',e=>{e.preventDefault();savePost('published')});
     $('save-draft').addEventListener('click',()=>savePost('draft'));
     $('delete').addEventListener('click',deletePost);
     $('preview').addEventListener('click',preview);
