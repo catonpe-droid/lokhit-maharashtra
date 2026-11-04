@@ -664,3 +664,126 @@ body{background:#f5f6f8;color:#17273b}
   .lk-weather .lk-w-actions .lk-w-button{flex:1}
   .lk-weather .lk-w-bottom{padding:9px 11px;font-size:10px}
 }
+
+
+/* Lokhit three farmer information cards — weather, market rates, farmer services */
+.lk-farmer-grid{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:14px;margin:18px 0 24px;align-items:stretch
+}
+.lk-farmer-grid > *{min-width:0;margin:0!important;align-self:stretch}
+.lk-farmer-grid .lk-weather{display:flex;flex-direction:column;box-shadow:0 5px 21px rgba(12,35,64,.06)}
+.lk-farmer-grid .lk-weather .lk-w-top{padding:14px 13px;min-height:73px}
+.lk-farmer-grid .lk-weather h2{font-size:19px}
+.lk-farmer-grid .lk-weather .lk-w-heading{gap:7px}
+.lk-farmer-grid .lk-weather .lk-w-heading-icon{width:34px;height:34px;flex:0 0 34px;font-size:18px}
+.lk-farmer-grid .lk-weather .lk-w-subheading{font-size:11px}
+.lk-farmer-grid .lk-weather .lk-w-live{font-size:9px;padding:5px 7px}
+.lk-farmer-grid .lk-weather .lk-w-content{grid-template-columns:1fr;flex:1;display:flex;flex-direction:column}
+.lk-farmer-grid .lk-weather .lk-w-current{padding:16px 15px}
+.lk-farmer-grid .lk-weather .lk-w-city{font-size:15px}
+.lk-farmer-grid .lk-weather .lk-w-temperature{gap:10px;margin:4px 0 0}
+.lk-farmer-grid .lk-weather .lk-w-symbol{font-size:46px}
+.lk-farmer-grid .lk-weather .lk-w-degrees{font-size:47px}
+.lk-farmer-grid .lk-weather .lk-w-unit{font-size:23px}
+.lk-farmer-grid .lk-weather .lk-w-feels{margin:0 0 9px}
+.lk-farmer-grid .lk-weather .lk-w-metrics{padding-top:10px;gap:5px}
+.lk-farmer-grid .lk-weather .lk-w-metric span{font-size:10px}
+.lk-farmer-grid .lk-weather .lk-w-metric strong{font-size:14px}
+.lk-farmer-grid .lk-weather .lk-w-forecast{padding:13px 12px 11px;min-height:165px;justify-content:flex-start}
+.lk-farmer-grid .lk-weather .lk-w-forecast h3{font-size:15px;margin:0 0 8px}
+.lk-farmer-grid .lk-weather .lk-w-days{gap:5px}
+.lk-farmer-grid .lk-weather .lk-w-day{padding:9px 3px}
+.lk-farmer-grid .lk-weather .lk-w-dayname{font-size:11px}
+.lk-farmer-grid .lk-weather .lk-w-dayicon{font-size:22px;margin:4px 0}
+.lk-farmer-grid .lk-weather .lk-w-day strong{font-size:11px}
+.lk-farmer-grid .lk-weather .lk-w-dayrain{font-size:11px}
+.lk-farmer-grid .lk-weather .lk-w-estimate{font-size:11px;margin:9px 0 0}
+.lk-farmer-grid .lk-weather .lk-w-controls{margin-top:auto;padding:10px 11px}
+.lk-farmer-grid .lk-weather .lk-w-search{flex:1 1 100%;max-width:none}
+.lk-farmer-grid .lk-weather .lk-w-search input{font-size:13px}
+.lk-farmer-grid .lk-weather .lk-w-actions{width:100%}
+.lk-farmer-grid .lk-weather .lk-w-actions .lk-w-button{flex:1;padding:8px 5px}
+.lk-farmer-grid .lk-weather .lk-w-bottom{padding:8px 11px;font-size:10px}
+.lk-farmer-grid .lk-weather .lk-w-loading{flex:1;min-height:245px}
+.lk-farm-card{
+ background:#fff;border:1px solid #e1e7ee;border-radius:15px;
+ overflow:hidden;box-shadow:0 5px 21px rgba(12,35,64,.06);
+ display:flex;flex-direction:column
+}
+.lk-farm-header{
+ display:flex;align-items:center;justify-content:space-between;gap:8px;
+ border-bottom:1px solid #eef1f5;background:#fff;padding:14px 13px;min-height:73px
+}
+.lk-farm-heading{display:flex;align-items:center;gap:8px;min-width:0}
+.lk-farm-icon{display:grid;place-items:center;border-radius:10px;flex:0 0 34px;width:34px;height:34px;background:#fff0f1;font-size:18px}
+.lk-farm-header h2{font-size:19px;line-height:1.25;margin:0;color:var(--navy);font-weight:800}
+.lk-farm-header p{font-size:11px;line-height:1.3;color:#657487;margin:3px 0 0}
+.lk-farm-pill{font-size:10px;line-height:1.3;background:#fff0f1;border:1px solid #f3cfd4;color:#99152a;font-weight:800;border-radius:30px;padding:5px 7px;white-space:nowrap}
+.lk-market-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:11px 10px 9px;background:#fff}
+.lk-market-tabs button{
+ border:1px solid #e1e7f0;border-radius:7px;padding:8px 3px;
+ background:#f7f9fb;color:#263f5b;font-size:12px;font-weight:800;
+ white-space:nowrap;line-height:1.2;min-width:0
+}
+.lk-market-tabs button:hover,.lk-market-tabs button.is-active{
+ color:#fff;background:#b60013;border-color:#b60013
+}
+.lk-market-embed-wrap{min-height:365px;background:#fafbfd;padding:1px 8px 8px;overflow:hidden}
+.lk-market-embed-wrap iframe{
+ display:block;width:100%;height:365px;min-height:365px;
+ border:1px solid #e7ecf1;border-radius:8px;background:#fff
+}
+.lk-market-footer{margin-top:auto;padding:10px 12px 12px;border-top:1px solid #eef1f5}
+.lk-market-footer p{margin:0 0 10px;color:#53657b;font-size:12px;line-height:1.6}
+.lk-market-links{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.lk-market-links a{
+ border:1px solid #d7e0e9;border-radius:7px;padding:9px 5px;
+ color:#153d62;background:#f6f9fc;font-size:12px;font-weight:800;
+ line-height:1.35;text-align:center
+}
+.lk-market-links a:last-child{color:#a50d22;border-color:#efcbd0;background:#fff6f7}
+.lk-market-links a:hover{border-color:#b60013}
+.lk-market-footer small{display:block;font-size:10px;color:#728096;line-height:1.5}
+.lk-market-footer small a{text-decoration:underline;text-underline-offset:2px}
+.lk-farm-services{padding:10px;display:grid;gap:8px;flex:1}
+.lk-farm-services>a{
+ display:grid;grid-template-columns:40px minmax(0,1fr) 14px;
+ gap:9px;align-items:center;padding:12px 10px;
+ color:#173958;border:1px solid #e5ebf2;border-radius:10px;
+ background:#f9fbfd;min-height:68px;min-width:0
+}
+.lk-farm-services>a:hover,.lk-farm-services>a:focus-visible{border-color:#b5c7dc;background:#f0f6fc}
+.lk-f-service-icon{
+ display:grid;place-items:center;width:39px;height:39px;
+ border-radius:10px;background:#e8f0f9;font-size:22px
+}
+.lk-farm-services strong{font-size:15px;font-weight:800;line-height:1.3;display:block}
+.lk-farm-services small{font-size:12px;color:#6c7b8f;line-height:1.45;display:block}
+.lk-farm-service-note{
+ border-top:1px solid #edf0f4;margin-top:auto;
+ padding:13px 13px 17px;font-size:11px;line-height:1.55;
+ color:#65768a;background:#fafcfe
+}
+@media(max-width:1140px){
+ .lk-farmer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .lk-farmer-links{grid-column:1/-1}
+ .lk-farm-services{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+ .lk-farmer-grid{grid-template-columns:minmax(0,1fr);gap:12px;margin:14px 0}
+ .lk-farmer-links{grid-column:auto}
+ .lk-farm-services{grid-template-columns:1fr}
+ .lk-farm-header,.lk-farmer-grid .lk-weather .lk-w-top{padding:13px 12px;min-height:65px}
+ .lk-market-embed-wrap{min-height:350px}
+ .lk-market-embed-wrap iframe{height:350px;min-height:350px}
+ .lk-farmer-grid .lk-weather .lk-w-content{grid-template-columns:1fr}
+ .lk-farmer-grid .lk-weather .lk-w-current{padding:16px}
+ .lk-farmer-grid .lk-weather .lk-w-forecast{padding:14px}
+ .lk-farmer-grid .lk-weather .lk-w-search{flex-basis:100%}
+}
+@media(max-width:360px){
+ .lk-market-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .lk-farm-header h2,.lk-farmer-grid .lk-weather h2{font-size:17px}
+ .lk-farm-services>a{padding:9px 7px}
+}
