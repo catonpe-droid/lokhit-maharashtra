@@ -153,13 +153,13 @@ def shell(content,title,desc,path='',image=None,kind='website',published=None,mo
  ticker_copy=''.join(f'<span class="ticker-item"><span class="ticker-star">◆</span>{item}</span>' for item in items)
  breakbar=(f'<div class="container"><div class="search-strip live-ticker"><span class="breaking-label"><span class="on-air-dot"></span> BREAKING NEWS</span><div class="ticker-window" aria-label="ब्रेकिंग न्यूज"><div class="ticker-move"><div class="ticker-segment">{ticker}</div><div class="ticker-segment" aria-hidden="true" inert>{ticker_copy}</div></div></div><button class="ticker-toggle" type="button" aria-label="ब्रेकिंग न्यूज पट्टी थांबवा" aria-pressed="false" title="Pause / Play">Ⅱ</button><a class="search-btn" href="{U("shodh/")}" aria-label="शोधा">⌕</a></div></div>' if items and ticker_settings.get('enabled',True) else '')
  meta=ld_head(title,desc,A(path),image,kind,published,modified)
- return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#b60013"><link rel="icon" type="image/png" href="{U('assets/img/favicon.png')}"><link rel="manifest" href="{U('manifest.webmanifest')}"><link rel="alternate" type="application/rss+xml" title="लोकहित महाराष्ट्र बातम्या" href="{U('rss.xml')}"><link rel="stylesheet" href="{U('assets/css/style.css')}?v=20261104-article-responsive3">{meta}{GOV_STYLE if path in ("", "shasakiy-duve/") else ""}</head><body data-base="{E(BASE)}">
+ return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#b60013"><link rel="icon" type="image/png" href="{U('assets/img/favicon.png')}"><link rel="manifest" href="{U('manifest.webmanifest')}"><link rel="alternate" type="application/rss+xml" title="लोकहित महाराष्ट्र बातम्या" href="{U('rss.xml')}"><link rel="stylesheet" href="{U('assets/css/style.css')}?v=20261104-weather1">{meta}{GOV_STYLE if path in ("", "shasakiy-duve/") else ""}</head><body data-base="{E(BASE)}">
 <div class="utility"><div class="container"><span><span id="today-date">महाराष्ट्राचा डिजिटल आवाज</span> · स्वतंत्र मराठी न्यूज पोर्टल</span><div class="utility-links">{quick}<a href="{U('privacy-policy/')}">Privacy Policy</a></div></div></div>
 <header class="brand-header"><div class="container brand-inner"><a href="{U()}" class="identity" aria-label="लोकहित महाराष्ट्र मुखपृष्ठ"><img src="{U('assets/img/logo.webp')}" alt="लोकहित महाराष्ट्र लोगो" class="site-logo" width="112" height="112"><div><div class="brand-title">लोकहित <span>महाराष्ट्र</span></div><div class="brand-tagline">{E(CFG['tagline'])}</div></div></a><div class="brand-actions"><a class="icon-btn" href="{U('shodh/')}" aria-label="बातमी शोधा">⌕ शोधा</a>{('<a class="live-nav-cta" href="'+U('live-tv/')+'">🔴 Live TV</a>') if home_enabled('live_tv',False) else ''}</div></div></header>
 <nav class="nav" aria-label="मुख्य मेनू"><div class="container nav-inner"><button id="nav-toggle" class="hamburger" aria-expanded="false" aria-controls="nav-links" aria-label="मेनू उघडा">☰</button><div class="nav-links" id="nav-links" style="display:contents">{nav}</div></div></nav>
 <main>{breakbar}{content}</main>
 <footer class="footer"><div class="container"><div class="footer-grid"><div><div class="footer-brand"><img src="{U('assets/img/logo.webp')}" alt="" class="footer-logo">लोकहित महाराष्ट्र</div><p>{E(CFG['tagline'])}. महाराष्ट्र, दुष्काळ, शेती, योजना आणि ग्रामीण विकासाविषयी मराठी माहिती.</p><small>डिजिटल न्यूज व जनमाहिती पोर्टल. हे कोणत्याही शासकीय कार्यालयाचे अधिकृत संकेतस्थळ नाही.</small></div>{footer}</div><div class="footer-bottom"><span>© २०२६ लोकहित महाराष्ट्र. सर्व हक्क राखीव.</span><span>माहितीतील त्रुटी निदर्शनास आणण्यासाठी संपर्क पृष्ठ वापरा.</span></div></div></footer>
-<div id="toast" class="toast" role="status" aria-live="polite"></div><script src="{U('assets/js/site.js')}" defer></script></body></html>'''.replace('id="nav-links" style="display:contents"','id="nav-links"')
+<div id="toast" class="toast" role="status" aria-live="polite"></div><script src="{U('assets/js/site.js')}" defer></script>{('<script src="'+U('assets/js/local-weather.js')+'?v=20261104-w1" defer></script>') if path=='' else ''}</body></html>'''.replace('id="nav-links" style="display:contents"','id="nav-links"')
 def write(path,content):
  target=OUT/path
  target.parent.mkdir(parents=True,exist_ok=True)
@@ -324,6 +324,52 @@ else:
  hero='<div class="empty-state">बातम्या लवकरच उपलब्ध होतील.</div>'
 other_posts=[p for p in POSTS if not lead or p['slug']!=lead['slug']]
 home=f'<div class="container"><section class="page-section hero-layout">{hero}<div class="hero-stack">'+''.join(stack(p) for p in other_posts[:4])+f'</div><div class="hero-latest side-panel"><div class="panel-title">ताज्या बातम्या <a href="{U("tajya-batmya/")}">सर्व पहा ›</a></div><div class="panel-content">'+''.join(latest(p) for p in POSTS[5:11])+'</div></div></section>'
+# Reader-local weather (IP city approximation with optional opt-in precise location).
+# Weather is fetched by the visitor's browser; no location is collected by this build.
+home+='''<section class="lk-weather page-section" id="lk-weather" aria-label="आपल्या परिसराचे हवामान">
+  <div class="lk-w-top">
+    <div class="lk-w-heading"><span class="lk-w-heading-icon" aria-hidden="true">🌦️</span><div>
+      <h2>आपल्या परिसराचे हवामान</h2>
+      <p class="lk-w-subheading">तापमान, पावसाची शक्यता आणि पुढील तीन दिवसांचा अंदाज</p>
+    </div></div>
+    <span class="lk-w-live"><span class="lk-w-dot" aria-hidden="true"></span> हवामान अपडेट</span>
+  </div>
+  <div id="weather-loading-view" class="lk-w-loading" role="status">🌤️ तुमच्या परिसराचे हवामान शोधत आहोत…</div>
+  <div id="weather-content" class="lk-w-content" hidden>
+    <div class="lk-w-current">
+      <p class="lk-w-city" id="weather-city">तुमचा परिसर</p>
+      <div class="lk-w-temperature"><span class="lk-w-symbol" id="weather-icon" aria-hidden="true">🌤️</span><div><span class="lk-w-degrees" id="weather-temp">—</span><span class="lk-w-unit">°C</span></div></div>
+      <div class="lk-w-condition" id="weather-condition">हवामान</div>
+      <div class="lk-w-feels" id="weather-feels">जाणवणारे तापमान</div>
+      <div class="lk-w-metrics">
+        <div class="lk-w-metric"><span>☔ पावसाची शक्यता</span><strong id="weather-rain">—</strong></div>
+        <div class="lk-w-metric"><span>💨 वाऱ्याचा वेग</span><strong id="weather-wind">—</strong></div>
+        <div class="lk-w-metric"><span>💧 आर्द्रता</span><strong id="weather-humidity">—</strong></div>
+      </div>
+    </div>
+    <div class="lk-w-forecast">
+      <h3>📆 पुढील ३ दिवसांचा अंदाज</h3>
+      <div class="lk-w-days" id="weather-days" aria-label="तीन दिवसांचा हवामान अंदाज"></div>
+      <p class="lk-w-estimate">हवामानाचा हा संगणकीय अंदाज आहे. शेती आणि सुरक्षिततेचे महत्त्वाचे निर्णय घेताना अधिकृत सूचना तपासा.</p>
+    </div>
+  </div>
+  <div id="weather-status" role="status" aria-live="polite" hidden></div>
+  <div class="lk-w-controls">
+    <form class="lk-w-search" id="weather-search-form" autocomplete="off">
+      <label for="weather-search">शहर शोधा</label><input id="weather-search" type="search" placeholder="शहर लिहा, उदा. Latur, Pune" minlength="2" maxlength="80" aria-label="शहराचे नाव इंग्रजीत शोधा">
+      <button class="lk-w-button lk-w-button-primary" type="submit">शोधा</button>
+    </form>
+    <div class="lk-w-actions">
+      <button class="lk-w-button" id="weather-location" type="button" title="परवानगी देऊन अचूक स्थान वापरा">📍 माझे स्थान</button>
+      <button class="lk-w-button" id="weather-refresh" type="button" aria-label="ताजे हवामान पुन्हा मिळवा">↻ ताजे करा</button>
+    </div>
+  </div>
+  <div class="lk-w-bottom">
+    <span><span id="weather-source">शहर IP वरून अंदाजाने शोधले जाते</span> · <span id="weather-updated">अद्ययावत माहिती</span></span>
+    <span>हवामान: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> · IP शहर अंदाज: <a href="https://www.geojs.io/" target="_blank" rel="noopener noreferrer">GeoJS</a> · <a href="/lokhit-maharashtra/privacy-policy/">गोपनीयता</a></span>
+  </div>
+</section>'''
+
 # Homepage blocks and categories are now managed from the secret News Admin.
 if home_enabled('latest',True):
  home+=section(str(HOME_SECTIONS.get('latest',{}).get('title') or 'ताज्या बातम्या')[:65],POSTS,'tajya-batmya/',grid_id='homepage-latest-grid',limit=home_count('latest'))
