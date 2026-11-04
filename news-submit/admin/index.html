@@ -93,10 +93,10 @@ dialog::backdrop{background:#162d4ca9}
       <div id="toolbar"><span class="ql-formats"><select class="ql-header"><option selected></option><option value="2">Heading</option><option value="3">Subheading</option></select></span>
       <span class="ql-formats"><button class="ql-bold" type="button"></button><button class="ql-italic" type="button"></button><button class="ql-underline" type="button"></button><button class="ql-strike" type="button"></button></span>
       <span class="ql-formats"><button class="ql-list" value="ordered" type="button"></button><button class="ql-list" value="bullet" type="button"></button><button class="ql-blockquote" type="button"></button><button class="ql-link" type="button"></button></span>
-      <span class="ql-formats"><button class="ql-clean" type="button"></button></span></div>
-      <div id="rich-editor"></div>
+      <span class="ql-formats"><button class="ql-clean" type="button"></button></span><span class="ql-formats"><button id="inline-image" type="button" title="बातमीच्या मजकुरात फोटो घाला" style="width:auto;min-width:120px;font-family:Mukta,sans-serif;font-size:13px;font-weight:800;color:#a31025">📷 फोटो घाला</button></span></div>
+      <div id="rich-editor"></div><input id="inline-file" class="hidden" type="file" accept="image/jpeg,image/png,image/webp" aria-label="बातमीमध्ये फोटो टाका">
       <textarea id="plain-body" class="hidden" placeholder="बातमी येथे लिहा..."></textarea>
-      <small class="muted">Bold, headings, bullets, link, paragraphs उपलब्ध. बाह्य HTML सुरक्षितपणे मजकुरात रूपांतरित केले जाते.</small>
+      <small class="muted">Bold, headings, bullets, link, paragraphs आणि मजकुरात ४ फोटो उपलब्ध. बाह्य HTML सुरक्षितपणे मजकुरात रूपांतरित केले जाते.</small>
      </div>
      <div class="field upload"><label for="photo">📷 मुख्य बातमीचा फोटो</label><input type="file" id="photo" accept="image/jpeg,image/png,image/webp"><small class="muted">नवीन फोटो निवडला नाही तर जुनी बातमी अपडेट केल्यानंतरही तिचा आधीचा फोटो कायम राहील.</small><img id="cover-preview" class="hidden" alt="बातमीचा फोटो"></div>
      <div class="foot-actions"><button id="preview" class="btn" type="button">👁 Preview</button><button id="save-draft" class="btn" type="button">मसुदा Save</button><button id="publish" class="btn btn-primary" type="submit">✅ Publish / Update</button><button id="delete" class="btn btn-danger hidden" type="button">🗑 Delete</button></div>
