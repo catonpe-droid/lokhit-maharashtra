@@ -200,14 +200,16 @@
   "homepage": {
     "latest": {
       "enabled": true,
-      "title": "ताज्या बातम्या"
+      "title": "ताज्या बातम्या",
+      "count": 4
     },
     "gov_links": {
       "enabled": true
     },
     "drought_news": {
       "enabled": true,
-      "title": "दुष्काळ विशेष"
+      "title": "दुष्काळ विशेष",
+      "count": 4
     },
     "drought_banner": {
       "enabled": true,
@@ -219,28 +221,33 @@
     },
     "more": {
       "enabled": false,
-      "title": "अधिक बातम्या"
+      "title": "अधिक बातम्या",
+      "count": 4
     },
     "category_blocks": [
       {
         "category": "महाराष्ट्र",
         "title": "महाराष्ट्र",
-        "enabled": true
+        "enabled": true,
+        "count": 4
       },
       {
         "category": "शेती",
         "title": "शेती",
-        "enabled": true
+        "enabled": true,
+        "count": 4
       },
       {
         "category": "शासन योजना",
         "title": "शासन योजना",
-        "enabled": true
+        "enabled": true,
+        "count": 4
       },
       {
         "category": "पशुसंवर्धन",
         "title": "पशुसंवर्धन",
-        "enabled": true
+        "enabled": true,
+        "count": 4
       }
     ]
   }
