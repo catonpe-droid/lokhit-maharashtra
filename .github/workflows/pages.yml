@@ -85,6 +85,11 @@ jobs:
                 fi
               done
             fi
+            # Optional Live TV page must disappear when disabled in Admin.
+            if [ ! -f docs/live-tv/index.html ] && [ -d live-tv ]; then
+              echo "Removing disabled Live TV page"
+              rm -rf live-tv
+            fi
             cp -a docs/. ./
             rm -rf docs
             git add -A
