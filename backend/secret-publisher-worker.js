@@ -416,7 +416,7 @@ export default {
     if(request.method==="OPTIONS") return new Response(null,{status:204,headers:cors});
     const url = new URL(request.url);
     if(url.pathname==="/health" && request.method==="GET") {
-      return json({ready:!!(env.GITHUB_TOKEN && env.PUBLISH_KEY),features:["publish","editor","list","edit","draft","delete","layout"]},200,cors);
+      return json({ready:!!(env.GITHUB_TOKEN && env.PUBLISH_KEY),features:["publish","editor","list","edit","draft","delete","layout","homepage","categories"]},200,cors);
     }
     const route=url.pathname,method=request.method;
     const valid=(route==="/publish"&&method==="POST")||
