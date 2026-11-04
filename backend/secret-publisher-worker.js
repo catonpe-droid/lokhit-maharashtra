@@ -71,9 +71,9 @@ async function github(env, path, content, commitMessage) {
   });
   const payload = await response.json().catch(() => ({}));
   if(!response.ok) {
-    if(response.status === 401 || response.status === 403) fail("GitHub प्रकाशन परवानगी उपलब्ध नाही.",502);
-    if(response.status === 409 || response.status === 422) fail("बातमी जतन करताना GitHub संघर्ष झाला. पुन्हा प्रयत्न करा.",409);
-    fail("GitHub जतन अयशस्वी: " + String(payload.message || response.status).slice(0,130),502);
+    if(response.status === 401 || response.status === 403) fail("Server प्रकाशन परवानगी उपलब्ध नाही.",502);
+    if(response.status === 409 || response.status === 422) fail("बातमी जतन करताना Server वर संघर्ष झाला. पान Refresh करून पुन्हा प्रयत्न करा.",409);
+    fail("Server जतन अयशस्वी: " + String(payload.message || response.status).slice(0,130),502);
   }
 }
 function validateImage(raw) {
@@ -148,18 +148,18 @@ async function githubRequest(env,path,method="GET",body){
   try{data=await r.json()}catch{data={}}
   if(!r.ok){
     if(r.status===404)fail("बातमी / फाइल सापडली नाही.",404);
-    if(r.status===409||r.status===422)fail("GitHub वर एकाच वेळी बदल झाले. पान Refresh करून पुन्हा प्रयत्न करा.",409);
-    if(r.status===401||r.status===403)fail("GitHub Token किंवा Contents Read & Write permission तपासा.",502);
-    fail("GitHub: "+String(data.message||r.status).slice(0,170),502);
+    if(r.status===409||r.status===422)fail("Server वर एकाच वेळी बदल झाले. पान Refresh करून पुन्हा प्रयत्न करा.",409);
+    if(r.status===401||r.status===403)fail("Server ची लेखन परवानगी तपासा.",502);
+    fail("Server: "+String(data.message||r.status).slice(0,170),502);
   }
   return data;
 }
 function decodeGitHub(file){
-  if(!file||typeof file.content!=="string")fail("GitHub फाइलचा मजकूर उपलब्ध नाही.",502);
+  if(!file||typeof file.content!=="string")fail("Server फाइलचा मजकूर उपलब्ध नाही.",502);
   try{
     const chars=atob(file.content.replace(/\s/g,""));
     return JSON.parse(new TextDecoder().decode(Uint8Array.from(chars,c=>c.charCodeAt(0))));
-  }catch{fail("GitHub JSON फाइल वाचता आली नाही.",502)}
+  }catch{fail("Server डेटा वाचता आला नाही.",502)}
 }
 async function getArticle(env,slug){
   if(!slugAllowed(slug))fail("बातमीचा URL अवैध आहे.");
