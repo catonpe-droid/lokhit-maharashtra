@@ -28,7 +28,7 @@ button:disabled{opacity:.56;cursor:not-allowed}
 .layout-settings .row-card{display:grid;grid-template-columns:minmax(150px,1.25fr) minmax(150px,1.4fr) auto auto;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #e7ecf1}
 .layout-settings .slider-card{grid-template-columns:minmax(130px,1fr) minmax(140px,1.3fr) auto auto}
 .layout-settings .category-card{grid-template-columns:minmax(130px,1fr) minmax(115px,1fr) minmax(130px,1fr) auto}
-.layout-settings .homecat-card{grid-template-columns:minmax(150px,1.15fr) minmax(150px,1.4fr) auto auto}
+.layout-settings .homecat-card{grid-template-columns:minmax(130px,1.15fr) minmax(135px,1.3fr) minmax(92px,.7fr) auto auto}
 .layout-settings .category-card [data-field],.layout-settings .homecat-card [data-field]{width:100%}
 .layout-settings .row-card .check{white-space:nowrap}
 .layout-settings .row-actions{display:flex;gap:4px}
@@ -164,11 +164,18 @@ dialog::backdrop{background:#162d4ca9}
    <div class="field"><label for="home-banner-title">निळ्या बॅनरचे शीर्षक</label><input id="home-banner-title" maxlength="130"></div>
   </div>
   <div class="field"><label for="home-banner-desc">निळ्या बॅनरमधील मजकूर</label><textarea id="home-banner-desc" rows="2" maxlength="250"></textarea></div>
+  <h3>🔢 प्रत्येक विभागात किती बातम्या?</h3>
+  <p class="muted">1 ते 12 निवडा. विभाग <strong>On</strong> असेल आणि त्यात बातम्या असतील, तर निवडलेल्या संख्येपर्यंत बातम्या दाखवल्या जातील.</p>
+  <div class="triple">
+   <div class="field"><label for="home-latest-count">ताज्या बातम्या — संख्या</label><input id="home-latest-count" type="number" min="1" max="12" step="1" value="4"></div>
+   <div class="field"><label for="home-drought-news-count">दुष्काळ बातम्या — संख्या</label><input id="home-drought-news-count" type="number" min="1" max="12" step="1" value="4"></div>
+   <div class="field"><label for="home-more-count">अधिक बातम्या — संख्या</label><input id="home-more-count" type="number" min="1" max="12" step="1" value="4"></div>
+  </div>
   <h3>🗂️ Category / बातम्यांचे विभाग</h3>
   <p class="muted">Category चे नाव, वेबसाइटवर दिसणारे नाव आणि URL slug बदलू शकता; नवीन Category जोडता येईल. जुन्या बातम्या त्यांच्या जुन्या Category मध्येच राहतात; त्यांच्या नोंदी स्वतंत्रपणे Edit कराव्या लागतील.</p>
   <div id="category-items"></div><button id="add-category" class="btn btn-small" type="button">+ नवीन Category</button>
   <h3>🏠 मुखपृष्ठ Category Blocks</h3>
-  <p class="muted">मुखपृष्ठावर कोणत्या Category च्या बातम्या दाखवायच्या ते निवडा; शीर्षक बदला, क्रम ↑ ↓ लावा, किंवा विभाग बंद करा.</p>
+  <p class="muted">मुखपृष्ठावर कोणत्या Category च्या बातम्या दाखवायच्या ते निवडा; शीर्षक, बातम्यांची संख्या (1 ते 12), क्रम ↑ ↓ बदला किंवा विभाग बंद करा.</p>
   <div id="home-category-items"></div><button id="add-home-category" class="btn btn-small" type="button">+ मुखपृष्ठ विभाग जोडा</button>
   <div class="layout-save"><button id="save-layout" class="btn btn-primary" type="button">💾 वेबसाइट सेटिंग्ज Save करा</button><button id="refresh-layout" class="btn" type="button">↻ Refresh</button><span class="muted" id="layout-note"></span></div>
  </section>
