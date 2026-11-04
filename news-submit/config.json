@@ -1,4 +1,4 @@
 {
-  "worker_url": "",
+  "worker_url": "https://lokhit-news-submit.catonpe.workers.dev",
   "note": "Paste the deployed Cloudflare Worker HTTPS origin here. Never put GITHUB_TOKEN or PUBLISH_KEY in this public file."
 }
