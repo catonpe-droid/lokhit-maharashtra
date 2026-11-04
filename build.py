@@ -43,11 +43,35 @@ except (OSError,ValueError) as exc:
  LAYOUT={}
 POST_BY_SLUG={p['slug']:p for p in POSTS}
 PAGES=[('महाराष्ट्र','maharashtra'),('मराठवाडा','marathwada'),('विदर्भ','vidarbha'),('पश्चिम महाराष्ट्र','paschim-maharashtra'),('कोकण','konkan'),('दुष्काळ विशेष','dushkal'),('शेती','sheti'),('शासन योजना','shasan-yojana'),('पशुसंवर्धन','pashusanvardhan'),('पाणी','pani'),('रोजगार','rojgar'),('ग्रामविकास','gramvikas'),('महिला व विकास','mahila-vikas'),('अर्थकारण','arthakaran'),('राजकारण','rajkaran'),('समाज','samaj'),('शिक्षण','shikshan'),('आरोग्य','arogya'),('विश्लेषण','vishleshan'),('व्हिडिओ','video')]
+# Editable categories, with stable URL slugs. Existing categories and article links are retained.
+DEFAULT_PAGES=list(PAGES)
+custom_categories=LAYOUT.get('categories')
+if isinstance(custom_categories,list) and custom_categories:
+ categories=[]
+ for entry in custom_categories[:40]:
+  if not isinstance(entry,dict):continue
+  name=str(entry.get('name','')).strip()[:65]
+  slug=str(entry.get('slug','')).strip().lower()[:65]
+  if name and re.fullmatch(r'[a-z0-9][a-z0-9-]{1,64}',slug) and name not in [n for n,_ in categories] and slug not in [x for _,x in categories]:
+   categories.append((name,slug))
+ if categories:PAGES=categories
+# Keep categories used by existing articles even when an editor changes the category list.
+for name,slug in DEFAULT_PAGES:
+ if name in [x for x,_ in PAGES]:continue
+ if any(p.get('category')==name for p in POSTS):PAGES.append((name,slug))
 CATEGORY_PATH={name:'vibhag/'+slug+'/' for name,slug in PAGES}
+HOME_SECTIONS=LAYOUT.get('homepage',{}) if isinstance(LAYOUT.get('homepage'),dict) else {}
+def home_enabled(name,default=True):return HOME_SECTIONS.get(name,{}).get('enabled',default) is not False
+def category_label(name):
+ for c in LAYOUT.get('categories',[]) if isinstance(LAYOUT.get('categories'),list) else []:
+  if isinstance(c,dict) and c.get('name')==name:return str(c.get('label') or name).strip()[:65] or name
+ return name
 DEFAULT_NAV=[('मुख्यपृष्ठ',''),('ताज्या बातम्या','tajya-batmya/'),('महाराष्ट्र',CATEGORY_PATH['महाराष्ट्र']),('मराठवाडा',CATEGORY_PATH['मराठवाडा']),('विदर्भ',CATEGORY_PATH['विदर्भ']),('दुष्काळ विशेष',CATEGORY_PATH['दुष्काळ विशेष']),('शेती',CATEGORY_PATH['शेती']),('शासन योजना',CATEGORY_PATH['शासन योजना']),('🏛️ शासकीय दुवे','shasakiy-duve/'),('पशुसंवर्धन',CATEGORY_PATH['पशुसंवर्धन']),('राजकारण',CATEGORY_PATH['राजकारण']),('व्हिडिओ','video/'),('🔴 Live TV','live-tv/'),('विश्लेषण',CATEGORY_PATH['विश्लेषण'])]
 CUSTOM_NAV=LAYOUT.get('menu')
 NAV=[(str(item.get('title','')).strip()[:65],str(item.get('href','')).strip()) for item in CUSTOM_NAV if isinstance(item,dict) and item.get('enabled',True) and str(item.get('title','')).strip() and re.fullmatch(r'[A-Za-z0-9_/-]*',str(item.get('href','')).strip())] if isinstance(CUSTOM_NAV,list) else DEFAULT_NAV
-NAV= NAV[:24] if NAV else DEFAULT_NAV
+# Suppress Live TV menu entries when the Live TV section is disabled.
+if not home_enabled('live_tv',False):NAV=[(t,h) for t,h in NAV if h!='live-tv/']
+NAV= NAV[:24] if NAV else [(t,h) for t,h in DEFAULT_NAV if h!='live-tv/']
 def article_path(p):return 'batmi/'+p['slug']+'/'
 def article_url(p):return A(article_path(p))
 def time_marathi(s):
@@ -127,7 +151,7 @@ def shell(content,title,desc,path='',image=None,kind='website',published=None,mo
  meta=ld_head(title,desc,A(path),image,kind,published,modified)
  return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#b60013"><link rel="icon" type="image/png" href="{U('assets/img/favicon.png')}"><link rel="manifest" href="{U('manifest.webmanifest')}"><link rel="alternate" type="application/rss+xml" title="लोकहित महाराष्ट्र बातम्या" href="{U('rss.xml')}"><link rel="stylesheet" href="{U('assets/css/style.css')}?v=20261104-gov2">{meta}{GOV_STYLE if path in ("", "shasakiy-duve/") else ""}</head><body data-base="{E(BASE)}">
 <div class="utility"><div class="container"><span><span id="today-date">महाराष्ट्राचा डिजिटल आवाज</span> · स्वतंत्र मराठी न्यूज पोर्टल</span><div class="utility-links">{quick}<a href="{U('privacy-policy/')}">Privacy Policy</a></div></div></div>
-<header class="brand-header"><div class="container brand-inner"><a href="{U()}" class="identity" aria-label="लोकहित महाराष्ट्र मुखपृष्ठ"><img src="{U('assets/img/logo.webp')}" alt="लोकहित महाराष्ट्र लोगो" class="site-logo" width="112" height="112"><div><div class="brand-title">लोकहित <span>महाराष्ट्र</span></div><div class="brand-tagline">{E(CFG['tagline'])}</div></div></a><div class="brand-actions"><a class="icon-btn" href="{U('shodh/')}" aria-label="बातमी शोधा">⌕ शोधा</a><a class="live-nav-cta" href="{U('live-tv/')}">🔴 Live TV</a><a class="admin-link" href="{U('admin/')}" rel="nofollow">🔒 प्रशासन</a></div></div></header>
+<header class="brand-header"><div class="container brand-inner"><a href="{U()}" class="identity" aria-label="लोकहित महाराष्ट्र मुखपृष्ठ"><img src="{U('assets/img/logo.webp')}" alt="लोकहित महाराष्ट्र लोगो" class="site-logo" width="112" height="112"><div><div class="brand-title">लोकहित <span>महाराष्ट्र</span></div><div class="brand-tagline">{E(CFG['tagline'])}</div></div></a><div class="brand-actions"><a class="icon-btn" href="{U('shodh/')}" aria-label="बातमी शोधा">⌕ शोधा</a>{('<a class="live-nav-cta" href="'+U('live-tv/')+'">🔴 Live TV</a>') if home_enabled('live_tv',False) else ''}</div></div></header>
 <nav class="nav" aria-label="मुख्य मेनू"><div class="container nav-inner"><button id="nav-toggle" class="hamburger" aria-expanded="false" aria-controls="nav-links" aria-label="मेनू उघडा">☰</button><div class="nav-links" id="nav-links" style="display:contents">{nav}</div></div></nav>
 <main>{breakbar}{content}</main>
 <footer class="footer"><div class="container"><div class="footer-grid"><div><div class="footer-brand"><img src="{U('assets/img/logo.webp')}" alt="" class="footer-logo">लोकहित महाराष्ट्र</div><p>{E(CFG['tagline'])}. महाराष्ट्र, दुष्काळ, शेती, योजना आणि ग्रामीण विकासाविषयी मराठी माहिती.</p><small>डिजिटल न्यूज व जनमाहिती पोर्टल. हे कोणत्याही शासकीय कार्यालयाचे अधिकृत संकेतस्थळ नाही.</small></div>{footer}</div><div class="footer-bottom"><span>© २०२६ लोकहित महाराष्ट्र. सर्व हक्क राखीव.</span><span>माहितीतील त्रुटी निदर्शनास आणण्यासाठी संपर्क पृष्ठ वापरा.</span></div></div></footer>
@@ -296,15 +320,29 @@ else:
  hero='<div class="empty-state">बातम्या लवकरच उपलब्ध होतील.</div>'
 other_posts=[p for p in POSTS if not lead or p['slug']!=lead['slug']]
 home=f'<div class="container"><section class="page-section hero-layout">{hero}<div class="hero-stack">'+''.join(stack(p) for p in other_posts[:4])+f'</div><div class="hero-latest side-panel"><div class="panel-title">ताज्या बातम्या <a href="{U("tajya-batmya/")}">सर्व पहा ›</a></div><div class="panel-content">'+''.join(latest(p) for p in POSTS[5:11])+'</div></div></section>'
-home+=section('ताज्या बातम्या',POSTS[:4],'tajya-batmya/',grid_id='homepage-latest-grid')
-home+=govt_home_section()
-home+=section('दुष्काळ विशेष',[p for p in POSTS if p['category'] in ('दुष्काळ विशेष','मराठवाडा','पाणी')][:4],CATEGORY_PATH['दुष्काळ विशेष'])
-home+='<section class="page-section drought-banner"><div><h2>🌾 दुष्काळ विशेष : माहिती, मदत आणि मार्गदर्शन</h2><p>पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी</p></div><a href="'+U(CATEGORY_PATH['दुष्काळ विशेष'])+'">सर्व बातम्या पहा →</a></section>'
-home+=live_section(True)
-for cat in ['महाराष्ट्र','शेती','शासन योजना','पशुसंवर्धन']:
- items=[p for p in POSTS if p['category']==cat]
- if items:home+=section(cat,items,CATEGORY_PATH[cat])
-home+=section('अधिक बातम्या',POSTS[10:14],'tajya-batmya/')
+# Homepage blocks and categories are now managed from the secret News Admin.
+if home_enabled('latest',True):
+ home+=section(str(HOME_SECTIONS.get('latest',{}).get('title') or 'ताज्या बातम्या')[:65],POSTS[:4],'tajya-batmya/',grid_id='homepage-latest-grid')
+if home_enabled('gov_links',True):home+=govt_home_section()
+if home_enabled('drought_news',True):
+ home+=section(str(HOME_SECTIONS.get('drought_news',{}).get('title') or 'दुष्काळ विशेष')[:65],[p for p in POSTS if p['category'] in ('दुष्काळ विशेष','मराठवाडा','पाणी')][:4],CATEGORY_PATH.get('दुष्काळ विशेष','tajya-batmya/'))
+if home_enabled('drought_banner',False):
+ banner=HOME_SECTIONS.get('drought_banner',{})
+ title=str(banner.get('title') or 'दुष्काळ विशेष : माहिती, मदत आणि मार्गदर्शन')[:130]
+ description=str(banner.get('description') or 'पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी')[:250]
+ home+='<section class="page-section drought-banner"><div><h2>🌾 '+E(title)+'</h2><p>'+E(description)+'</p></div><a href="'+U(CATEGORY_PATH.get('दुष्काळ विशेष','tajya-batmya/'))+'">सर्व बातम्या पहा →</a></section>'
+if home_enabled('live_tv',False):home+=live_section(True)
+category_blocks=HOME_SECTIONS.get('category_blocks')
+if not isinstance(category_blocks,list):
+ category_blocks=[{'category':n,'title':n,'enabled':True} for n in ['महाराष्ट्र','शेती','शासन योजना','पशुसंवर्धन']]
+for item in category_blocks[:20]:
+ if not isinstance(item,dict) or item.get('enabled',True) is False:continue
+ cat=str(item.get('category','')).strip()
+ if cat not in CATEGORY_PATH:continue
+ title=str(item.get('title') or category_label(cat))[:65]
+ items=[p for p in POSTS if p.get('category')==cat]
+ if items:home+=section(title,items,CATEGORY_PATH[cat])
+if home_enabled('more',True):home+=section(str(HOME_SECTIONS.get('more',{}).get('title') or 'अधिक बातम्या')[:65],POSTS[10:14],'tajya-batmya/')
 home+='</div>'
 write('index.html',shell(home,'ताज्या बातम्या आणि महाराष्ट्राचे अपडेट्स',CFG['description']))
 # Articles
@@ -337,10 +375,10 @@ for cat,slug in PAGES:
  items=[p for p in POSTS if p['category']==cat]
  # curated drought category includes all drought-related content
  if cat=='दुष्काळ विशेष':items=POSTS
- content=f'<div class="container">{breadcrumbs([E(cat)])}<div class="section-head"><h2>{E(cat)}</h2></div>'
+ content=f'<div class="container">{breadcrumbs([E(category_label(cat))])}<div class="section-head"><h2>{E(category_label(cat))}</h2></div>'
  content+='<div class="news-grid">'+''.join(card(p) for p in items)+'</div>' if items else '<div class="empty-state">या विभागातील नवीन बातम्या लवकरच प्रकाशित होतील.</div>'
  content+='</div>'
- write(path+'index.html',shell(content,cat+' बातम्या',cat+' विभागातील ताज्या मराठी बातम्या',path,active=path))
+ write(path+'index.html',shell(content,category_label(cat)+' बातम्या',category_label(cat)+' विभागातील ताज्या मराठी बातम्या',path,active=path))
 # latest index
 path='tajya-batmya/'
 latest_content=f'<div class="container">{breadcrumbs(["ताज्या बातम्या"])}<div class="section-head"><h2>ताज्या बातम्या</h2></div><div class="news-grid" id="latest-all-grid">'+''.join(card(p) for p in POSTS)+'</div></div>'
@@ -366,8 +404,9 @@ videos=[p for p in POSTS if youtube_id(p.get('video','')) or youtube_id(p.get('b
 video_content=f'<div class="container">{breadcrumbs(["व्हिडिओ"])}<div class="section-head"><h2>व्हिडिओ बातम्या</h2></div>'+( '<div class="news-grid">'+''.join(card(p) for p in videos)+'</div>' if videos else '<div class="empty-state">अधिकृत व्हिडिओ बातमी उपलब्ध झाल्यावर या विभागात दिसेल. प्रशासनातून बातमीमध्ये YouTube लिंक जोडा.</div>')+'</div>'
 write('video/index.html',shell(video_content,'व्हिडिओ बातम्या','YouTube व्हिडिओसह मराठी बातम्या','video/',active='video/'))
 # Live TV page with the provider explicitly credited
-livetv_content=f'<div class="container">{breadcrumbs(["Live TV"])}'+live_section(False)+'</div>'
-write('live-tv/index.html',shell(livetv_content,'YouTube Live TV | लोकहित महाराष्ट्र','बाह्य YouTube चॅनेलचे मराठी बातम्या व लाइव्ह प्रक्षेपण','live-tv/',active='live-tv/'))
+if home_enabled('live_tv',False):
+ livetv_content=f'<div class="container">{breadcrumbs(["Live TV"])}'+live_section(False)+'</div>'
+ write('live-tv/index.html',shell(livetv_content,'YouTube Live TV | लोकहित महाराष्ट्र','बाह्य YouTube चॅनेलचे मराठी बातम्या व लाइव्ह प्रक्षेपण','live-tv/',active='live-tv/'))
 # Curated government services directory
 write('shasakiy-duve/index.html',shell(govt_directory_page(),'महत्त्वाच्या शासकीय वेबसाइट्स','शेतकरी, महिला, विद्यार्थी, कामगार आणि संस्थांसाठी उपयुक्त अधिकृत शासकीय दुवे','shasakiy-duve/',active='shasakiy-duve/'))
 # Static editorial / legal pages
@@ -379,10 +418,12 @@ for slug,(title,intro,sections) in legal.items():
 # category listing, post index, sitemap and RSS
 index=[{k:p.get(k) for k in ['slug','title','description','category','image','date']} for p in POSTS]
 write('posts-index.json',json.dumps(index,ensure_ascii=False,indent=2))
+# Public category catalog for the simple no-login publisher; no secret data.
+write('categories.json',json.dumps([{'name':n,'label':category_label(n),'slug':slug} for n,slug in PAGES if n!='व्हिडिओ'],ensure_ascii=False,indent=2))
 # Public copy of already-published articles; lets the unchanged GitHub Editor edit older news.
 write('cms-export.json',json.dumps(POSTS,ensure_ascii=False,indent=2))
 write('manifest.webmanifest',json.dumps({'name':CFG['name'],'short_name':'लोकहित','start_url':BASE,'display':'standalone','background_color':'#ffffff','theme_color':'#b60013','icons':[{'src':U('assets/img/favicon.png'),'sizes':'192x192','type':'image/png'}]},ensure_ascii=False))
-allpaths=['','tajya-batmya/','shodh/','video/','live-tv/','shasakiy-duve/'] + [x+'/' for x in legal] + [x for x in CATEGORY_PATH.values() if x!='vibhag/video/'] + [article_path(p) for p in POSTS]
+allpaths=['','tajya-batmya/','shodh/','video/','shasakiy-duve/']+(['live-tv/'] if home_enabled('live_tv',False) else []) + [x+'/' for x in legal] + [x for x in CATEGORY_PATH.values() if x!='vibhag/video/'] + [article_path(p) for p in POSTS]
 sitemap='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{E(A(path))}</loc></url>\n' for path in allpaths)+'</urlset>\n'
 write('sitemap.xml',sitemap)
 write('robots.txt',f'User-agent: *\nAllow: /\nDisallow: {BASE}admin/\nSitemap: {A("sitemap.xml")}\n')
