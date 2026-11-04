@@ -127,12 +127,32 @@ let latestSha=docs.get("content/posts/"+savedSlug+".json").sha;
  latestSha=docs.get("content/posts/"+savedSlug+".json").sha;
 }
 {
+ // Inline news photos are stored as local JPEG assets, not as dangerous data URLs.
+ const image=Buffer.from([0xff,0xd8,0xff,0xe0,0x11,0x22,0x33,0x44]).toString("base64");
+ const rich=[
+   {insert:"संपूर्ण बातमीतील फोटो पाहा.\n"},
+   {insert:{image:"data:image/jpeg;base64,"+image}},
+   {insert:"\nशेतकऱ्यांना योजनेची माहिती देण्यात आली.\n"}
+ ];
+ const res=await worker.fetch(req("POST","/save",KEY,{
+   article:{slug:savedSlug,expected_sha:latestSha,...sample,
+     body:"संपूर्ण बातमीतील फोटो पाहा.\nशेतकऱ्यांना योजनेची माहिती देण्यात आली.",
+     rich_delta:rich,body_changed:true,status:"published"}
+ }),env);
+ assert.equal(res.status,200);
+ const item=docs.get("content/posts/"+savedSlug+".json").item;
+ const src=item.rich_delta.find(x=>x.insert?.image)?.insert.image;
+ assert.match(src,/^assets\/img\/news-.*-inline-.*\.jpg$/);
+ assert.equal(docs.has(src),true);
+ latestSha=docs.get("content/posts/"+savedSlug+".json").sha;
+}
+{
  const res=await worker.fetch(req("POST","/delete",KEY,{slug:savedSlug,expected_sha:"wrong-sha"}),env);
  assert.equal(res.status,409);
 }
 {
  const res=await worker.fetch(req("POST","/delete",KEY,{slug:savedSlug,expected_sha:latestSha}),env);
  assert.equal(res.status,200);assert.equal((await res.json()).deleted,true);
- assert.equal(docs.size,0);
+ assert.equal([...docs.keys()].filter(x=>x.startsWith("content/posts/")).length,0);
 }
 console.log("Secret Publisher + Admin Studio tests passed. No live API writes.");
