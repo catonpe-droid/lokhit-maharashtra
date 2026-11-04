@@ -157,7 +157,7 @@
   function shareResult(url,title,status){
     $('published').classList.remove('hidden');
     $('published-title').textContent=status==='draft'?'✅ मसुदा जतन झाला':'✅ बातमी जतन झाली';
-    $('published-note').textContent=status==='draft'?'मसुदा सार्वजनिक वेबसाइटवर दिसणार नाही.':'GitHub वेबसाइटचा HTML Build पूर्ण झाल्यावर सुधारित बातमी दिसेल.';
+    $('published-note').textContent=status==='draft'?'मसुदा सार्वजनिक वेबसाइटवर दिसणार नाही.':'Server अपडेट झाल्यावर सुधारित बातमी दिसेल.';
     $('article-url').href=url;$('article-url').textContent=url;
     $('whatsapp').href='https://api.whatsapp.com/send?text='+encodeURIComponent(title+'\n'+url);
     $('whatsapp').classList.toggle('hidden',status==='draft');
@@ -179,7 +179,7 @@
       $('editor-heading').textContent='✏️ बातमी संपादित करा';
       $('photo').value='';pendingPhoto='';editorChanged=false;
       shareResult(url,data.article.title,status);
-      alertMsg(status==='draft'?'✅ मसुदा GitHub वर जतन झाला.':'✅ GitHub वर Save झाले. HTML पानाचा Build सुरू होईल.');
+      alertMsg(status==='draft'?'✅ मसुदा Server वर जतन झाला.':'✅ Server वर Save झाले. HTML पानाचा Build सुरू होईल.');
       try{await loadList()}catch(e){alertMsg('बातमी Save झाली; यादी Refresh करता आली नाही: '+e.message,true)}
       try{const newData=await api('/article?slug='+encodeURIComponent(result.slug));baseline=newData.article;active.sha=newData.sha}catch{}
     }catch(e){alertMsg('❌ '+e.message,true)}
@@ -188,7 +188,7 @@
   async function deletePost(){
     if(!active||busy||!ready)return;
     const slug=active.slug;
-    if(!confirm('ही बातमी कायमची Delete करायची आहे का?\n\n'+$('title').value+'\n\nबातमीचे सार्वजनिक HTML पान पुढील GitHub Build मध्ये काढले जाईल.'))return;
+    if(!confirm('ही बातमी कायमची Delete करायची आहे का?\n\n'+$('title').value+'\n\nबातमीचे सार्वजनिक HTML पान पुढील Server Update मध्ये काढले जाईल.'))return;
     setBusy(true);alertMsg('बातमी काढत आहे…');
     try{
       const res=await api('/delete','POST',{slug,expected_sha:active.sha});
@@ -211,6 +211,106 @@
   }
 
   let siteLayout=null,siteLayoutSha='',siteLoaded=false;
+
+  const homeNames=['live_tv','drought_banner','latest','gov_links','drought_news','more'];
+  const checkId={live_tv:'home-live-tv',drought_banner:'home-drought-banner',latest:'home-latest',gov_links:'home-gov-links',drought_news:'home-drought-news',more:'home-more'};
+  function cleanCategorySlug(text){return String(text||'').trim().toLowerCase().replace(/[^a-z0-9-]/g,'').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(0,65)}
+  function rowButton(label,action){
+    const b=document.createElement('button');b.type='button';b.textContent=label;b.addEventListener('click',action);return b;
+  }
+  function rowActions(div){
+    const actions=document.createElement('div');actions.className='row-actions';
+    actions.append(
+      rowButton('↑',()=>{if(div.previousElementSibling)div.parentNode.insertBefore(div,div.previousElementSibling)}),
+      rowButton('↓',()=>{if(div.nextElementSibling)div.parentNode.insertBefore(div.nextElementSibling,div)}),
+      rowButton('✕',()=>div.remove())
+    );return actions;
+  }
+  function fieldInput(value,placeholder,max=85){
+    const input=document.createElement('input');input.type='text';input.value=String(value||'');input.placeholder=placeholder;input.maxLength=max;return input;
+  }
+  function categoryRow(obj={}){
+    const div=document.createElement('div');div.className='row-card category-card';
+    const name=fieldInput(obj.name,'Category नाव',65);
+    const slug=fieldInput(obj.slug,'English URL slug',65);
+    const label=fieldInput(obj.label||obj.name,'वेबसाइटवर दिसणारे नाव',65);
+    for(const el of [name,slug,label])el.dataset.categoryField='1';
+    div.append(name,slug,label,rowActions(div));
+    return div;
+  }
+  function layoutCategoryOptions(selected){
+    const names=[...new Set([...$('category-items').querySelectorAll('.category-card')].map(row=>row.querySelector('input')?.value.trim()).filter(Boolean))];
+    const all=new Set([...names,selected].filter(Boolean));
+    return [...all];
+  }
+  function homeCategoryRow(obj={}){
+    const div=document.createElement('div');div.className='row-card homecat-card';
+    const select=document.createElement('select');select.dataset.blockField='category';
+    for(const name of layoutCategoryOptions(obj.category)){
+      const option=new Option(name,name);select.add(option);
+    }
+    if(obj.category)select.value=obj.category;
+    const title=fieldInput(obj.title||obj.category,'मुखपृष्ठावर दिसणारे शीर्षक',65);title.dataset.blockField='title';
+    const show=document.createElement('label');show.className='check';
+    const checked=document.createElement('input');checked.type='checkbox';checked.checked=obj.enabled!==false;checked.dataset.blockField='enabled';show.append(checked,document.createTextNode('दाखवा'));
+    div.append(select,title,show,rowActions(div));
+    return div;
+  }
+  function renderHomeControls(){
+    const homepage=siteLayout?.homepage||{};
+    for(const name of homeNames)$(checkId[name]).checked=homepage[name]?.enabled===true || (homepage[name]?.enabled!==false && !['live_tv','drought_banner'].includes(name));
+    $('home-latest-title').value=homepage.latest?.title||'ताज्या बातम्या';
+    $('home-drought-news-title').value=homepage.drought_news?.title||'दुष्काळ विशेष';
+    $('home-more-title').value=homepage.more?.title||'अधिक बातम्या';
+    $('home-banner-title').value=homepage.drought_banner?.title||'दुष्काळ विशेष : माहिती, मदत आणि मार्गदर्शन';
+    $('home-banner-desc').value=homepage.drought_banner?.description||'पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी';
+    $('home-category-items').replaceChildren();
+    const blocks=Array.isArray(homepage.category_blocks)?homepage.category_blocks:[];
+    blocks.forEach(b=>$('home-category-items').append(homeCategoryRow(b)));
+  }
+  function updateArticleCategoryChoices(){
+    const selected=$('category').value;
+    const entries=(siteLayout?.categories||[]).filter(c=>c&&c.name);
+    if(!entries.length)return;
+    const node=$('category');node.replaceChildren();
+    for(const c of entries){
+      const opt=new Option(c.label||c.name,c.name);node.add(opt);
+    }
+    if(!entries.some(c=>c.name===selected)&&selected){
+      node.add(new Option(selected+' (जुनी Category)',selected));
+    }
+    if(selected)node.value=selected;
+  }
+  function newHomeData(){
+    return {
+      latest:{enabled:$('home-latest').checked,title:$('home-latest-title').value.trim()},
+      gov_links:{enabled:$('home-gov-links').checked},
+      drought_news:{enabled:$('home-drought-news').checked,title:$('home-drought-news-title').value.trim()},
+      drought_banner:{enabled:$('home-drought-banner').checked,title:$('home-banner-title').value.trim(),description:$('home-banner-desc').value.trim()},
+      live_tv:{enabled:$('home-live-tv').checked},
+      more:{enabled:$('home-more').checked,title:$('home-more-title').value.trim()},
+      category_blocks:[...$('home-category-items').children].map(row=>({
+        category:row.querySelector('[data-block-field="category"]').value,
+        title:row.querySelector('[data-block-field="title"]').value.trim(),
+        enabled:row.querySelector('[data-block-field="enabled"]').checked
+      })).filter(item=>!!item.category).slice(0,20)
+    };
+  }
+  function newCategoryData(){
+    const data=[...$('category-items').children].map(row=>{
+      const fields=row.querySelectorAll('[data-category-field]');
+      return {name:fields[0].value.trim(),slug:cleanCategorySlug(fields[1].value),label:fields[2].value.trim()};
+    });
+    if(data.some(x=>!x.name||x.slug.length<2)){
+      throw Error('Category साठी नाव आणि 2+ इंग्रजी अक्षरांचा URL slug आवश्यक आहे.');
+    }
+    const names=data.map(x=>x.name),slugs=data.map(x=>x.slug);
+    if(new Set(names).size!==data.length||new Set(slugs).size!==data.length){
+      throw Error('एकाच नावाची किंवा URL slug असलेली Category दोनदा नको.');
+    }
+    return data;
+  }
+
   function layoutRow(item={},kind='menu'){
     const isSlide=kind==='slider';
     const div=document.createElement('div');
@@ -247,7 +347,11 @@
     $('breaking-mode').value=siteLayout.breaking?.mode==='custom'?'custom':'latest';
     $('breaking-lines').value=Array.isArray(siteLayout.breaking?.custom)?siteLayout.breaking.custom.join('\n'):'';
     $('slider-seconds').value=Number(siteLayout.slider_seconds)||6;
-    $('layout-note').textContent='मेनू आणि स्लायडर क्रम बदलण्यासाठी ↑ ↓ बटणे वापरा.';
+    $('category-items').replaceChildren();
+    (siteLayout.categories||[]).forEach(cat=>$('category-items').append(categoryRow(cat)));
+    renderHomeControls();
+    updateArticleCategoryChoices();
+    $('layout-note').textContent='मेनू, Categories आणि विभागांचा क्रम बदलण्यासाठी ↑ ↓ बटणे वापरा.';
   }
   async function loadLayout(){
     if(!ready)return;
@@ -276,14 +380,18 @@
       },
       slider_seconds:Math.max(3,Math.min(15,Number($('slider-seconds').value)||6))
     };
-    if(layout.menu.length>24||layout.slider.length>12){alertMsg('जास्तीत जास्त २४ मेनू आणि १२ स्लाइड वापरता येतील.',true);return;}
+    try{
+      layout.categories=newCategoryData();
+      layout.homepage=newHomeData();
+    }catch(e){alertMsg('❌ '+e.message,true);return;}
+    if(layout.menu.length>24||layout.slider.length>12||layout.categories.length>40){alertMsg('जास्तीत जास्त २४ मेनू, १२ स्लाइड आणि ४० Categories वापरता येतील.',true);return;}
     $('save-layout').disabled=true;
     try{
       const result=await api('/layout','POST',{layout,expected_sha:siteLayoutSha});
       if(!result.saved)throw Error('Save झाले नाही.');
       siteLayout=result.layout;siteLayoutSha=result.sha;
-      renderLayout();alertMsg('✅ मेनू, ब्रेकिंग न्यूज आणि स्लायडर Save झाले. वेबसाइट Build सुरू होईल.');
-      $('layout-note').textContent='✅ जतन झाले. वेबसाइटवर बदल Build नंतर दिसतील.';
+      renderLayout();alertMsg('✅ Categories, मुखपृष्ठ, मेनू आणि ब्रेकिंग न्यूज Server वर Save झाले. वेबसाइट अपडेट होईल.');
+      $('layout-note').textContent='✅ जतन झाले. वेबसाइटवर Server अपडेट झाल्यावर बदल दिसतील.';
     }catch(e){alertMsg('❌ सेटिंग्ज Save अयशस्वी: '+e.message,true)}
     finally{$('save-layout').disabled=false;}
   }
@@ -302,6 +410,12 @@
     $('tab-site').addEventListener('click',()=>togglePanel(true));
     $('add-menu').addEventListener('click',()=>{if($('menu-items').children.length<24)$('menu-items').append(layoutRow({title:'',href:'',enabled:true},'menu'))});
     $('add-slide').addEventListener('click',()=>{if($('slider-items').children.length<12)$('slider-items').append(layoutRow({slug:'',title:'',enabled:true},'slider'))});
+    $('add-category').addEventListener('click',()=>{
+      if($('category-items').children.length<40)$('category-items').append(categoryRow({}));
+    });
+    $('add-home-category').addEventListener('click',()=>{
+      if($('home-category-items').children.length<20)$('home-category-items').append(homeCategoryRow({category:'महाराष्ट्र',title:'',enabled:true}));
+    });
     $('save-layout').addEventListener('click',saveLayout);
     $('refresh-layout').addEventListener('click',loadLayout);
     $('top-new').addEventListener('click',resetForm);$('reset').addEventListener('click',resetForm);
@@ -376,6 +490,7 @@
       const ping=await api('/list?page=1&limit=1');
       ready=true;alertMsg('✅ News Admin Studio तयार आहे.');
       await loadList();
+      await loadLayout();
     }catch(e){alertMsg('प्रकाशन सेवा: '+e.message,true)}
   }
   init();
