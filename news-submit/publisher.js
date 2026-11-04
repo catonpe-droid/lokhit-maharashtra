@@ -12,6 +12,8 @@
     catch { return raw.trim(); }
   }
   const key = getPublishKey();
+  const adminLink = document.getElementById('news-admin-link');
+  if (adminLink) adminLink.href = './admin/' + (location.hash || '');
   let worker = '',busy = false, publishedUrl = '',previewObjectURL = '';
 
   function notice(text, kind = 'info') {
