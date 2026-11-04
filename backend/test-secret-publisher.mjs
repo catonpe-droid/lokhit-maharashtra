@@ -54,7 +54,7 @@ const sample={title:"शेतकऱ्यांसाठी पाणी नि
 {
  const resp=await worker.fetch(req("GET","/health"),env);
  assert.equal(resp.status,200);
- const health=await resp.json();assert.equal(health.ready,true);assert.ok(health.features.includes("editor"));
+ const health=await resp.json();assert.equal(health.ready,true);assert.ok(health.features.includes("editor"));assert.ok(health.features.includes("section-counts"));
 }
 {
  const resp=await worker.fetch(req("POST","/publish","invalid-secret",sample),env);
@@ -169,7 +169,7 @@ let latestSha=docs.get("content/posts/"+savedSlug+".json").sha;
    breaking:{enabled:true,mode:"custom",custom:["महत्त्वाची कृषी बातमी"]},
    slider_seconds:8,
    categories:[...config.layout.categories,{name:"युवा घडामोडी",slug:"yuva-ghadamodi",label:"युवा"}],
-   homepage:{...config.layout.homepage,live_tv:{enabled:false},drought_banner:{enabled:false,title:"दुष्काळ मार्गदर्शन",description:"बातम्या आणि माहिती"},category_blocks:[{category:"युवा घडामोडी",title:"युवांसाठी",enabled:true}]}
+   homepage:{...config.layout.homepage,latest:{enabled:true,title:"ताज्या बातम्या",count:6},more:{enabled:true,title:"अधिक बातम्या",count:12},live_tv:{enabled:false},drought_banner:{enabled:false,title:"दुष्काळ मार्गदर्शन",description:"बातम्या आणि माहिती"},category_blocks:[{category:"युवा घडामोडी",title:"युवांसाठी",enabled:true,count:8}]}
  };
  const bad=await worker.fetch(req("POST","/layout",KEY,{layout:changed,expected_sha:"stale"}),env);
  assert.equal(bad.status,409);
@@ -182,6 +182,10 @@ let latestSha=docs.get("content/posts/"+savedSlug+".json").sha;
  assert.equal(stored.categories[2].label,"युवा");
  assert.equal(stored.homepage.live_tv.enabled,false);
  assert.equal(stored.homepage.category_blocks[0].title,"युवांसाठी");
+ assert.equal(stored.homepage.category_blocks[0].count,8);
+ assert.equal(stored.homepage.latest.count,6);
+ assert.equal(stored.homepage.more.count,12);
+ assert.equal(stored.homepage.drought_news.count,4);
 }
 {
  const sampleCustom={...sample,category:"युवा घडामोडी"};
