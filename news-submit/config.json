@@ -1,0 +1,4 @@
+{
+  "worker_url": "",
+  "note": "Paste the deployed Cloudflare Worker HTTPS origin here. Never put GITHUB_TOKEN or PUBLISH_KEY in this public file."
+}
