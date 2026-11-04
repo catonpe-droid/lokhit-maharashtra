@@ -49,6 +49,7 @@ jobs:
           node --check assets/js/cms.js
           node --check assets/js/site.js
           node --check assets/js/local-weather.js
+          node --check assets/js/farmer-widgets.js
           node --check assets/js/sheets-public.js
           node --check --input-type=commonjs < backend/sheets-admin-code.gs
           node --check assets/js/google-admin.js
@@ -66,6 +67,10 @@ jobs:
           grep -q 'id="lk-weather"' docs/index.html
           grep -q 'local-weather.js' docs/index.html
           grep -q 'weather-city-list' docs/index.html
+          grep -q 'class="lk-farmer-grid"' docs/index.html
+          grep -q 'id="lk-market-embed"' docs/index.html
+          grep -q 'lk-farmer-links' docs/index.html
+          grep -q 'assets/js/farmer-widgets.js' docs/index.html
       - name: Sync finished website to repository root
         shell: bash
         run: |
