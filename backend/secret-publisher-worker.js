@@ -127,6 +127,177 @@ async function publish(env, request) {
   await github(env,"content/posts/" + slug + ".json",encodeBase64(JSON.stringify(item,null,2)+"\n"),"Publish news " + slug);
   return {saved:true,status:"building",slug,url:SITE+"batmi/"+slug+"/"};
 }
+
+/* Admin Studio API v2: title library, edit, draft, photo update and deletion.
+ * All mutation/list/read endpoints require the same high-entropy PUBLISH_KEY.
+ * GitHub token remains a Worker secret; no credentials are sent to GitHub Pages.
+ */
+const slugAllowed=s=>typeof s==="string"&&/^[a-z0-9][a-z0-9_-]{2,115}$/.test(s);
+async function githubRequest(env,path,method="GET",body){
+  const headers={
+    "Accept":"application/vnd.github+json",
+    "Authorization":"Bearer "+env.GITHUB_TOKEN,
+    "X-GitHub-Api-Version":"2022-11-28",
+    "User-Agent":"lokhit-news-admin-studio"
+  };
+  if(body)headers["Content-Type"]="application/json";
+  const r=await fetch("https://api.github.com/repos/"+REPO+"/"+path,{
+    method,headers,...(body?{body:JSON.stringify(body)}:{})
+  });
+  let data;
+  try{data=await r.json()}catch{data={}}
+  if(!r.ok){
+    if(r.status===404)fail("बातमी / फाइल सापडली नाही.",404);
+    if(r.status===409||r.status===422)fail("GitHub वर एकाच वेळी बदल झाले. पान Refresh करून पुन्हा प्रयत्न करा.",409);
+    if(r.status===401||r.status===403)fail("GitHub Token किंवा Contents Read & Write permission तपासा.",502);
+    fail("GitHub: "+String(data.message||r.status).slice(0,170),502);
+  }
+  return data;
+}
+function decodeGitHub(file){
+  if(!file||typeof file.content!=="string")fail("GitHub फाइलचा मजकूर उपलब्ध नाही.",502);
+  try{
+    const chars=atob(file.content.replace(/\s/g,""));
+    return JSON.parse(new TextDecoder().decode(Uint8Array.from(chars,c=>c.charCodeAt(0))));
+  }catch{fail("GitHub JSON फाइल वाचता आली नाही.",502)}
+}
+async function getArticle(env,slug){
+  if(!slugAllowed(slug))fail("बातमीचा URL अवैध आहे.");
+  const file=await githubRequest(env,"contents/content/posts/"+encodeURIComponent(slug)+".json?ref=main");
+  return {article:decodeGitHub(file),sha:file.sha};
+}
+async function listArticles(env,url){
+  const page=Math.max(1,Math.min(500,Number.parseInt(url.searchParams.get("page")||"1",10)||1));
+  const limit=Math.max(1,Math.min(24,Number.parseInt(url.searchParams.get("limit")||"24",10)||24));
+  const entries=await githubRequest(env,"contents/content/posts?ref=main");
+  if(!Array.isArray(entries))fail("बातम्यांची यादी उपलब्ध नाही.",502);
+  // Include draft source files, unlike cms-export.json which includes published only.
+  const files=entries.filter(x=>x.type==="file"&&/^[a-z0-9][a-z0-9_-]*\.json$/.test(x.name)).sort((a,b)=>b.name.localeCompare(a.name));
+  const start=(page-1)*limit;
+  const selected=files.slice(start,start+limit);
+  const items=[];
+  // Work within Cloudflare's free-tier outbound-subrequest limits.
+  for(let offset=0;offset<selected.length;offset+=5){
+    const part=await Promise.all(selected.slice(offset,offset+5).map(async file=>{
+      try{
+        const item=decodeGitHub(await githubRequest(env,"contents/"+file.path+"?ref=main"));
+        return {
+          slug:clean(item.slug,120)||file.name.slice(0,-5),
+          title:clean(item.title,180),category:clean(item.category,80),
+          status:item.status==="draft"?"draft":"published",
+          author:clean(item.author,90),date:clean(item.date,40),updated:clean(item.updated,40),
+          featured:!!item.featured
+        };
+      }catch(e){return null}
+    }));
+    items.push(...part.filter(Boolean));
+  }
+  items.sort((a,b)=>String(b.updated||b.date).localeCompare(String(a.updated||a.date)));
+  return {posts:items,page,limit,total:files.length,hasMore:start+limit<files.length};
+}
+function safeRichDelta(value){
+  if(value===null||value===undefined)return null;
+  if(!Array.isArray(value)||value.length>2000)fail("Rich Text आकार अवैध आहे.");
+  const output=[];
+  let total=0;
+  for(const op of value){
+    if(!op||typeof op!=="object"||typeof op.insert!=="string")continue;
+    total+=op.insert.length;if(total>80000)fail("Rich Text खूप मोठा आहे.");
+    const cleanOp={insert:op.insert};
+    if(op.attributes&&typeof op.attributes==="object"){
+      const a={},old=op.attributes;
+      for(const field of ["bold","italic","underline","strike","blockquote"]){
+        if(old[field]===true)a[field]=true;
+      }
+      if([2,3].includes(Number(old.header)))a.header=Number(old.header);
+      if(["bullet","ordered"].includes(old.list))a.list=old.list;
+      if(typeof old.link==="string"&&old.link.length<=1000){
+        try{
+          const u=new URL(old.link);
+          if(u.protocol==="https:"&&!u.username&&!u.password)a.link=old.link;
+        }catch{}
+      }
+      if(Object.keys(a).length)cleanOp.attributes=a;
+    }
+    output.push(cleanOp);
+  }
+  return output;
+}
+async function saveArticle(env,request){
+  const raw=await request.text();
+  if(encoder.encode(raw).byteLength>MAX_REQUEST)fail("बातमी / फोटो खूप मोठा आहे.",413);
+  let input;
+  try{input=JSON.parse(raw)}catch{fail("बातमीची माहिती चुकीची आहे.")}
+  const p=input?.article;
+  if(!p||typeof p!=="object"||Array.isArray(p))fail("बातमीचा डेटा अपूर्ण आहे.");
+  const title=clean(p.title,180),body=clean(p.body,50000),category=clean(p.category,80);
+  if(title.length<8||body.length<30)fail("योग्य शीर्षक आणि किमान ३० अक्षरांची बातमी आवश्यक आहे.");
+  if(!CATEGORIES.has(category))fail("योग्य विभाग निवडा.");
+  const video=clean(p.video,400);
+  if(video){
+    let u;try{u=new URL(video)}catch{fail("YouTube ची योग्य URL द्या.")}
+    if(u.protocol!=="https:"||!["youtube.com","www.youtube.com","m.youtube.com","youtu.be","www.youtube-nocookie.com"].includes(u.hostname))fail("फक्त अधिकृत YouTube लिंक वापरा.");
+  }
+  const photo=validateImage(input.photo);
+  const now=new Date().toISOString();
+  let slug=clean(p.slug,120),file=null,old={};
+  if(slug){
+    if(!slugAllowed(slug))fail("बातमीचा URL अवैध आहे.");
+    file=await githubRequest(env,"contents/content/posts/"+encodeURIComponent(slug)+".json?ref=main");
+    if(!p.expected_sha||p.expected_sha!==file.sha)fail("ही बातमी दुसऱ्या ठिकाणी बदलली आहे. Refresh करून पुन्हा Edit करा.",409);
+    old=decodeGitHub(file);
+  }else{
+    const nonce=Array.from(crypto.getRandomValues(new Uint8Array(6)),x=>x.toString(16).padStart(2,"0")).join("");
+    slug="news-"+now.replace(/\D/g,"").slice(0,14)+"-"+nonce;
+  }
+  let image=old.image||"assets/img/logo.webp";
+  if(photo){
+    image="assets/img/"+slug+"-"+Date.now()+".jpg";
+    await githubRequest(env,"contents/"+image,"PUT",{branch:"main",message:"Update news cover "+slug,content:photo});
+  }
+  const changed=!file||p.body_changed===true;
+  const cleanDelta=changed?safeRichDelta(p.rich_delta):undefined;
+  const item={
+    ...old,
+    slug,title,description:clean(p.description,300)||body.replace(/[#*_~\[\]]/g,"").replace(/\s+/g," ").slice(0,180),
+    category,
+    body:changed?body:old.body,
+    image,author:clean(p.author,90)||"लोकहित महाराष्ट्र डिजिटल डेस्क",
+    status:p.status==="draft"?"draft":"published",
+    featured:p.featured===true,
+    video,
+    tags:Array.isArray(p.tags)?p.tags.map(x=>clean(x,50)).filter(Boolean).slice(0,15):[],
+    date:old.date||now,updated:now
+  };
+  if(changed){
+    if(cleanDelta!==null&&cleanDelta!==undefined)item.rich_delta=cleanDelta;
+    else delete item.rich_delta;
+  }
+  const data={branch:"main",message:(file?"Update ":"Publish ")+slug,
+    content:encodeBase64(JSON.stringify(item,null,2)+"\n")};
+  if(file)data.sha=file.sha;
+  const saved=await githubRequest(env,"contents/content/posts/"+slug+".json","PUT",data);
+  return {saved:true,slug,status:item.status,sha:saved.content?.sha||"",date:item.date,url:SITE+"batmi/"+slug+"/"};
+}
+async function deleteArticle(env,request){
+  const raw=await request.text();
+  if(raw.length>1000)fail("अवैध विनंती.");
+  let data;try{data=JSON.parse(raw)}catch{fail("Delete डेटा चुकीचा आहे.")}
+  const slug=clean(data?.slug,120);
+  if(!slugAllowed(slug))fail("अवैध बातमी URL.");
+  const old=await githubRequest(env,"contents/content/posts/"+encodeURIComponent(slug)+".json?ref=main");
+  if(!data?.expected_sha||data.expected_sha!==old.sha)fail("बातमी बदलली आहे. Refresh करून पुन्हा प्रयत्न करा.",409);
+  await githubRequest(env,"contents/content/posts/"+slug+".json","DELETE",{
+    branch:"main",sha:old.sha,message:"Delete news "+slug
+  });
+  return {deleted:true,slug};
+}
+async function checkEditorKey(env,request){
+  const h=request.headers.get("Authorization")||"";
+  const supplied=h.startsWith("Bearer ")?h.slice(7):"";
+  if(!(await sameSecret(supplied,env.PUBLISH_KEY)))fail("गुप्त प्रकाशन लिंक चुकीची आहे.",401);
+}
+
 export default {
   async fetch(request,env) {
     const origin = request.headers.get("Origin") || "";
@@ -141,18 +312,27 @@ export default {
     if(request.method==="OPTIONS") return new Response(null,{status:204,headers:cors});
     const url = new URL(request.url);
     if(url.pathname==="/health" && request.method==="GET") {
-      return json({ready:!!(env.GITHUB_TOKEN && env.PUBLISH_KEY)},200,cors);
+      return json({ready:!!(env.GITHUB_TOKEN && env.PUBLISH_KEY),features:["publish","editor","list","edit","draft","delete"]},200,cors);
     }
-    if(url.pathname!=="/publish" || request.method!=="POST") {
-      return json({error:"अवैध विनंती."},404,cors);
-    }
+    const route=url.pathname,method=request.method;
+    const valid=(route==="/publish"&&method==="POST")||
+      (route==="/list"&&method==="GET")||
+      (route==="/article"&&method==="GET")||
+      (route==="/save"&&method==="POST")||
+      (route==="/delete"&&method==="POST");
+    if(!valid)return json({error:"अवैध विनंती."},404,cors);
     if(!env.GITHUB_TOKEN || !env.PUBLISH_KEY || env.PUBLISH_KEY.length<32) {
       return json({error:"प्रकाशन सेवा अद्याप सक्रिय नाही."},503,cors);
     }
     try {
-      const outcome = await publish(env,request);
-      return json(outcome,202,cors);
-    } catch(e) {
+      if(route==="/publish")return json(await publish(env,request),202,cors);
+      await checkEditorKey(env,request);
+      if(route==="/list")return json(await listArticles(env,url),200,cors);
+      if(route==="/article")return json(await getArticle(env,url.searchParams.get("slug")),200,cors);
+      if(route==="/save")return json(await saveArticle(env,request),200,cors);
+      if(route==="/delete")return json(await deleteArticle(env,request),200,cors);
+      return json({error:"अवैध विनंती."},404,cors);
+    }catch(e){
       return json({error:e.message || "बातमी जतन करता आली नाही."},e.status || 500,cors);
     }
   }
