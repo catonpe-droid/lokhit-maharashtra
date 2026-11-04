@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "menu": [
     {
       "title": "मुख्यपृष्ठ",
@@ -62,11 +62,6 @@
       "enabled": true
     },
     {
-      "title": "🔴 Live TV",
-      "href": "live-tv/",
-      "enabled": true
-    },
-    {
       "title": "विश्लेषण",
       "href": "vibhag/vishleshan/",
       "enabled": true
@@ -99,5 +94,174 @@
     "enabled": true,
     "mode": "latest",
     "custom": []
+  },
+  "categories": [
+    {
+      "name": "महाराष्ट्र",
+      "slug": "maharashtra",
+      "label": "महाराष्ट्र",
+      "enabled": true
+    },
+    {
+      "name": "मराठवाडा",
+      "slug": "marathwada",
+      "label": "मराठवाडा",
+      "enabled": true
+    },
+    {
+      "name": "विदर्भ",
+      "slug": "vidarbha",
+      "label": "विदर्भ",
+      "enabled": true
+    },
+    {
+      "name": "पश्चिम महाराष्ट्र",
+      "slug": "paschim-maharashtra",
+      "label": "पश्चिम महाराष्ट्र",
+      "enabled": true
+    },
+    {
+      "name": "कोकण",
+      "slug": "konkan",
+      "label": "कोकण",
+      "enabled": true
+    },
+    {
+      "name": "दुष्काळ विशेष",
+      "slug": "dushkal",
+      "label": "दुष्काळ विशेष",
+      "enabled": true
+    },
+    {
+      "name": "शेती",
+      "slug": "sheti",
+      "label": "शेती",
+      "enabled": true
+    },
+    {
+      "name": "शासन योजना",
+      "slug": "shasan-yojana",
+      "label": "शासन योजना",
+      "enabled": true
+    },
+    {
+      "name": "पशुसंवर्धन",
+      "slug": "pashusanvardhan",
+      "label": "पशुसंवर्धन",
+      "enabled": true
+    },
+    {
+      "name": "पाणी",
+      "slug": "pani",
+      "label": "पाणी",
+      "enabled": true
+    },
+    {
+      "name": "रोजगार",
+      "slug": "rojgar",
+      "label": "रोजगार",
+      "enabled": true
+    },
+    {
+      "name": "ग्रामविकास",
+      "slug": "gramvikas",
+      "label": "ग्रामविकास",
+      "enabled": true
+    },
+    {
+      "name": "महिला व विकास",
+      "slug": "mahila-vikas",
+      "label": "महिला व विकास",
+      "enabled": true
+    },
+    {
+      "name": "अर्थकारण",
+      "slug": "arthakaran",
+      "label": "अर्थकारण",
+      "enabled": true
+    },
+    {
+      "name": "राजकारण",
+      "slug": "rajkaran",
+      "label": "राजकारण",
+      "enabled": true
+    },
+    {
+      "name": "समाज",
+      "slug": "samaj",
+      "label": "समाज",
+      "enabled": true
+    },
+    {
+      "name": "शिक्षण",
+      "slug": "shikshan",
+      "label": "शिक्षण",
+      "enabled": true
+    },
+    {
+      "name": "आरोग्य",
+      "slug": "arogya",
+      "label": "आरोग्य",
+      "enabled": true
+    },
+    {
+      "name": "विश्लेषण",
+      "slug": "vishleshan",
+      "label": "विश्लेषण",
+      "enabled": true
+    },
+    {
+      "name": "व्हिडिओ",
+      "slug": "video",
+      "label": "व्हिडिओ",
+      "enabled": true
+    }
+  ],
+  "homepage": {
+    "latest": {
+      "enabled": true,
+      "title": "ताज्या बातम्या"
+    },
+    "gov_links": {
+      "enabled": true
+    },
+    "drought_news": {
+      "enabled": true,
+      "title": "दुष्काळ विशेष"
+    },
+    "drought_banner": {
+      "enabled": false,
+      "title": "दुष्काळ विशेष : माहिती, मदत आणि मार्गदर्शन",
+      "description": "पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी"
+    },
+    "live_tv": {
+      "enabled": false
+    },
+    "more": {
+      "enabled": true,
+      "title": "अधिक बातम्या"
+    },
+    "category_blocks": [
+      {
+        "category": "महाराष्ट्र",
+        "title": "महाराष्ट्र",
+        "enabled": true
+      },
+      {
+        "category": "शेती",
+        "title": "शेती",
+        "enabled": true
+      },
+      {
+        "category": "शासन योजना",
+        "title": "शासन योजना",
+        "enabled": true
+      },
+      {
+        "category": "पशुसंवर्धन",
+        "title": "पशुसंवर्धन",
+        "enabled": true
+      }
+    ]
   }
 }
