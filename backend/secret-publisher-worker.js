@@ -8,7 +8,7 @@ const REPO = "catonpe-droid/lokhit-maharashtra";
 const API = "https://api.github.com/repos/" + REPO + "/contents/";
 const SITE = "https://catonpe-droid.github.io/lokhit-maharashtra/";
 const ORIGIN = "https://catonpe-droid.github.io";
-const MAX_REQUEST = 1300000;
+const MAX_REQUEST = 2900000;
 const encoder = new TextEncoder();
 
 const CATEGORIES = new Set([
@@ -195,30 +195,57 @@ async function listArticles(env,url){
   items.sort((a,b)=>String(b.updated||b.date).localeCompare(String(a.updated||a.date)));
   return {posts:items,page,limit,total:files.length,hasMore:start+limit<files.length};
 }
-function safeRichDelta(value){
+async function safeRichDelta(env,slug,value){
   if(value===null||value===undefined)return null;
   if(!Array.isArray(value)||value.length>2000)fail("Rich Text आकार अवैध आहे.");
   const output=[];
-  let total=0;
+  let total=0,images=0;
+  const safeImage=/^assets\/img\/(?!.*\.\.)[A-Za-z0-9_./-]+\.(?:jpe?g|png|webp)$/i;
   for(const op of value){
-    if(!op||typeof op!=="object"||typeof op.insert!=="string")continue;
-    total+=op.insert.length;if(total>80000)fail("Rich Text खूप मोठा आहे.");
-    const cleanOp={insert:op.insert};
-    if(op.attributes&&typeof op.attributes==="object"){
-      const a={},old=op.attributes;
-      for(const field of ["bold","italic","underline","strike","blockquote"]){
-        if(old[field]===true)a[field]=true;
+    if(!op||typeof op!=="object")continue;
+    const insert=op.insert;
+    let cleanOp;
+    if(typeof insert==="string"){
+      total+=insert.length;if(total>80000)fail("Rich Text खूप मोठा आहे.");
+      cleanOp={insert};
+      if(op.attributes&&typeof op.attributes==="object"){
+        const a={},old=op.attributes;
+        for(const field of ["bold","italic","underline","strike","blockquote"]){
+          if(old[field]===true)a[field]=true;
+        }
+        if([2,3].includes(Number(old.header)))a.header=Number(old.header);
+        if(["bullet","ordered"].includes(old.list))a.list=old.list;
+        if(typeof old.link==="string"&&old.link.length<=1000){
+          try{
+            const u=new URL(old.link);
+            if(u.protocol==="https:"&&!u.username&&!u.password)a.link=old.link;
+          }catch{}
+        }
+        if(Object.keys(a).length)cleanOp.attributes=a;
       }
-      if([2,3].includes(Number(old.header)))a.header=Number(old.header);
-      if(["bullet","ordered"].includes(old.list))a.list=old.list;
-      if(typeof old.link==="string"&&old.link.length<=1000){
-        try{
-          const u=new URL(old.link);
-          if(u.protocol==="https:"&&!u.username&&!u.password)a.link=old.link;
-        }catch{}
+    }else if(insert&&typeof insert==="object"&&typeof insert.image==="string"){
+      images++;if(images>4)fail("मजकुरात जास्तीत जास्त ४ फोटो घाला.");
+      let image=insert.image;
+      if(image.startsWith("data:image/jpeg;base64,")){
+        const jpeg=image.slice("data:image/jpeg;base64,".length);
+        if(jpeg.length>380000)fail("मजकुरातील फोटोचा आकार मोठा आहे.",413);
+        validateImage(jpeg);
+        const random=Array.from(crypto.getRandomValues(new Uint8Array(3)),v=>v.toString(16).padStart(2,"0")).join("");
+        const name="assets/img/"+slug+"-inline-"+Date.now()+"-"+images+"-"+random+".jpg";
+        await githubRequest(env,"contents/"+name,"PUT",{branch:"main",message:"Add inline news image "+slug,content:jpeg});
+        image=name;
+      }else if(!safeImage.test(image)){
+        fail("मजकुरात फक्त या वेबसाइटवर साठवलेले फोटो वापरा.");
       }
-      if(Object.keys(a).length)cleanOp.attributes=a;
-    }
+      cleanOp={insert:{image}};
+    }else if(insert&&typeof insert==="object"&&typeof insert.video==="string"){
+      // Video embed URLs are converted into safe youtube-nocookie frames by rich_renderer.py.
+      try{
+        const u=new URL(insert.video);
+        if(u.protocol!=="https:"||u.hostname!=="www.youtube-nocookie.com"||!/^\/embed\/[A-Za-z0-9_-]{11}$/.test(u.pathname))continue;
+        cleanOp={insert:{video:u.origin+u.pathname}};
+      }catch{continue}
+    }else continue;
     output.push(cleanOp);
   }
   return output;
@@ -256,7 +283,7 @@ async function saveArticle(env,request){
     await githubRequest(env,"contents/"+image,"PUT",{branch:"main",message:"Update news cover "+slug,content:photo});
   }
   const changed=!file||p.body_changed===true;
-  const cleanDelta=changed?safeRichDelta(p.rich_delta):undefined;
+  const cleanDelta=changed?await safeRichDelta(env,slug,p.rich_delta):undefined;
   const item={
     ...old,
     slug,title,description:clean(p.description,300)||body.replace(/[#*_~\[\]]/g,"").replace(/\s+/g," ").slice(0,180),
