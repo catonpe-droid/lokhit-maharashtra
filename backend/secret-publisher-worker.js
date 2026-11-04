@@ -373,19 +373,24 @@ async function saveLayout(env,request){
     drought_banner:{enabled:false,title:"दुष्काळ विशेष : माहिती, मदत आणि मार्गदर्शन",description:"पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी"},
     live_tv:{enabled:false},more:{enabled:true,title:"अधिक बातम्या"}
   };
+  const safeCount=value=>{
+    const n=Number.parseInt(value,10);
+    return Number.isFinite(n)?Math.max(1,Math.min(12,n)):4;
+  };
   const homepage={};
   for(const k of Object.keys(defaults)){
     const old=homeIn[k]&&typeof homeIn[k]==="object"?homeIn[k]:defaults[k];
     homepage[k]={
       enabled:old.enabled===true,
       ...(defaults[k].title!==undefined?{title:clean(old.title||defaults[k].title,k==="drought_banner"?130:65)}:{}),
+      ...(["latest","drought_news","more"].includes(k)?{count:safeCount(old.count)}:{}),
       ...(k==="drought_banner"?{description:clean(old.description||defaults[k].description,250)}:{})
     };
   }
   const choices=new Set([...categories.map(c=>c.name),...CATEGORIES]);
   homepage.category_blocks=(Array.isArray(homeIn.category_blocks)?homeIn.category_blocks:[]).slice(0,20)
     .filter(x=>x&&choices.has(x.category)).map(x=>({
-      category:clean(x.category,65),title:clean(x.title,65),enabled:x.enabled!==false
+      category:clean(x.category,65),title:clean(x.title,65),count:safeCount(x.count),enabled:x.enabled!==false
     }));
   const updated={...current,version:3,menu,slider,breaking,categories,homepage,
     slider_seconds:Math.max(3,Math.min(15,Number(p.slider_seconds)||6))};
@@ -416,7 +421,7 @@ export default {
     if(request.method==="OPTIONS") return new Response(null,{status:204,headers:cors});
     const url = new URL(request.url);
     if(url.pathname==="/health" && request.method==="GET") {
-      return json({ready:!!(env.GITHUB_TOKEN && env.PUBLISH_KEY),features:["publish","editor","list","edit","draft","delete","layout","homepage","categories"]},200,cors);
+      return json({ready:!!(env.GITHUB_TOKEN && env.PUBLISH_KEY),features:["publish","editor","list","edit","draft","delete","layout","homepage","categories","section-counts"]},200,cors);
     }
     const route=url.pathname,method=request.method;
     const valid=(route==="/publish"&&method==="POST")||
