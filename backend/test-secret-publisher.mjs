@@ -13,7 +13,7 @@ let revision=0;const writes=[];
 function objFromBase64(s){return JSON.parse(Buffer.from(s.replace(/\s/g,""),"base64").toString("utf8"))}
 function toFile(data,sha){return {content:Buffer.from(JSON.stringify(data)).toString("base64"),sha,encoding:"base64"}}
 function store(path,item){const sha="sha"+(++revision);docs.set(path,{item,sha});return sha}
-store("content/layout.json",{version:2,menu:[{title:"मुख्यपृष्ठ",href:"",enabled:true}],slider:[],slider_seconds:6,breaking:{enabled:true,mode:"latest",custom:[]}});
+store("content/layout.json",{version:3,menu:[{title:"मुख्यपृष्ठ",href:"",enabled:true}],slider:[],slider_seconds:6,breaking:{enabled:true,mode:"latest",custom:[]},categories:[{name:"महाराष्ट्र",slug:"maharashtra",label:"महाराष्ट्र"},{name:"शेती",slug:"sheti",label:"शेती"}],homepage:{live_tv:{enabled:false},drought_banner:{enabled:false},latest:{enabled:true,title:"ताज्या बातम्या"},gov_links:{enabled:true},drought_news:{enabled:true,title:"दुष्काळ विशेष"},more:{enabled:true,title:"अधिक बातम्या"},category_blocks:[{category:"शेती",title:"शेती",enabled:true}]}});
 const BASE="https://api.github.com/repos/catonpe-droid/lokhit-maharashtra/";
 globalThis.fetch=async (url,options={})=>{
   assert.ok(String(url).startsWith(BASE));
@@ -167,7 +167,9 @@ let latestSha=docs.get("content/posts/"+savedSlug+".json").sha;
    ...config.layout,
    menu:[...config.layout.menu,{title:"शेती",href:"vibhag/sheti/",enabled:true}],
    breaking:{enabled:true,mode:"custom",custom:["महत्त्वाची कृषी बातमी"]},
-   slider_seconds:8
+   slider_seconds:8,
+   categories:[...config.layout.categories,{name:"युवा घडामोडी",slug:"yuva-ghadamodi",label:"युवा"}],
+   homepage:{...config.layout.homepage,live_tv:{enabled:false},drought_banner:{enabled:false,title:"दुष्काळ मार्गदर्शन",description:"बातम्या आणि माहिती"},category_blocks:[{category:"युवा घडामोडी",title:"युवांसाठी",enabled:true}]}
  };
  const bad=await worker.fetch(req("POST","/layout",KEY,{layout:changed,expected_sha:"stale"}),env);
  assert.equal(bad.status,409);
@@ -176,5 +178,17 @@ let latestSha=docs.get("content/posts/"+savedSlug+".json").sha;
  const stored=docs.get("content/layout.json").item;
  assert.equal(stored.menu.length,2);assert.equal(stored.breaking.mode,"custom");
  assert.equal(stored.slider_seconds,8);
+ assert.equal(stored.categories.length,3);
+ assert.equal(stored.categories[2].label,"युवा");
+ assert.equal(stored.homepage.live_tv.enabled,false);
+ assert.equal(stored.homepage.category_blocks[0].title,"युवांसाठी");
+}
+{
+ const sampleCustom={...sample,category:"युवा घडामोडी"};
+ const res=await worker.fetch(req("POST","/publish",KEY,sampleCustom),env);
+ assert.equal(res.status,202);
+ const d=await res.json();
+ assert.equal(d.saved,true);
+ assert.equal(docs.get("content/posts/"+d.slug+".json").item.category,"युवा घडामोडी");
 }
 console.log("Secret Publisher + Admin Studio tests passed. No live API writes.");
