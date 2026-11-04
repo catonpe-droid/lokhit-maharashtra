@@ -153,13 +153,13 @@ def shell(content,title,desc,path='',image=None,kind='website',published=None,mo
  ticker_copy=''.join(f'<span class="ticker-item"><span class="ticker-star">◆</span>{item}</span>' for item in items)
  breakbar=(f'<div class="container"><div class="search-strip live-ticker"><span class="breaking-label"><span class="on-air-dot"></span> BREAKING NEWS</span><div class="ticker-window" aria-label="ब्रेकिंग न्यूज"><div class="ticker-move"><div class="ticker-segment">{ticker}</div><div class="ticker-segment" aria-hidden="true" inert>{ticker_copy}</div></div></div><button class="ticker-toggle" type="button" aria-label="ब्रेकिंग न्यूज पट्टी थांबवा" aria-pressed="false" title="Pause / Play">Ⅱ</button><a class="search-btn" href="{U("shodh/")}" aria-label="शोधा">⌕</a></div></div>' if items and ticker_settings.get('enabled',True) else '')
  meta=ld_head(title,desc,A(path),image,kind,published,modified)
- return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#b60013"><link rel="icon" type="image/png" href="{U('assets/img/favicon.png')}"><link rel="manifest" href="{U('manifest.webmanifest')}"><link rel="alternate" type="application/rss+xml" title="लोकहित महाराष्ट्र बातम्या" href="{U('rss.xml')}"><link rel="stylesheet" href="{U('assets/css/style.css')}?v=20261104-weather1">{meta}{GOV_STYLE if path in ("", "shasakiy-duve/") else ""}</head><body data-base="{E(BASE)}">
+ return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#b60013"><link rel="icon" type="image/png" href="{U('assets/img/favicon.png')}"><link rel="manifest" href="{U('manifest.webmanifest')}"><link rel="alternate" type="application/rss+xml" title="लोकहित महाराष्ट्र बातम्या" href="{U('rss.xml')}"><link rel="stylesheet" href="{U('assets/css/style.css')}?v=20261104-farm3cards1">{meta}{GOV_STYLE if path in ("", "shasakiy-duve/") else ""}</head><body data-base="{E(BASE)}">
 <div class="utility"><div class="container"><span><span id="today-date">महाराष्ट्राचा डिजिटल आवाज</span> · स्वतंत्र मराठी न्यूज पोर्टल</span><div class="utility-links">{quick}<a href="{U('privacy-policy/')}">Privacy Policy</a></div></div></div>
 <header class="brand-header"><div class="container brand-inner"><a href="{U()}" class="identity" aria-label="लोकहित महाराष्ट्र मुखपृष्ठ"><img src="{U('assets/img/logo.webp')}" alt="लोकहित महाराष्ट्र लोगो" class="site-logo" width="112" height="112"><div><div class="brand-title">लोकहित <span>महाराष्ट्र</span></div><div class="brand-tagline">{E(CFG['tagline'])}</div></div></a><div class="brand-actions"><a class="icon-btn" href="{U('shodh/')}" aria-label="बातमी शोधा">⌕ शोधा</a>{('<a class="live-nav-cta" href="'+U('live-tv/')+'">🔴 Live TV</a>') if home_enabled('live_tv',False) else ''}</div></div></header>
 <nav class="nav" aria-label="मुख्य मेनू"><div class="container nav-inner"><button id="nav-toggle" class="hamburger" aria-expanded="false" aria-controls="nav-links" aria-label="मेनू उघडा">☰</button><div class="nav-links" id="nav-links" style="display:contents">{nav}</div></div></nav>
 <main>{breakbar}{content}</main>
 <footer class="footer"><div class="container"><div class="footer-grid"><div><div class="footer-brand"><img src="{U('assets/img/logo.webp')}" alt="" class="footer-logo">लोकहित महाराष्ट्र</div><p>{E(CFG['tagline'])}. महाराष्ट्र, दुष्काळ, शेती, योजना आणि ग्रामीण विकासाविषयी मराठी माहिती.</p><small>डिजिटल न्यूज व जनमाहिती पोर्टल. हे कोणत्याही शासकीय कार्यालयाचे अधिकृत संकेतस्थळ नाही.</small></div>{footer}</div><div class="footer-bottom"><span>© २०२६ लोकहित महाराष्ट्र. सर्व हक्क राखीव.</span><span>माहितीतील त्रुटी निदर्शनास आणण्यासाठी संपर्क पृष्ठ वापरा.</span></div></div></footer>
-<div id="toast" class="toast" role="status" aria-live="polite"></div><script src="{U('assets/js/site.js')}" defer></script>{('<script src="'+U('assets/js/local-weather.js')+'?v=20261104-w1" defer></script>') if path=='' else ''}</body></html>'''.replace('id="nav-links" style="display:contents"','id="nav-links"')
+<div id="toast" class="toast" role="status" aria-live="polite"></div><script src="{U('assets/js/site.js')}" defer></script>{('<script src="'+U('assets/js/local-weather.js')+'?v=20261104-w2" defer></script><script src="'+U('assets/js/farmer-widgets.js')+'?v=20261104-f1" defer></script>') if path=='' else ''}</body></html>'''.replace('id="nav-links" style="display:contents"','id="nav-links"')
 def write(path,content):
  target=OUT/path
  target.parent.mkdir(parents=True,exist_ok=True)
@@ -326,7 +326,8 @@ other_posts=[p for p in POSTS if not lead or p['slug']!=lead['slug']]
 home=f'<div class="container"><section class="page-section hero-layout">{hero}<div class="hero-stack">'+''.join(stack(p) for p in other_posts[:4])+f'</div><div class="hero-latest side-panel"><div class="panel-title">ताज्या बातम्या <a href="{U("tajya-batmya/")}">सर्व पहा ›</a></div><div class="panel-content">'+''.join(latest(p) for p in POSTS[5:11])+'</div></div></section>'
 # Reader-local weather (IP city approximation with optional opt-in precise location).
 # Weather is fetched by the visitor's browser; no location is collected by this build.
-home+='''<section class="lk-weather page-section" id="lk-weather" aria-label="आपल्या परिसराचे हवामान">
+home+='''<div class="lk-farmer-grid" aria-label="शेतकरी माहितीचे तीन उपयुक्त विभाग">
+<section class="lk-weather page-section" id="lk-weather" aria-label="आपल्या परिसराचे हवामान">
   <div class="lk-w-top">
     <div class="lk-w-heading"><span class="lk-w-heading-icon" aria-hidden="true">🌦️</span><div>
       <h2>आपल्या परिसराचे हवामान</h2>
@@ -369,7 +370,45 @@ home+='''<section class="lk-weather page-section" id="lk-weather" aria-label="�
     <span><span id="weather-source">शहर IP वरून अंदाजाने शोधले जाते</span> · <span id="weather-updated">अद्ययावत माहिती</span></span>
     <span>हवामान: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> · IP शहर अंदाज: <a href="https://www.geojs.io/" target="_blank" rel="noopener noreferrer">GeoJS</a> · <a href="privacy-policy/">गोपनीयता</a></span>
   </div>
-</section>'''
+</section>
+<section class="lk-farm-card lk-market-card page-section" aria-label="आजचे शेतमाल बाजारभाव">
+ <div class="lk-farm-header">
+  <div class="lk-farm-heading"><span class="lk-farm-icon" aria-hidden="true">📈</span><div><h2>आजचे बाजारभाव</h2><p>APMC / अगमार्कनेट · अहवालानुसार ताजे दर</p></div></div>
+  <span class="lk-farm-pill">↻ अपडेट</span>
+ </div>
+ <div class="lk-market-tabs" role="group" aria-label="बाजारभावासाठी शेतमाल निवडा">
+  <button type="button" class="is-active" data-market-crop="soybean" aria-pressed="true">सोयाबीन</button>
+  <button type="button" data-market-crop="cotton" aria-pressed="false">कापूस</button>
+  <button type="button" data-market-crop="tur" aria-pressed="false">तूर</button>
+  <button type="button" data-market-crop="maharashtra" aria-pressed="false">महाराष्ट्र</button>
+ </div>
+ <div class="lk-market-embed-wrap">
+  <iframe id="lk-market-embed" title="सोयाबीन शेतमालाचा नवीनतम APMC बाजारभाव, स्रोत BajarBhav" src="https://www.bajarbhav.in/embed/commodity/soybean" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+ </div>
+ <div class="lk-market-footer">
+  <p>दर ₹/क्विंटल (स्रोतानुसार). वाढ/घट व दर प्रत्येक बाजार समितीनुसार बदलतात. दिलेली तारीख तपासा.</p>
+  <div class="lk-market-links">
+   <a id="lk-market-full" href="https://www.bajarbhav.in/commodities/soybean" target="_blank" rel="noopener noreferrer">सविस्तर दर ↗</a>
+   <a href="https://www.bajarbhav.in/market-movers" target="_blank" rel="noopener noreferrer">↑↓ भावातील चढ-उतार ↗</a>
+  </div>
+  <small>डेटा: <a href="https://www.bajarbhav.in/data-sources" target="_blank" rel="noopener noreferrer">BajarBhav / MSAMB / Agmarknet</a>. व्यापारी निर्णयाआधी स्थानिक बाजारात खात्री करा.</small>
+ </div>
+</section>
+<section class="lk-farm-card lk-farmer-links page-section" aria-label="शेतकऱ्यांसाठी महत्त्वाच्या सरकारी सेवा">
+ <div class="lk-farm-header">
+  <div class="lk-farm-heading"><span class="lk-farm-icon" aria-hidden="true">🌾</span><div><h2>शेतकरी सेवा केंद्र</h2><p>थेट अधिकृत वेबसाइटवरून माहिती व अर्ज</p></div></div>
+  <span class="lk-farm-pill">उपयुक्त</span>
+ </div>
+ <div class="lk-farm-services">
+  <a href="https://pmkisan.gov.in/" target="_blank" rel="noopener noreferrer"><span class="lk-f-service-icon">💰</span><span><strong>PM-KISAN</strong><small>हप्ता व लाभार्थी स्थिती तपासा</small></span><span aria-hidden="true">↗</span></a>
+  <a href="https://mahadbt.maharashtra.gov.in/Farmer/" target="_blank" rel="noopener noreferrer"><span class="lk-f-service-icon">🚜</span><span><strong>महाDBT शेतकरी</strong><small>अनुदान, अर्ज आणि लाभ स्थिती</small></span><span aria-hidden="true">↗</span></a>
+  <a href="https://pmfby.gov.in/" target="_blank" rel="noopener noreferrer"><span class="lk-f-service-icon">🛡️</span><span><strong>पीक विमा योजना</strong><small>नोंदणी, विमा व दावा माहिती</small></span><span aria-hidden="true">↗</span></a>
+  <a href="https://krishi.maharashtra.gov.in/" target="_blank" rel="noopener noreferrer"><span class="lk-f-service-icon">🌱</span><span><strong>महाराष्ट्र कृषी विभाग</strong><small>शासकीय योजना व कृषी मार्गदर्शन</small></span><span aria-hidden="true">↗</span></a>
+  <a href="https://www.enam.gov.in/web/" target="_blank" rel="noopener noreferrer"><span class="lk-f-service-icon">🏪</span><span><strong>ई-नाम (e-NAM)</strong><small>बाजार समित्या व व्यापार माहिती</small></span><span aria-hidden="true">↗</span></a>
+ </div>
+ <div class="lk-farm-service-note">🔎 या लिंक्स शासकीय पोर्टलवर उघडतात. योजनेची पात्रता व अर्जाची मुदत मूळ पोर्टलवर तपासा.</div>
+</section>
+</div>'''
 
 # Homepage blocks and categories are now managed from the secret News Admin.
 if home_enabled('latest',True):
