@@ -1,0 +1,97 @@
+[
+  {
+    "name": "महाराष्ट्र",
+    "label": "महाराष्ट्र",
+    "slug": "maharashtra"
+  },
+  {
+    "name": "मराठवाडा",
+    "label": "मराठवाडा",
+    "slug": "marathwada"
+  },
+  {
+    "name": "विदर्भ",
+    "label": "विदर्भ",
+    "slug": "vidarbha"
+  },
+  {
+    "name": "पश्चिम महाराष्ट्र",
+    "label": "पश्चिम महाराष्ट्र",
+    "slug": "paschim-maharashtra"
+  },
+  {
+    "name": "कोकण",
+    "label": "कोकण",
+    "slug": "konkan"
+  },
+  {
+    "name": "दुष्काळ विशेष",
+    "label": "दुष्काळ विशेष",
+    "slug": "dushkal"
+  },
+  {
+    "name": "शेती",
+    "label": "शेती",
+    "slug": "sheti"
+  },
+  {
+    "name": "शासन योजना",
+    "label": "शासन योजना",
+    "slug": "shasan-yojana"
+  },
+  {
+    "name": "पशुसंवर्धन",
+    "label": "पशुसंवर्धन",
+    "slug": "pashusanvardhan"
+  },
+  {
+    "name": "पाणी",
+    "label": "पाणी",
+    "slug": "pani"
+  },
+  {
+    "name": "रोजगार",
+    "label": "रोजगार",
+    "slug": "rojgar"
+  },
+  {
+    "name": "ग्रामविकास",
+    "label": "ग्रामविकास",
+    "slug": "gramvikas"
+  },
+  {
+    "name": "महिला व विकास",
+    "label": "महिला व विकास",
+    "slug": "mahila-vikas"
+  },
+  {
+    "name": "अर्थकारण",
+    "label": "अर्थकारण",
+    "slug": "arthakaran"
+  },
+  {
+    "name": "राजकारण",
+    "label": "राजकारण",
+    "slug": "rajkaran"
+  },
+  {
+    "name": "समाज",
+    "label": "समाज",
+    "slug": "samaj"
+  },
+  {
+    "name": "शिक्षण",
+    "label": "शिक्षण",
+    "slug": "shikshan"
+  },
+  {
+    "name": "आरोग्य",
+    "label": "आरोग्य",
+    "slug": "arogya"
+  },
+  {
+    "name": "विश्लेषण",
+    "label": "विश्लेषण",
+    "slug": "vishleshan"
+  }
+]
