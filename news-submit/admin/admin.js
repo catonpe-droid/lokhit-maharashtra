@@ -103,7 +103,12 @@
       if(!p||!p.slug)throw Error('बातमी मिळाली नाही.');
       active={slug:p.slug,sha:data.sha,status:p.status||'published'};
       baseline=p;
-      $('title').value=p.title||'';$('category').value=p.category||'महाराष्ट्र';
+      $('title').value=p.title||'';
+      const articleCategory=p.category||'महाराष्ट्र';
+      if(![...$('category').options].some(opt=>opt.value===articleCategory)){
+        $('category').add(new Option(articleCategory+' (जुनी Category)',articleCategory));
+      }
+      $('category').value=articleCategory;
       $('author').value=p.author||'लोकहित महाराष्ट्र डिजिटल डेस्क';$('description').value=p.description||'';
       $('tags').value=Array.isArray(p.tags)?p.tags.join(', '):'';$('video').value=p.video||'';
       $('post-status').value=p.status==='draft'?'draft':'published';$('featured').checked=!!p.featured;
