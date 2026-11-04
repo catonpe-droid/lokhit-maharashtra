@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="mr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#092045">
+<title>बातमी प्रकाशित करा | लोकहित महाराष्ट्र</title>
+<link rel="icon" href="../assets/img/favicon.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&display=swap');
+:root{font-family:'Mukta',system-ui,sans-serif;color:#1c3045;background:#f3f6f9;font-size:16px}
+*{box-sizing:border-box}
+body{margin:0;line-height:1.55}
+a{color:inherit}
+header{background:#fff;border-bottom:1px solid #dfe6ee}
+.top{max-width:1000px;margin:auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;gap:10px;align-items:center;text-decoration:none;font-size:24px;font-weight:800;color:#092045}
+.brand img{width:54px;height:54px;border-radius:50%;object-fit:contain}
+.brand strong span{color:#b60013}
+.top small{color:#6b7b8b;font-weight:700}
+main{max-width:850px;margin:26px auto 60px;padding:0 16px}
+.lead{padding:27px 28px;background:linear-gradient(115deg,#092045,#244d67);color:#fff;border-radius:15px 15px 0 0}
+.lead h1{margin:0 0 6px;font-size:clamp(26px,4.2vw,35px);line-height:1.25}
+.lead p{margin:0;color:#dce9f3}
+.paper{background:#fff;border:1px solid #e1e8f0;border-top:0;padding:27px 30px 32px;border-radius:0 0 15px 15px;box-shadow:0 12px 40px rgba(10,36,65,.06)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:7px;margin:0 0 17px;min-width:0}
+label{font-weight:800;color:#18324b}
+label span{color:#b60013}
+input,select,textarea{width:100%;padding:11px 12px;border-radius:8px;border:1px solid #c9d4df;font:inherit;color:#152c45;background:#fff}
+textarea{min-height:240px;resize:vertical;line-height:1.75}
+input:focus,select:focus,textarea:focus{outline:3px solid #f3dbe2;border-color:#b60013}
+small,.hint{color:#67788a}
+.photo{border:1.5px dashed #c6d1de;border-radius:10px;padding:16px;background:#f8fafc}
+.photo input{border:0;padding:5px 0;background:none}
+#photo-preview{display:none;max-width:100%;max-height:200px;margin:12px 0 0;border-radius:8px;object-fit:contain}
+.actions{display:flex;flex-wrap:wrap;gap:11px;align-items:center;margin-top:24px}
+button{font:inherit;cursor:pointer;border-radius:8px;font-weight:800;padding:11px 20px;border:1px solid #cbd4de}
+button.primary{background:#b60013;color:#fff;border-color:#b60013;min-width:194px}
+button.primary:disabled{opacity:.52;cursor:not-allowed}
+button.secondary{background:#fff;color:#17314b}
+button:focus-visible,a:focus-visible{outline:3px solid #f39a21;outline-offset:3px}
+.note{font-size:14px;margin:14px 0 0;color:#617388}
+#status{margin-top:17px;padding:12px 14px;background:#edf3f8;border-radius:9px;display:none;white-space:pre-wrap;font-weight:700}
+#status.error{display:block;background:#fff0f1;color:#931327}
+#status.ok{display:block;background:#e8f6ee;color:#125a36}
+#status.info{display:block;background:#edf3f8;color:#173d5b}
+#published{display:none;margin-top:20px;background:#eef8f0;border:1px solid #b9dbc6;border-radius:12px;padding:19px}
+#published strong{font-size:19px;color:#1a6738}
+#published a{color:#124a67;overflow-wrap:anywhere;font-weight:700}
+#published p{margin:7px 0}
+#published .actions{margin-top:12px}
+dialog{width:min(92vw,770px);max-height:85vh;padding:25px;border:0;border-radius:15px;box-shadow:0 18px 70px #152c4566}
+dialog::backdrop{background:#0e213b99}
+#preview-body{white-space:pre-wrap;font-size:18px}
+#preview-photo{max-width:100%;max-height:360px;object-fit:contain;border-radius:8px}
+#preview-title{font-size:27px;line-height:1.35}
+@media(max-width:650px){.top{padding:9px 12px}.top small{display:none}.brand{font-size:19px}.brand img{width:43px;height:43px}main{margin:14px auto 34px;padding:0 10px}.lead{padding:22px 17px}.paper{padding:22px 15px}.grid{grid-template-columns:1fr;gap:0}.actions button{flex:1}.lead h1{font-size:26px}}
+</style>
+</head>
+<body>
+<header><div class="top"><a class="brand" href="../"><img src="../assets/img/logo.webp" alt="लोकहित महाराष्ट्र लोगो"><strong>लोकहित <span>महाराष्ट्र</span></strong></a><small>संपादकीय बातमी प्रकाशन</small></div></header>
+<main>
+<section class="lead"><h1>📰 नवीन बातमी प्रकाशित करा</h1><p>माहिती भरा, फोटो जोडा आणि Publish दाबा. स्वतंत्र बातमीची लिंक याच पानावर मिळेल.</p></section>
+<section class="paper">
+<form id="news-form" autocomplete="off">
+<div class="field"><label for="title">बातमीचे शीर्षक <span>*</span></label><input id="title" name="title" required minlength="8" maxlength="180" placeholder="येथे बातमीचे संपूर्ण शीर्षक लिहा"></div>
+<div class="grid">
+ <div class="field"><label for="category">विभाग <span>*</span></label><select id="category" required>
+ <option value="">— विभाग निवडा —</option>
+ <option>महाराष्ट्र</option><option>मराठवाडा</option><option>विदर्भ</option><option>पश्चिम महाराष्ट्र</option><option>कोकण</option><option>दुष्काळ विशेष</option><option>शेती</option><option>शासन योजना</option><option>पशुसंवर्धन</option><option>पाणी</option><option>रोजगार</option><option>ग्रामविकास</option><option>महिला व विकास</option><option>अर्थकारण</option><option>राजकारण</option><option>समाज</option><option>शिक्षण</option><option>आरोग्य</option><option>विश्लेषण</option>
+ </select></div>
+ <div class="field"><label for="author">बातमी पाठवणाऱ्याचे नाव</label><input id="author" maxlength="90" placeholder="नाव (ऐच्छिक)"></div>
+</div>
+<div class="field"><label for="body">संपूर्ण बातमी <span>*</span></label><textarea id="body" required minlength="30" maxlength="50000" placeholder="बातमी येथे लिहा किंवा Word/WhatsApp मधून कॉपी-पेस्ट करा. प्रत्येक परिच्छेदानंतर एक रिकामी ओळ द्या."></textarea></div>
+<div class="field photo"><label for="photo">📷 बातमीचा फोटो (ऐच्छिक)</label><input type="file" id="photo" accept="image/jpeg,image/png,image/webp" aria-describedby="photo-hint"><small id="photo-hint">JPG / PNG / WebP. मोठा फोटो आपोआप कमी आकारात तयार होईल. फोटो न दिल्यास लोगो वापरला जाईल.</small><img id="photo-preview" alt="निवडलेला फोटो"></div>
+<div class="actions"><button type="button" class="secondary" id="preview-button">👁️ बातमी पाहा</button><button type="submit" class="primary" id="publish-button">📰 Publish News</button></div>
+<p class="note">बातमी पाठवण्यापूर्वी मजकूर, व्यक्तींची नावे, तथ्य आणि फोटो वापरण्याची परवानगी तपासा.</p>
+<div id="status" role="status" aria-live="polite"></div>
+<div id="published" aria-live="polite"><strong id="published-heading">बातमी जतन झाली</strong><p id="published-note"></p><p><a id="published-url" href="#" target="_blank" rel="noopener noreferrer"></a></p><div class="actions"><button id="copy-button" type="button" class="secondary">📋 लिंक कॉपी करा</button><a id="share-link" class="secondary" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:11px 20px;background:#fff;border:1px solid #cbd4de;border-radius:8px;font-weight:800;text-decoration:none">WhatsApp Share</a></div></div>
+</form></section>
+</main>
+<dialog id="preview-dialog" aria-label="बातमीचे पूर्वावलोकन"><h2 id="preview-title"></h2><p id="preview-category"></p><img id="preview-photo" alt=""><div id="preview-body"></div><div class="actions"><button id="preview-close" class="primary" type="button">बंद करा</button></div></dialog>
+<script src="./publisher.js" defer></script>
+</body></html>
