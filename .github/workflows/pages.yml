@@ -72,6 +72,19 @@ jobs:
             git reset --hard origin/main
             rm -rf docs
             python build.py
+            # The site lives at repository root. cp -a does NOT remove old
+            # pages, so deleting a post JSON previously left its old HTML live.
+            # Compare generated article pages with the existing public root;
+            # remove only stale article directories absent from this build.
+            if [ -d batmi ]; then
+              for article_dir in batmi/*/; do
+                [ -d "$article_dir" ] || continue
+                if [ ! -f "docs/${article_dir}index.html" ]; then
+                  echo "Removing deleted or unpublished article: $article_dir"
+                  rm -rf -- "$article_dir"
+                fi
+              done
+            fi
             cp -a docs/. ./
             rm -rf docs
             git add -A
