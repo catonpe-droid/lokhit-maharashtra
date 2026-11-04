@@ -275,6 +275,9 @@ if isinstance(configured,list):
   post=POST_BY_SLUG.get(str(item.get('slug','')))
   if post:
    slides.append((post,str(item.get('title','')).strip()[:160]))
+# A freshly featured article takes priority without deleting manual slider entries.
+if lead and lead.get('featured'):
+ slides=[(lead,'')]+[(post,title) for post,title in slides if post['slug']!=lead['slug']][:3]
 if not slides:
  slides=[(p,'') for p in ([lead]+[q for q in POSTS if lead and q['slug']!=lead['slug']][:3] if lead else [])]
 if slides:
