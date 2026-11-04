@@ -218,7 +218,7 @@
       "enabled": true
     },
     "more": {
-      "enabled": true,
+      "enabled": false,
       "title": "अधिक बातम्या"
     },
     "category_blocks": [
