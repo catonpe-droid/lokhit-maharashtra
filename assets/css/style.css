@@ -715,3 +715,12 @@ body{background:#f5f6f8;color:#17273b}
  .live-tv-section .tv-video-card img{width:64px;height:36px}
  .live-tv-section .tv-video-card .tv-card-play{display:none}
 }
+
+
+/* Homepage: four stories per editorial section and compact "more news" action */
+.page-section .home-more-news{display:flex;justify-content:flex-end;align-items:center;margin-top:12px}
+.page-section .home-more-news-button{display:inline-flex;justify-content:center;align-items:center;min-height:32px;padding:5px 12px;background:#fff;border:1px solid #d8c3c6;border-radius:7px;color:var(--red,#b60013);font-size:13px;font-weight:800;line-height:1.4;text-decoration:none;transition:background .18s,border-color .18s}
+.page-section .home-more-news-button:hover,.page-section .home-more-news-button:focus-visible{background:#fff5f6;border-color:var(--red,#b60013);color:var(--red,#b60013)}
+.page-section .home-more-news-button:focus-visible{outline:2px solid var(--red,#b60013);outline-offset:2px}
+.hero-latest .home-more-news.home-panel-more{margin-top:0;padding:9px 13px 12px;border-top:1px solid var(--line,#e0e0e0)}
+@media(max-width:600px){.page-section .home-more-news{margin-top:9px}.page-section .home-more-news-button{font-size:12px;min-height:30px;padding:4px 10px}}
