@@ -282,13 +282,14 @@ def live_source():
  if re.fullmatch(r'UC[A-Za-z0-9_-]{22}',cid):
   return 'https://www.youtube-nocookie.com/embed/live_stream?channel='+cid
  return ''
-def live_embed():
+def live_embed(homepage=False):
  src=live_source()
  if src:
-  # Browsers permit reliable autoplay with audio muted; viewers can unmute.
+  # Autoplay muted, and on the homepage only after >=51% of the player is visible.
   separator='&' if '?' in src else '?'
   player_src=src+separator+'autoplay=1&mute=1&playsinline=1&rel=0'
-  return '<div class="tv-frame"><iframe src="'+E(player_src)+'" title="DD Sahyadri News - बाह्य YouTube प्रक्षेपण" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>'
+  source_attr=(' data-lokhit-auto-src="'+E(player_src)+'" src="about:blank"') if homepage else (' src="'+E(player_src)+'"')
+  return '<div class="tv-frame"><iframe'+source_attr+' title="DD Sahyadri News - बाह्य YouTube प्रक्षेपण" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>'
  return '<div class="tv-offline"><div class="tv-play-symbol">▶</div><h3>YouTube Live TV</h3><p>या विभागासाठी अधिकृत YouTube व्हिडिओ लिंक जोडली जाईल.</p></div>'
 def live_link():
  src=str(CFG.get('youtube_live_channel_url','')).strip()
@@ -300,7 +301,7 @@ def live_section(homepage=False):
  own=str(CFG.get('youtube_url','')).strip()
  own_btn='<p><a href="'+E(own)+'" target="_blank" rel="noopener noreferrer">▶ लोकहित महाराष्ट्रचे YouTube चॅनेल</a></p>' if own.startswith('https://www.youtube.com/') else ''
  note='हे '+label+' या बाह्य YouTube चॅनेलचे प्रक्षेपण आहे; लोकहित महाराष्ट्रचे स्वतःचे प्रक्षेपण नाही. कार्यक्रम लाइव्ह उपलब्ध असताना आवाज बंद ठेवून प्लेअर आपोआप सुरू होईल.'
- return '<section class="page-section live-tv-section"><div class="section-head"><h2><span class="on-air-dot"></span> YouTube Live TV</h2><a href="'+U('live-tv/')+'">Live TV पान उघडा ›</a></div><div class="tv-layout">'+live_embed()+'<div class="tv-info"><div class="tv-eyebrow">बाह्य YouTube प्रक्षेपण</div><h3>'+label+'</h3><p>'+E(note)+'</p>'+btn+own_btn+'<div class="tv-status-note">लाइव्ह दिसत नसल्यास <a href="https://prasarbharati.gov.in/en/live-tv/" target="_blank" rel="noopener noreferrer">प्रसार भारती Live TV</a> येथे पाहा. प्रसारकाचे लाइव्ह उपलब्ध असणे आणि YouTube embedding परवानगी यावर प्लेअर अवलंबून आहे.</div></div></div></section>'
+ return '<section class="page-section live-tv-section"><div class="section-head"><h2><span class="on-air-dot"></span> YouTube Live TV</h2><a href="'+U('live-tv/')+'">Live TV पान उघडा ›</a></div><div class="tv-layout">'+live_embed(homepage)+'<div class="tv-info"><div class="tv-eyebrow">बाह्य YouTube प्रक्षेपण</div><h3>'+label+'</h3><p>'+E(note)+'</p>'+btn+own_btn+'<div class="tv-status-note">लाइव्ह दिसत नसल्यास <a href="https://prasarbharati.gov.in/en/live-tv/" target="_blank" rel="noopener noreferrer">प्रसार भारती Live TV</a> येथे पाहा. प्रसारकाचे लाइव्ह उपलब्ध असणे आणि YouTube embedding परवानगी यावर प्लेअर अवलंबून आहे.</div></div></div></section>'
 
 # Homepage carousel is rendered from the editor-managed slider list.
 lead=next((p for p in POSTS if p.get('featured')),POSTS[0] if POSTS else None)
