@@ -278,7 +278,7 @@ def govt_directory_page():
 # video URL can be configured in site.json once a broadcast is available.
 def live_source():
  direct=str(CFG.get('youtube_live_url','')).strip()
- m=re.search(r'(?:youtube\\.com/(?:watch\\?v=|live/|embed/)|youtu\\.be/)([A-Za-z0-9_-]{11})',direct)
+ m=re.search(r'(?:youtube\.com/(?:watch\?v=|live/|embed/)|youtu\.be/)([A-Za-z0-9_-]{11})',direct)
  if m:return 'https://www.youtube-nocookie.com/embed/'+m.group(1)
  cid=str(CFG.get('youtube_live_channel_id','')).strip()
  if re.fullmatch(r'UC[A-Za-z0-9_-]{22}',cid):
