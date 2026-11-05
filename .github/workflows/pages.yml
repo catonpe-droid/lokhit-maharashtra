@@ -48,8 +48,6 @@ jobs:
           node --check assets/js/pin-admin.js
           node --check assets/js/cms.js
           node --check assets/js/site.js
-          node --check assets/js/local-weather.js
-          node --check assets/js/farmer-widgets.js
           node --check assets/js/sheets-public.js
           node --check --input-type=commonjs < backend/sheets-admin-code.gs
           node --check assets/js/google-admin.js
@@ -63,14 +61,11 @@ jobs:
       - name: Build Marathi news portal and all article pages
         run: |
           python build.py
-          test -f docs/assets/js/local-weather.js
-          grep -q 'id="lk-weather"' docs/index.html
-          grep -q 'local-weather.js' docs/index.html
-          grep -q 'weather-city-list' docs/index.html
-          grep -q 'class="lk-farmer-grid"' docs/index.html
-          grep -q 'id="lk-market-embed"' docs/index.html
-          grep -q 'lk-farmer-links' docs/index.html
-          grep -q 'assets/js/farmer-widgets.js' docs/index.html
+          # The three farmer widgets are intentionally removed from homepage.
+          if grep -Eq 'id="lk-weather"|id="lk-market-embed"|class="lk-farmer-grid"' docs/index.html; then
+            echo 'Unexpected retired widget still present in homepage' >&2
+            exit 1
+          fi
       - name: Sync finished website to repository root
         shell: bash
         run: |
