@@ -1,6 +1,42 @@
 (function(){
  const qs=(s)=>document.querySelector(s);const date=document.querySelector('#today-date');if(date)date.textContent=new Date().toLocaleDateString('mr-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
  const nav=qs('#nav-toggle'); if(nav){nav.addEventListener('click',()=>{const el=qs('#nav-links'); const open=el.classList.toggle('open');nav.setAttribute('aria-expanded',String(open));});}
+
+ // Only load the homepage's muted live TV when viewers can see most of it.
+ const tvFrames=[...document.querySelectorAll('iframe[data-lokhit-auto-src]')];
+ if(tvFrames.length){
+  const startTV=(frame)=>{
+   const source=frame.getAttribute('data-lokhit-auto-src');
+   if(!source)return;
+   frame.removeAttribute('data-lokhit-auto-src');
+   frame.src=source;
+  };
+  if('IntersectionObserver' in window){
+   const observer=new IntersectionObserver((entries)=>{
+    for(const entry of entries){
+     if(entry.isIntersecting&&entry.intersectionRatio>=0.51){
+      startTV(entry.target);
+      observer.unobserve(entry.target);
+     }
+    }
+   },{threshold:[0,0.51,1]});
+   tvFrames.forEach((frame)=>observer.observe(frame));
+  }else{
+   const check=()=>{
+    for(const frame of tvFrames){
+     if(!frame.hasAttribute('data-lokhit-auto-src'))continue;
+     const rect=frame.getBoundingClientRect();
+     if(rect.height<=0||rect.width<=0)continue;
+     const shown=Math.max(0,Math.min(rect.bottom,window.innerHeight)-Math.max(rect.top,0));
+     if(shown/rect.height>=0.51)startTV(frame);
+    }
+   };
+   window.addEventListener('scroll',check,{passive:true});
+   window.addEventListener('resize',check);
+   check();
+  }
+ }
+
  const tickerToggle=document.querySelector('.ticker-toggle');
  if(tickerToggle){
   tickerToggle.addEventListener('click',()=>{
