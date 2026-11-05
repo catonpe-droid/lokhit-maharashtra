@@ -622,11 +622,11 @@ body{background:#f5f6f8;color:#17273b}
 /* Compact Lokhit video TV: featured 16:9 player plus four small choices. */
 .live-tv-section .tv-layout.tv-compact{
  display:grid;
- grid-template-columns:minmax(0,1fr) 238px;
+ grid-template-columns:minmax(0,1fr) clamp(260px,26%,340px);
  gap:12px;
  width:100%;
- max-width:860px;
- margin:0 auto;
+ max-width:none;
+ margin:0;
  padding:10px;
  background:#fff;
  border:1px solid #e3e8ee;
@@ -636,7 +636,7 @@ body{background:#f5f6f8;color:#17273b}
  align-items:start;
 }
 .live-tv-section .tv-player-col{min-width:0}
-.live-tv-section .tv-frame{width:100%;aspect-ratio:16/9;max-height:340px;background:#0a1e3a;border-radius:8px;overflow:hidden}
+.live-tv-section .tv-frame{width:100%;aspect-ratio:16/9;max-height:none;background:#0a1e3a;border-radius:8px;overflow:hidden}
 .live-tv-section .tv-frame iframe{display:block;width:100%;height:100%;border:0}
 .live-tv-section .tv-player-meta{display:flex;align-items:center;gap:9px;padding:7px 2px 2px;min-width:0;font-size:12px;color:#24344f}
 .live-tv-section .tv-featured-label{color:#b70018;font-weight:800;white-space:nowrap}
@@ -672,8 +672,8 @@ body{background:#f5f6f8;color:#17273b}
 .live-tv-section .tv-card-play{font-size:10px;color:#b60017;justify-self:center}
 .live-tv-section .tv-all-videos{font-weight:700;font-size:12px;color:#b60017;text-decoration:none;padding:4px 2px}
 .live-tv-section .tv-all-videos:hover{text-decoration:underline}
-.live-tv-section>.section-head{max-width:860px;margin-left:auto;margin-right:auto}
-@media(max-width:660px){
+.live-tv-section>.section-head{max-width:none;width:100%;margin-left:0;margin-right:0}
+@media(max-width:780px){
  .live-tv-section .tv-layout.tv-compact{grid-template-columns:minmax(0,1fr);gap:8px;padding:8px}
  .live-tv-section .tv-video-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
  .live-tv-section .tv-video-sidebar-title{padding-top:3px}
@@ -689,4 +689,29 @@ body{background:#f5f6f8;color:#17273b}
  .live-tv-section .tv-video-card{grid-template-columns:72px minmax(0,1fr) 12px}
  .live-tv-section .tv-video-card img{width:72px;height:40px}
  .live-tv-section .tv-card-play{display:inline}
+}
+
+/* Fluid full-width video TV: only the site container limits the desktop width. */
+.live-tv-section{width:100%;min-width:0}
+.live-tv-section .tv-layout.tv-compact{box-sizing:border-box}
+.live-tv-section .tv-player-col,.live-tv-section .tv-video-sidebar{min-width:0}
+.live-tv-section .tv-frame{height:auto;min-width:0}
+.live-tv-section .tv-frame iframe{width:100%;height:100%;aspect-ratio:16/9}
+@media(min-width:781px) and (max-width:1030px){
+ .live-tv-section .tv-layout.tv-compact{grid-template-columns:minmax(0,1fr) 250px;gap:10px}
+ .live-tv-section .tv-video-card{grid-template-columns:68px minmax(0,1fr) 10px}
+ .live-tv-section .tv-video-card img{width:68px;height:38px}
+}
+@media(max-width:780px){
+ .live-tv-section .tv-layout.tv-compact{width:100%;max-width:none}
+ .live-tv-section .tv-video-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .live-tv-section .tv-video-sidebar{width:100%}
+}
+@media(max-width:480px){
+ .live-tv-section .tv-layout.tv-compact{border-radius:9px;gap:7px;padding:6px}
+ .live-tv-section .tv-frame{border-radius:6px}
+ .live-tv-section .tv-player-meta{font-size:11px;gap:6px}
+ .live-tv-section .tv-video-card{grid-template-columns:64px minmax(0,1fr);min-height:48px}
+ .live-tv-section .tv-video-card img{width:64px;height:36px}
+ .live-tv-section .tv-video-card .tv-card-play{display:none}
 }
