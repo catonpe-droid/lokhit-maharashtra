@@ -37,6 +37,35 @@
   }
  }
 
+
+ // Compact video TV: selecting a small thumbnail replaces the main player.
+ // The autoplay playlist continues with other Lokhit channel videos.
+ for(const section of document.querySelectorAll('.live-tv-section')){
+  const player=section.querySelector('iframe[data-lokhit-featured-player]');
+  if(!player)continue;
+  const cards=[...section.querySelectorAll('button.tv-video-card[data-video-id]')];
+  const starting=player.dataset.mainVideoId;
+  const ids=[starting,...cards.map(card=>card.dataset.videoId)].filter(id=>/^[A-Za-z0-9_-]{11}$/.test(id));
+  const currentTitle=section.querySelector('.tv-current-title');
+  for(const card of cards){
+   card.addEventListener('click',()=>{
+    const id=card.dataset.videoId;
+    if(!ids.includes(id))return;
+    const ordered=[id,...ids.filter(candidate=>candidate!==id)];
+    const params='?autoplay=1&mute=0&playsinline=1&rel=0&loop=1&playlist='+ordered.join(',');
+    player.removeAttribute('data-lokhit-auto-src');
+    player.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+params;
+    player.dataset.mainVideoId=id;
+    if(currentTitle)currentTitle.textContent=card.dataset.videoTitle||'लोकहित महाराष्ट्र व्हिडिओ';
+    for(const other of cards){
+     const selected=other===card;
+     other.classList.toggle('is-selected',selected);
+     other.setAttribute('aria-pressed',String(selected));
+    }
+   });
+  }
+ }
+
  const tickerToggle=document.querySelector('.ticker-toggle');
  if(tickerToggle){
   tickerToggle.addEventListener('click',()=>{
