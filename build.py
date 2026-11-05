@@ -153,7 +153,7 @@ def shell(content,title,desc,path='',image=None,kind='website',published=None,mo
  ticker_copy=''.join(f'<span class="ticker-item"><span class="ticker-star">◆</span>{item}</span>' for item in items)
  breakbar=(f'<div class="container"><div class="search-strip live-ticker"><span class="breaking-label"><span class="on-air-dot"></span> BREAKING NEWS</span><div class="ticker-window" aria-label="ब्रेकिंग न्यूज"><div class="ticker-move"><div class="ticker-segment">{ticker}</div><div class="ticker-segment" aria-hidden="true" inert>{ticker_copy}</div></div></div><button class="ticker-toggle" type="button" aria-label="ब्रेकिंग न्यूज पट्टी थांबवा" aria-pressed="false" title="Pause / Play">Ⅱ</button><a class="search-btn" href="{U("shodh/")}" aria-label="शोधा">⌕</a></div></div>' if items and ticker_settings.get('enabled',True) else '')
  meta=ld_head(title,desc,A(path),image,kind,published,modified)
- return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#b60013"><link rel="icon" type="image/png" href="{U('assets/img/favicon.png')}"><link rel="manifest" href="{U('manifest.webmanifest')}"><link rel="alternate" type="application/rss+xml" title="लोकहित महाराष्ट्र बातम्या" href="{U('rss.xml')}"><link rel="stylesheet" href="{U('assets/css/style.css')}?v=20261105-clean-news3">{meta}{GOV_STYLE if path in ("", "shasakiy-duve/") else ""}</head><body data-base="{E(BASE)}">
+ return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#b60013"><link rel="icon" type="image/png" href="{U('assets/img/favicon.png')}"><link rel="manifest" href="{U('manifest.webmanifest')}"><link rel="alternate" type="application/rss+xml" title="लोकहित महाराष्ट्र बातम्या" href="{U('rss.xml')}"><link rel="stylesheet" href="{U('assets/css/style.css')}?v=20261105-gov-sidebar1">{meta}{GOV_STYLE if path in ("", "shasakiy-duve/") else ""}</head><body data-base="{E(BASE)}">
 <div class="utility"><div class="container"><span><span id="today-date">महाराष्ट्राचा डिजिटल आवाज</span> · स्वतंत्र मराठी न्यूज पोर्टल</span><div class="utility-links">{quick}<a href="{U('privacy-policy/')}">Privacy Policy</a></div></div></div>
 <header class="brand-header"><div class="container brand-inner"><a href="{U()}" class="identity" aria-label="लोकहित महाराष्ट्र मुखपृष्ठ"><img src="{U('assets/img/logo.webp')}" alt="लोकहित महाराष्ट्र लोगो" class="site-logo" width="112" height="112"><div><div class="brand-title">लोकहित <span>महाराष्ट्र</span></div><div class="brand-tagline">{E(CFG['tagline'])}</div></div></a><div class="brand-actions"><a class="icon-btn" href="{U('shodh/')}" aria-label="बातमी शोधा">⌕ शोधा</a>{('<a class="live-nav-cta" href="'+U('live-tv/')+'">🔴 Live TV</a>') if home_enabled('live_tv',False) else ''}</div></div></header>
 <nav class="nav" aria-label="मुख्य मेनू"><div class="container nav-inner"><button id="nav-toggle" class="hamburger" aria-expanded="false" aria-controls="nav-links" aria-label="मेनू उघडा">☰</button><div class="nav-links" id="nav-links" style="display:contents">{nav}</div></div></nav>
@@ -352,6 +352,32 @@ if home_enabled('more',True):
  home+=section(str(HOME_SECTIONS.get('more',{}).get('title') or 'अधिक बातम्या')[:65],POSTS[offset:],'tajya-batmya/',limit=home_count('more'))
 home+='</div>'
 write('index.html',shell(home,'ताज्या बातम्या आणि महाराष्ट्राचे अपडेट्स',CFG['description']))
+# Compact, verified government service links in every article sidebar.
+# These are external official portals, not live news feeds or endorsements.
+GOVT_SIDEBAR_SERVICES=[
+ ("💰","PM-KISAN","हप्ता व लाभार्थी स्थिती","https://pmkisan.gov.in/"),
+ ("🌱","महाDBT शेतकरी","अनुदान व अर्जाची माहिती","https://mahadbt.maharashtra.gov.in/Farmer/"),
+ ("📜","महाभूलेख ७/१२","७/१२, ८अ व मालमत्ता पत्रक","https://bhulekh.mahabhumi.gov.in/"),
+ ("🏛️","आपले सरकार","दाखले व नागरिक सेवा","https://aaplesarkar.mahaonline.gov.in/"),
+ ("🛡️","पीक विमा योजना","विमा व दावा माहिती","https://pmfby.gov.in/"),
+ ("🌾","महाराष्ट्र कृषी विभाग","शेतीविषयक सूचना व योजना","https://krishi.maharashtra.gov.in/")
+]
+def government_sidebar_widget():
+ rows=[]
+ for symbol,name,subtitle,url in GOVT_SIDEBAR_SERVICES:
+  rows.append(
+   '<a class="govt-quick-link" href="'+E(url)+'" target="_blank" rel="noopener noreferrer">'
+   '<span class="govt-quick-icon" aria-hidden="true">'+E(symbol)+'</span>'
+   '<span class="govt-quick-copy"><strong>'+E(name)+'</strong><small>'+E(subtitle)+'</small></span>'
+   '<span class="govt-quick-arrow" aria-hidden="true">↗</span></a>'
+  )
+ return ('<div class="side-panel govt-quick-panel">'
+         '<div class="panel-title">🏛️ महत्त्वाचे शासकीय दुवे</div>'
+         '<nav class="govt-quick-links" aria-label="शेतकरी आणि नागरिकांसाठी महत्त्वाच्या शासकीय सेवा">'
+         +''.join(rows)+'</nav>'
+         '<p class="govt-quick-disclaimer">लिंक संबंधित अधिकृत संकेतस्थळावर उघडेल. योजना, अर्ज व मुदत तेथे तपासा.</p>'
+         '</div>')
+
 # Articles
 yt_patterns=[re.compile(r'(?:youtube\.com/(?:watch\?v=|shorts/|live/|embed/)|youtu\.be/)([A-Za-z0-9_-]{11})')]
 def youtube_id(text):
@@ -373,7 +399,7 @@ for p in POSTS:
  video=f'<div class="video-embed"><iframe src="https://www.youtube-nocookie.com/embed/{yvid}" title="संबंधित YouTube व्हिडिओ" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>' if yvid else ''
  bar='<div class="share-bar"><strong>ही बातमी शेअर करा :</strong><button class="share-btn share-wa" data-share="wa">WhatsApp</button><button class="share-btn share-fb" data-share="fb">Facebook</button><button class="share-btn share-x" data-share="x">X</button><button class="share-btn share-tg" data-share="tg">Telegram</button><button class="share-btn share-copy" data-share="copy">लिंक कॉपी</button><button class="share-btn share-native" data-share="native">इतर</button></div>'
  related=[q for q in POSTS if q['slug']!=p['slug'] and q['category']==p['category']][:2] or [q for q in POSTS if q['slug']!=p['slug']][:2]
- content=f'<div class="container">{breadcrumbs([E(p["category"]),E(p["title"])])}<div class="content-layout"><article class="article" data-news-revision="{E(p.get("updated") or p["date"])}"><span class="tag">{E(p["category"])}</span><h1>{E(p["title"])}</h1><p class="article-summary">{E(p["description"])}</p><div class="meta"><span>✍ {E(p.get("author",CFG["name"]))}</span><span>📅 {E(time_marathi(p["date"]))}</span></div><figure class="article-figure"><img src="{img(p)}" alt="{E(p["title"])}" width="960" height="540">{"<figcaption>प्रतीकात्मक, संगणकनिर्मित चित्र</figcaption>" if str(p.get("image","")).startswith("assets/img/story-") else ""}</figure>{bar}<div class="article-body">{"".join(body)}{video}</div>{tag_html}{bar}<div class="section-head"><h2>संबंधित बातम्या</h2></div><div class="related-grid">{"".join(card(q) for q in related)}</div></article><aside><div class="side-panel sidebar-box"><div class="panel-title">ताज्या बातम्या</div><div class="panel-content">{"".join(latest(q) for q in POSTS[:9])}</div></div><div class="side-panel"><div class="panel-title">लोकहित विशेष</div><div class="panel-content"><p>शेती, पाणी, रोजगार आणि शासन योजनांची माहिती</p><a class="admin-link" href="{U(CATEGORY_PATH["दुष्काळ विशेष"])}">सर्व लेख पहा</a></div></div></aside></div></div>'
+ content=f'<div class="container">{breadcrumbs([E(p["category"]),E(p["title"])])}<div class="content-layout"><article class="article" data-news-revision="{E(p.get("updated") or p["date"])}"><span class="tag">{E(p["category"])}</span><h1>{E(p["title"])}</h1><p class="article-summary">{E(p["description"])}</p><div class="meta"><span>✍ {E(p.get("author",CFG["name"]))}</span><span>📅 {E(time_marathi(p["date"]))}</span></div><figure class="article-figure"><img src="{img(p)}" alt="{E(p["title"])}" width="960" height="540">{"<figcaption>प्रतीकात्मक, संगणकनिर्मित चित्र</figcaption>" if str(p.get("image","")).startswith("assets/img/story-") else ""}</figure>{bar}<div class="article-body">{"".join(body)}{video}</div>{tag_html}{bar}<div class="section-head"><h2>संबंधित बातम्या</h2></div><div class="related-grid">{"".join(card(q) for q in related)}</div></article><aside><div class="side-panel sidebar-box"><div class="panel-title">ताज्या बातम्या</div><div class="panel-content">{"".join(latest(q) for q in POSTS[:9])}</div></div><div class="side-panel"><div class="panel-title">लोकहित विशेष</div><div class="panel-content"><p>शेती, पाणी, रोजगार आणि शासन योजनांची माहिती</p><a class="admin-link" href="{U(CATEGORY_PATH["दुष्काळ विशेष"])}">सर्व लेख पहा</a></div></div>{government_sidebar_widget()}</aside></div></div>'
  write(article_path(p)+'index.html',shell(content,p['title'],p['description'],article_path(p),share_preview_image(p),'article',p['date'],p.get('updated') or p['date']))
 # Category pages
 for cat,slug in PAGES:
@@ -391,7 +417,7 @@ path='tajya-batmya/'
 latest_content=f'<div class="container">{breadcrumbs(["ताज्या बातम्या"])}<div class="section-head"><h2>ताज्या बातम्या</h2></div><div class="news-grid" id="latest-all-grid">'+''.join(card(p) for p in POSTS)+'</div></div>'
 write(path+'index.html',shell(latest_content,'ताज्या बातम्या','लोकहित महाराष्ट्रच्या सर्व बातम्या',path,active=path))
 # Reader-accessible immediate article route: works before the next GitHub build.
-instant_sidebar='<aside><div class="side-panel sidebar-box"><div class="panel-title">ताज्या बातम्या</div><div class="panel-content" id="live-article-sidebar">'+''.join(latest(q) for q in POSTS[:9])+'</div></div><div class="side-panel"><div class="panel-title">लोकहित विशेष</div><div class="panel-content"><p>शेती, पाणी, रोजगार आणि शासन योजनांची माहिती</p><a class="admin-link" href="'+U(CATEGORY_PATH['दुष्काळ विशेष'])+'">सर्व लेख पहा</a></div></div></aside>'
+instant_sidebar='<aside><div class="side-panel sidebar-box"><div class="panel-title">ताज्या बातम्या</div><div class="panel-content" id="live-article-sidebar">'+''.join(latest(q) for q in POSTS[:9])+'</div></div><div class="side-panel"><div class="panel-title">लोकहित विशेष</div><div class="panel-content"><p>शेती, पाणी, रोजगार आणि शासन योजनांची माहिती</p><a class="admin-link" href="'+U(CATEGORY_PATH['दुष्काळ विशेष'])+'">सर्व लेख पहा</a></div></div>'+government_sidebar_widget()+'</aside>'
 instant_article='<div class="container"><div class="breadcrumbs" id="live-article-breadcrumb"><a href="'+U()+'">मुख्यपृष्ठ</a> / ताज्या बातम्या</div><div class="content-layout"><article class="article" id="sheet-article-root"><p class="article-summary">बातमी लोड होत आहे…</p></article>'+instant_sidebar+'</div></div>'
 # Keep legacy links working, but use a neutral public "live" URL for new news.
 # GitHub Pages serves this same full news layout at /batmi/<slug>/ before
