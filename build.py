@@ -173,7 +173,7 @@ def section(title,items,see=None,grid_id='',limit=4):
  if not items:return ''
  see=see or CATEGORY_PATH.get(title,'tajya-batmya/')
  grid_attr=' id="'+E(grid_id)+'"' if grid_id else ''
- return f'<section class="page-section"><div class="section-head"><h2>{E(title)}</h2><a href="{U(see)}">सर्व बातम्या ›</a></div><div class="news-grid"{grid_attr}>'+''.join(card(p) for p in items[:news_count(limit)])+'</div></section>'
+ return f'<section class="page-section"><div class="section-head"><h2>{E(title)}</h2></div><div class="news-grid"{grid_attr}>'+''.join(card(p) for p in items[:min(4,news_count(limit))])+f'</div><div class="home-more-news"><a class="home-more-news-button" href="{U(see)}">आणखी बातम्या वाचा ›</a></div></section>'
 def card(p):
  return f'<a class="news-card" data-article-slug="{E(p["slug"])}" href="{U(article_path(p))}"><img src="{img(p)}" alt="{E(p["title"])}" width="480" height="270" loading="lazy"><div class="card-body"><span class="category-kicker">{E(p["category"])}</span><h3>{E(p["title"])}</h3><p>{E(p["description"])}</p><div class="meta"><span>📅 {E(time_marathi(p["date"]))}</span><span>लोकहित डेस्क</span></div></div></a>'
 def stack(p):return f'<a class="stack-card" href="{U(article_path(p))}"><img src="{img(p)}" alt="" loading="lazy"><div><h3>{E(p["title"])}</h3><span class="meta">{E(time_marathi(p["date"]))}</span></div></a>'
@@ -346,7 +346,7 @@ if slides:
 else:
  hero='<div class="empty-state">बातम्या लवकरच उपलब्ध होतील.</div>'
 other_posts=[p for p in POSTS if not lead or p['slug']!=lead['slug']]
-home=f'<div class="container"><section class="page-section hero-layout">{hero}<div class="hero-stack">'+''.join(stack(p) for p in other_posts[:4])+f'</div><div class="hero-latest side-panel"><div class="panel-title">ताज्या बातम्या <a href="{U("tajya-batmya/")}">सर्व पहा ›</a></div><div class="panel-content">'+''.join(latest(p) for p in POSTS[5:11])+'</div></div></section>'
+home=f'<div class="container"><section class="page-section hero-layout">{hero}<div class="hero-stack">'+''.join(stack(p) for p in other_posts[:4])+f'</div><div class="hero-latest side-panel"><div class="panel-title">ताज्या बातम्या</div><div class="panel-content">'+''.join(latest(p) for p in POSTS[5:9])+f'</div><div class="home-more-news home-panel-more"><a class="home-more-news-button" href="{U("tajya-batmya/")}">आणखी बातम्या वाचा ›</a></div></div></section>'
 # Homepage blocks and categories are now managed from the secret News Admin.
 if home_enabled('latest',True):
  home+=section(str(HOME_SECTIONS.get('latest',{}).get('title') or 'ताज्या बातम्या')[:65],POSTS,'tajya-batmya/',grid_id='homepage-latest-grid',limit=home_count('latest'))
