@@ -337,18 +337,7 @@
       const link=heading.querySelector('a[href]');
       if(link){const href=link.getAttribute('href');link.remove();makeMore(href,section);}
     });
-    const panel=document.querySelector('.hero-latest.side-panel');
-    if(panel){
-      const content=panel.querySelector('.panel-content');
-      if(content){
-        [...content.querySelectorAll(':scope > .latest-item')].slice(4).forEach(n=>n.remove());
-        const topLink=panel.querySelector('.panel-title a[href]');
-        if(topLink){
-          const href=topLink.getAttribute('href');topLink.remove();
-          makeMore(href,panel);
-        }
-      }
-    }
+    // The hero sidebar is intentionally fuller than the four-card news grids.
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',limitHomeNews,{once:true});
   else limitHomeNews();
