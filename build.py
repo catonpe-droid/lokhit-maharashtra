@@ -2,6 +2,7 @@
 """Lokhit Maharashtra static mini-CMS renderer. No external pip dependencies."""
 import html, json, os, pathlib, re, shutil, datetime, urllib.parse, xml.etree.ElementTree as ET, hashlib, urllib.request
 from email.utils import format_datetime
+from functools import lru_cache
 from rich_renderer import render_rich
 from tina_markdown import render_markdown
 ROOT=pathlib.Path(__file__).resolve().parent
@@ -276,6 +277,7 @@ def govt_directory_page():
 # Live TV is explicitly credited to the external YouTube broadcaster.
 # Lokhit Maharashtra video TV - automatically queues the channel's uploads,
 # rather than a third-party live feed. The UU playlist updates when new uploads appear.
+@lru_cache(maxsize=1)
 def uploads_playlist_id():
  configured=str(CFG.get('youtube_uploads_playlist_id','')).strip()
  if re.fullmatch(r'UU[A-Za-z0-9_-]{22}',configured):
@@ -292,8 +294,8 @@ def uploads_playlist_id():
    'Accept-Language':'en-US,en;q=0.9'})
   with urllib.request.urlopen(req,timeout=6) as response:
    page=response.read(2000000).decode('utf-8','replace')
-  found=(re.search(r'<meta\\s+itemprop="channelId"\\s+content="(UC[A-Za-z0-9_-]{22})"',page)
-    or re.search(r'"(?:externalId|channelId|browseId)"\\s*:\\s*"(UC[A-Za-z0-9_-]{22})"',page)
+  found=(re.search(r'<meta\s+itemprop="channelId"\s+content="(UC[A-Za-z0-9_-]{22})"',page)
+    or re.search(r'"(?:externalId|channelId|browseId)"\s*:\s*"(UC[A-Za-z0-9_-]{22})"',page)
     or re.search(r'"/channel/(UC[A-Za-z0-9_-]{22})"',page))
   if found:
    print('Lokhit Maharashtra uploads playlist resolved:',found.group(1))
@@ -307,7 +309,7 @@ def live_source():
   return 'https://www.youtube-nocookie.com/embed/videoseries?list='+playlist
  # An optionally configured, verified Lokhit video can play while uploads are unavailable.
  direct=str(CFG.get('youtube_featured_video_url','')).strip()
- m=re.search(r'(?:youtube\\.com/(?:watch\\?v=|live/|embed/)|youtu\\.be/)([A-Za-z0-9_-]{11})',direct)
+ m=re.search(r'(?:youtube\.com/(?:watch\?v=|live/|embed/)|youtu\.be/)([A-Za-z0-9_-]{11})',direct)
  if m:return 'https://www.youtube-nocookie.com/embed/'+m.group(1)
  return ''
 def live_link():
