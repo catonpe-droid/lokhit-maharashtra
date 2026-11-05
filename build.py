@@ -274,34 +274,45 @@ def govt_directory_page():
          f'<p class="gov-disclaimer">सूचना: लोकहित महाराष्ट्र हे स्वतंत्र वृत्त व जनमाहिती पोर्टल आहे; शासकीय संकेतस्थळ नाही. बाह्य संकेतस्थळांवरील योजना, अर्ज, पात्रता, शुल्क आणि तारखा संबंधित शासकीय विभागाकडून तपासा. सर्व दुवे नवीन टॅबमध्ये उघडतात.</p>{GOV_SCRIPT}</div>')
 
 # Live TV is explicitly credited to the external YouTube broadcaster.
+# Lokhit Maharashtra's own channel only. A direct, embeddable YouTube live
+# video URL can be configured in site.json once a broadcast is available.
 def live_source():
  direct=str(CFG.get('youtube_live_url','')).strip()
- m=re.search(r'(?:youtube\.com/(?:watch\?v=|live/|embed/)|youtu\.be/)([A-Za-z0-9_-]{11})',direct)
+ m=re.search(r'(?:youtube\\.com/(?:watch\\?v=|live/|embed/)|youtu\\.be/)([A-Za-z0-9_-]{11})',direct)
  if m:return 'https://www.youtube-nocookie.com/embed/'+m.group(1)
  cid=str(CFG.get('youtube_live_channel_id','')).strip()
  if re.fullmatch(r'UC[A-Za-z0-9_-]{22}',cid):
   return 'https://www.youtube-nocookie.com/embed/live_stream?channel='+cid
  return ''
+def live_link():
+ return 'https://www.youtube.com/@LokhitMaharashtra/live'
 def live_embed(homepage=False):
  src=live_source()
  if src:
-  # Autoplay muted, and on the homepage only after >=51% of the player is visible.
+  # Muted autoplay is accepted by most modern browsers.
   separator='&' if '?' in src else '?'
   player_src=src+separator+'autoplay=1&mute=1&playsinline=1&rel=0'
   source_attr=(' data-lokhit-auto-src="'+E(player_src)+'" src="about:blank"') if homepage else (' src="'+E(player_src)+'"')
-  return '<div class="tv-frame"><iframe'+source_attr+' title="DD Sahyadri News - बाह्य YouTube प्रक्षेपण" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>'
- return '<div class="tv-offline"><div class="tv-play-symbol">▶</div><h3>YouTube Live TV</h3><p>या विभागासाठी अधिकृत YouTube व्हिडिओ लिंक जोडली जाईल.</p></div>'
-def live_link():
- src=str(CFG.get('youtube_live_channel_url','')).strip()
- return src if src.startswith('https://www.youtube.com/') else ''
+  return '<div class="tv-frame"><iframe'+source_attr+' title="लोकहित महाराष्ट्र - अधिकृत YouTube Live" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>'
+ # Never show third-party channel content or an unavailable black iframe.
+ return ('<div class="tv-offline lokhit-live-offline" role="status">'
+         '<img src="'+U('assets/img/logo.webp')+'" class="lokhit-live-logo" alt="लोकहित महाराष्ट्र लोगो">'
+         '<h3>लोकहित महाराष्ट्र Live TV</h3>'
+         '<p>सध्या आमचे लाइव्ह प्रक्षेपण उपलब्ध नाही.<br>व्हिडिओ व आगामी थेट प्रसारणासाठी आमचे YouTube चॅनेल पहा.</p>'
+         '<a class="tv-watch-link" href="'+E(live_link())+'" target="_blank" rel="noopener noreferrer">▶ लोकहित महाराष्ट्र YouTube उघडा</a>'
+         '</div>')
 def live_section(homepage=False):
- label=E(CFG.get('youtube_live_provider','YouTube channel'))
+ label='लोकहित महाराष्ट्र'
  url=live_link()
- btn='<a class="tv-watch-link" href="'+E(url)+'" target="_blank" rel="noopener noreferrer">DD सह्याद्री YouTube वर पाहा ↗</a>' if url else ''
- own=str(CFG.get('youtube_url','')).strip()
- own_btn='<p><a href="'+E(own)+'" target="_blank" rel="noopener noreferrer">▶ लोकहित महाराष्ट्रचे YouTube चॅनेल</a></p>' if own.startswith('https://www.youtube.com/') else ''
- note='हे '+label+' या बाह्य YouTube चॅनेलचे प्रक्षेपण आहे; लोकहित महाराष्ट्रचे स्वतःचे प्रक्षेपण नाही. कार्यक्रम लाइव्ह उपलब्ध असताना आवाज बंद ठेवून प्लेअर आपोआप सुरू होईल.'
- return '<section class="page-section live-tv-section"><div class="section-head"><h2><span class="on-air-dot"></span> YouTube Live TV</h2><a href="'+U('live-tv/')+'">Live TV पान उघडा ›</a></div><div class="tv-layout">'+live_embed(homepage)+'<div class="tv-info"><div class="tv-eyebrow">बाह्य YouTube प्रक्षेपण</div><h3>'+label+'</h3><p>'+E(note)+'</p>'+btn+own_btn+'<div class="tv-status-note">लाइव्ह दिसत नसल्यास <a href="https://prasarbharati.gov.in/en/live-tv/" target="_blank" rel="noopener noreferrer">प्रसार भारती Live TV</a> येथे पाहा. प्रसारकाचे लाइव्ह उपलब्ध असणे आणि YouTube embedding परवानगी यावर प्लेअर अवलंबून आहे.</div></div></div></section>'
+ has_live=bool(live_source())
+ btn='<a class="tv-watch-link" href="'+E(url)+'" target="_blank" rel="noopener noreferrer">▶ आमचे YouTube चॅनेल पहा ↗</a>'
+ note=('लोकहित महाराष्ट्रच्या अधिकृत YouTube चॅनेलवरील थेट प्रसारण. व्हिडिओ आवाज बंद ठेवून सुरू होऊ शकतो.' if has_live else
+       'हे लोकहित महाराष्ट्रचे स्वतःचे YouTube चॅनेल आहे. सध्या थेट प्रक्षेपण उपलब्ध नसल्यामुळे चॅनेलची लिंक दिली आहे.')
+ status=('टीप: लाइव्ह सुरू असतानाच व्हिडिओ प्ले होईल.' if has_live else
+         'लाइव्ह सुरू झाल्यावर या ठिकाणी व्हिडिओ जोडता येईल. तोपर्यंत इतर कोणत्याही चॅनेलचा व्हिडिओ दाखवला जाणार नाही.')
+ return ('<section class="page-section live-tv-section"><div class="section-head"><h2><span class="on-air-dot"></span> लोकहित महाराष्ट्र Live TV</h2><a href="'+U('live-tv/')+'">Live TV पान उघडा ›</a></div><div class="tv-layout">'
+         +live_embed(homepage)+'<div class="tv-info"><div class="tv-eyebrow">आमचे अधिकृत YouTube चॅनेल</div><h3>'+E(label)+'</h3><p>'+E(note)+'</p>'
+         +btn+'<div class="tv-status-note">'+E(status)+'</div></div></div></section>')
 
 # Homepage carousel is rendered from the editor-managed slider list.
 lead=next((p for p in POSTS if p.get('featured')),POSTS[0] if POSTS else None)
@@ -446,10 +457,10 @@ write(path+'index.html',shell(search_content,'बातमी शोधा','ल
 videos=[p for p in POSTS if youtube_id(p.get('video','')) or youtube_id(p.get('body','')) or any(isinstance(x,dict) and isinstance(x.get("insert"),dict) and x["insert"].get("video") for x in (p.get("rich_delta") if isinstance(p.get("rich_delta"),list) else []))]
 video_content=f'<div class="container">{breadcrumbs(["व्हिडिओ"])}<div class="section-head"><h2>व्हिडिओ बातम्या</h2><a href="{E(CFG.get("youtube_url","https://www.youtube.com/@LokhitMaharashtra"))}" target="_blank" rel="noopener noreferrer">▶ लोकहित महाराष्ट्र YouTube चॅनेल</a></div>'+( '<div class="news-grid">'+''.join(card(p) for p in videos)+'</div>' if videos else '<div class="empty-state">अधिकृत व्हिडिओ बातमी उपलब्ध झाल्यावर या विभागात दिसेल. प्रशासनातून बातमीमध्ये YouTube लिंक जोडा.</div>')+'</div>'
 write('video/index.html',shell(video_content,'व्हिडिओ बातम्या','YouTube व्हिडिओसह मराठी बातम्या','video/',active='video/'))
-# Live TV page with the provider explicitly credited
+# Live TV page dedicated exclusively to Lokhit Maharashtra
 if home_enabled('live_tv',False):
  livetv_content=f'<div class="container">{breadcrumbs(["Live TV"])}'+live_section(False)+'</div>'
- write('live-tv/index.html',shell(livetv_content,'YouTube Live TV | लोकहित महाराष्ट्र','बाह्य YouTube चॅनेलचे मराठी बातम्या व लाइव्ह प्रक्षेपण','live-tv/',active='live-tv/'))
+ write('live-tv/index.html',shell(livetv_content,'लोकहित महाराष्ट्र Live TV','लोकहित महाराष्ट्रच्या अधिकृत YouTube चॅनेलचे थेट प्रक्षेपण व व्हिडिओ','live-tv/',active='live-tv/'))
 # Curated government services directory
 write('shasakiy-duve/index.html',shell(govt_directory_page(),'महत्त्वाच्या शासकीय वेबसाइट्स','शेतकरी, महिला, विद्यार्थी, कामगार आणि संस्थांसाठी उपयुक्त अधिकृत शासकीय दुवे','shasakiy-duve/',active='shasakiy-duve/'))
 # Static editorial / legal pages
