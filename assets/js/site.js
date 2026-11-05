@@ -312,3 +312,44 @@
   if (document.getElementById('nav-links')) install();
   else if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
 })();
+
+
+/* Maintain compact homepage news sections after future static-site rebuilds. */
+(function(){
+  function limitHomeNews(){
+    if(!document.querySelector('#homepage-latest-grid'))return;
+    const label='आणखी बातम्या वाचा ›';
+    function makeMore(href,container){
+      if(!href||container.querySelector(':scope > .home-more-news'))return;
+      const row=document.createElement('div');
+      row.className='home-more-news';
+      const btn=document.createElement('a');
+      btn.className='home-more-news-button';
+      btn.href=href;btn.textContent=label;row.appendChild(btn);
+      container.appendChild(row);
+    }
+    document.querySelectorAll('main section.page-section').forEach(section=>{
+      const grid=section.querySelector(':scope > .news-grid');
+      const heading=section.querySelector(':scope > .section-head');
+      if(!grid||!heading)return;
+      const cards=[...grid.children].filter(n=>n.classList.contains('news-card'));
+      cards.slice(4).forEach(n=>n.remove());
+      const link=heading.querySelector('a[href]');
+      if(link){const href=link.getAttribute('href');link.remove();makeMore(href,section);}
+    });
+    const panel=document.querySelector('.hero-latest.side-panel');
+    if(panel){
+      const content=panel.querySelector('.panel-content');
+      if(content){
+        [...content.querySelectorAll(':scope > .latest-item')].slice(4).forEach(n=>n.remove());
+        const topLink=panel.querySelector('.panel-title a[href]');
+        if(topLink){
+          const href=topLink.getAttribute('href');topLink.remove();
+          makeMore(href,panel);
+        }
+      }
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',limitHomeNews,{once:true});
+  else limitHomeNews();
+})();
