@@ -617,3 +617,76 @@ body{background:#f5f6f8;color:#17273b}
  .govt-quick-panel .panel-title{font-size:17px}
  .govt-quick-links .govt-quick-link{min-height:49px}
 }
+
+
+/* Compact Lokhit video TV: featured 16:9 player plus four small choices. */
+.live-tv-section .tv-layout.tv-compact{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) 238px;
+ gap:12px;
+ width:100%;
+ max-width:860px;
+ margin:0 auto;
+ padding:10px;
+ background:#fff;
+ border:1px solid #e3e8ee;
+ border-radius:12px;
+ overflow:hidden;
+ box-shadow:0 3px 16px rgba(12,34,63,.06);
+ align-items:start;
+}
+.live-tv-section .tv-player-col{min-width:0}
+.live-tv-section .tv-frame{width:100%;aspect-ratio:16/9;max-height:340px;background:#0a1e3a;border-radius:8px;overflow:hidden}
+.live-tv-section .tv-frame iframe{display:block;width:100%;height:100%;border:0}
+.live-tv-section .tv-player-meta{display:flex;align-items:center;gap:9px;padding:7px 2px 2px;min-width:0;font-size:12px;color:#24344f}
+.live-tv-section .tv-featured-label{color:#b70018;font-weight:800;white-space:nowrap}
+.live-tv-section .tv-current-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.live-tv-section .tv-video-sidebar{min-width:0;display:flex;flex-direction:column;gap:7px}
+.live-tv-section .tv-video-sidebar-title{font-weight:800;color:#0d2341;font-size:13px;display:flex;align-items:baseline;justify-content:space-between;gap:6px;padding:1px 1px 0}
+.live-tv-section .tv-video-sidebar-title small{font-size:10px;color:#7a8492;font-weight:500}
+.live-tv-section .tv-video-list{display:grid;grid-template-columns:minmax(0,1fr);gap:6px}
+.live-tv-section .tv-video-card{
+ display:grid;
+ grid-template-columns:74px minmax(0,1fr) 11px;
+ align-items:center;
+ gap:7px;
+ width:100%;
+ min-width:0;
+ min-height:49px;
+ padding:4px;
+ border-radius:7px;
+ border:1px solid #e4e9f0;
+ background:#fbfcfe;
+ text-align:left;
+ color:#152c4d;
+ cursor:pointer;
+ font:inherit;
+ transition:border-color .15s,background .15s;
+}
+.live-tv-section .tv-video-card:hover,.live-tv-section .tv-video-card:focus-visible{
+ border-color:#bf0b22;background:#fff7f8;outline:none
+}
+.live-tv-section .tv-video-card.is-selected{border-color:#b9001a;background:#fff4f5}
+.live-tv-section .tv-video-card img{display:block;width:74px;height:42px;object-fit:cover;aspect-ratio:16/9;border-radius:4px;background:#e9edf3}
+.live-tv-section .tv-card-title{font-size:12px;font-weight:700;line-height:1.3;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
+.live-tv-section .tv-card-play{font-size:10px;color:#b60017;justify-self:center}
+.live-tv-section .tv-all-videos{font-weight:700;font-size:12px;color:#b60017;text-decoration:none;padding:4px 2px}
+.live-tv-section .tv-all-videos:hover{text-decoration:underline}
+.live-tv-section>.section-head{max-width:860px;margin-left:auto;margin-right:auto}
+@media(max-width:660px){
+ .live-tv-section .tv-layout.tv-compact{grid-template-columns:minmax(0,1fr);gap:8px;padding:8px}
+ .live-tv-section .tv-video-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ .live-tv-section .tv-video-sidebar-title{padding-top:3px}
+ .live-tv-section .tv-video-card{grid-template-columns:59px minmax(0,1fr);min-height:45px;gap:6px;padding:3px}
+ .live-tv-section .tv-video-card img{width:59px;height:35px}
+ .live-tv-section .tv-card-play{display:none}
+ .live-tv-section .tv-card-title{font-size:11px}
+ .live-tv-section .tv-frame{max-height:none}
+ .live-tv-section .tv-player-meta{padding-top:4px}
+}
+@media(max-width:360px){
+ .live-tv-section .tv-video-list{grid-template-columns:minmax(0,1fr)}
+ .live-tv-section .tv-video-card{grid-template-columns:72px minmax(0,1fr) 12px}
+ .live-tv-section .tv-video-card img{width:72px;height:40px}
+ .live-tv-section .tv-card-play{display:inline}
+}
