@@ -743,3 +743,32 @@ body{background:#f5f6f8;color:#17273b}
 .footer-udyam span{display:block;overflow-wrap:anywhere}
 @media(max-width:760px){.channel-topbar-inner{min-height:58px;padding-block:7px;justify-content:stretch;gap:6px}.channel-topbar-label{display:none}.channel-follow{width:100%;max-width:100%;gap:8px;padding:6px 9px}.channel-follow-play{width:34px;height:34px;flex-basis:34px;font-size:16px}.channel-follow-copy{flex:1}.channel-follow-copy strong{font-size:14px}.channel-follow-copy small{font-size:11px}.channel-follow-cta{font-size:12px;margin-left:0}}
 @media(max-width:360px){.channel-follow-cta{font-size:11px}.channel-follow-copy strong{font-size:13px}}
+
+
+/* Publisher/editor and MSME registration are visible in every header, including narrow phones. */
+.brand-inner{height:auto;min-height:126px;align-items:center}
+.identity{flex:1 1 auto;min-width:0;align-items:center}
+.brand-copy{flex:1;min-width:0;max-width:100%;overflow:visible}
+.brand-detail-lines{display:flex;flex-wrap:wrap;column-gap:18px;row-gap:4px;margin-top:9px;min-width:0;max-width:100%;line-height:1.42}
+.brand-editor,.brand-registration{font-size:13px;font-weight:650;color:#36445a;white-space:normal;min-width:0;max-width:100%;overflow-wrap:anywhere}
+.brand-editor strong{font-size:14px;font-weight:850;color:#153252}
+.brand-registration strong{font-size:13px;font-weight:850;color:#990b21;letter-spacing:.015em;overflow-wrap:anywhere}
+.brand-copy .brand-title,.brand-copy .brand-tagline{white-space:normal;overflow:visible;text-overflow:clip;max-width:100%}
+@media(max-width:768px){
+ .brand-inner{height:auto;min-height:106px;padding:11px 0;align-items:center;gap:6px}
+ .identity{flex:1 1 100%;min-width:0;max-width:100%;align-items:flex-start;gap:9px}
+ .brand-copy{min-width:0;max-width:100%}
+ .brand-detail-lines{display:flex;flex-direction:column;align-items:flex-start;gap:3px;margin-top:6px}
+ .brand-editor,.brand-registration{font-size:11px;line-height:1.42;max-width:100%;letter-spacing:0}
+ .brand-editor strong,.brand-registration strong{font-size:11px;font-weight:800}
+ .brand-actions{flex:0 0 auto}
+}
+@media(max-width:380px){
+ .brand-inner{padding:9px 0}
+ .identity{gap:7px}
+ .brand-header .site-logo{width:46px;height:46px}
+ .brand-copy .brand-title{font-size:22px;line-height:1.15}
+ .brand-copy .brand-tagline{font-size:10px}
+ .brand-detail-lines{margin-top:5px}
+ .brand-editor,.brand-registration,.brand-editor strong,.brand-registration strong{font-size:10.5px}
+}
