@@ -9,7 +9,7 @@ import re
 from urllib.parse import urlsplit, unquote
 
 _IMAGE = re.compile(r'^/?assets/img/(?!.*\.\.)[A-Za-z0-9_./-]+\.(?:jpg|jpeg|png|webp)$', re.I)
-_IMAGE_INLINE = re.compile(r'!\[([^\]]*)\]\((\S+?)(?:\s+["\'][^)]*["\'])?\)')
+_IMAGE_INLINE = re.compile(r'!\[([^\]]*)\]\((\S+?)(?:\s+["\']([^"\')]*)["\'])?\)')
 _URL = re.compile(r'\[([^\]]+)\]\(([^\s)]+)\)')
 _FORMATS = re.compile(r'(\*\*([^*\n]+)\*\*|~~([^~\n]+)~~|\*([^*\n]+)\*|\x60([^\x60\n]+)\x60)')
 _YOUTUBE = re.compile(r'(?:youtube(?:-nocookie)?\.com/(?:watch\?v=|shorts/|live/|embed/)|youtu\.be/)([A-Za-z0-9_-]{11})', re.I)
@@ -90,7 +90,7 @@ def _standalone_media(text, site_path):
     if match:
         src = _asset_path(match.group(2))
         if src:
-            return '<figure class="inline-news-photo"><img loading="lazy" src="'+_e(site_path(src))+'" alt="'+_e(match.group(1))+'"></figure>'
+            return '<figure class="inline-news-photo"><img loading="lazy" src="'+_e(site_path(src))+'" alt="'+_e(match.group(1))+'">'+('<figcaption>'+_e(match.group(3))+'</figcaption>' if match.group(3) else '')+'</figure>'
         return '<p>'+_e(stripped)+'</p>'
     if stripped.startswith(('https://youtube.com/', 'https://www.youtube.com/', 'https://youtu.be/', 'https://m.youtube.com/')):
         return _video(stripped)
