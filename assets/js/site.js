@@ -134,7 +134,7 @@
  document.addEventListener('click',async(event)=>{
   const btn=event.target.closest('[data-share]');
   if(!btn)return;
-  const link=(location.pathname==='/batmi/marathwada-dushkalmukti-duheri-jalmahamarg/' ? location.origin+location.pathname+'?share=20261113v2' : location.href),title=document.title.replace(' | लोकहित महाराष्ट्र','');
+  const link=(location.pathname==='/batmi/marathwada-dushkalmukti-duheri-jalmahamarg/' ? 'https://lokhitmaharashtra.com/share/anna-marathwada-jalmahamarg/' : location.href),title=document.title.replace(' | लोकहित महाराष्ट्र','');
   const t=btn.dataset.share;
   if(t==='native'){
    if(navigator.share){
