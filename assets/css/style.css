@@ -774,23 +774,133 @@ body{background:#f5f6f8;color:#17273b}
 }
 
 
-/* A single recognizable YouTube icon replaces the oversized channel strip. */
-.brand-actions .youtube-header-btn{
- display:inline-flex;align-items:center;justify-content:center;
- flex:0 0 43px;width:43px;height:43px;border:1px solid #f3c9cf;
- background:#fff;border-radius:11px;padding:0;text-decoration:none;
- box-shadow:0 1px 4px rgba(99,17,28,.10);transition:background .18s,border-color .18s;
+/* Lokhit header | balanced responsive branding + large official YouTube icon and Marathi label */
+.brand-header{
+  background:linear-gradient(105deg,#ffffff 0%,#ffffff 64%,#fff9f9 100%);
+  border-bottom:1px solid #ebd9dd;
 }
-.brand-actions .youtube-header-btn svg{display:block;flex-shrink:0;width:27px;height:27px}
-.brand-actions .youtube-header-btn:hover{background:#fff1f3;border-color:#ff8290}
-.brand-actions .youtube-header-btn:focus-visible{outline:3px solid #f04a5b;outline-offset:2px}
-@media(max-width:768px){
- .brand-actions .youtube-header-btn{display:inline-flex!important;flex:0 0 36px;width:36px;height:36px;min-width:36px;border-radius:9px}
- .brand-actions .youtube-header-btn svg{width:24px;height:24px}
- .brand-inner .brand-actions{align-self:center;flex:0 0 36px;margin-left:0}
+.brand-header .brand-inner{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:clamp(10px,2.5vw,28px);height:auto;min-height:134px;
+  padding:13px 0;
+}
+.brand-header .identity{
+  display:flex;align-items:center;flex:1 1 auto;min-width:0;
+  gap:clamp(10px,1.6vw,20px);
+}
+.brand-header .site-logo{
+  width:clamp(74px,7.5vw,104px);height:auto;aspect-ratio:1/1;
+  flex:0 0 auto;object-fit:contain;border-radius:50%;
+}
+.brand-header .brand-copy{min-width:0;flex:1 1 auto}
+.brand-header .brand-copy .brand-title{
+  font-size:clamp(36px,4.25vw,60px);font-weight:800;
+  line-height:1.11;letter-spacing:-.025em;white-space:normal;
+  overflow:visible;text-overflow:clip;
+}
+.brand-header .brand-copy .brand-tagline{
+  font-size:clamp(12px,1.2vw,16px);line-height:1.37;
+  font-weight:700;margin-top:3px;
+}
+.brand-header .brand-detail-lines{
+  display:flex;flex-wrap:wrap;align-items:center;column-gap:17px;row-gap:3px;
+  max-width:100%;padding-top:5px;margin-top:6px;
+  border-top:1px solid #edf0f4;
+}
+.brand-header .brand-editor,.brand-header .brand-registration{
+  line-height:1.5;font-size:12.5px;color:#46536a;
+  overflow-wrap:anywhere;white-space:normal;
+}
+.brand-header .brand-editor strong{color:#0e294d;font-size:13px}
+.brand-header .brand-registration strong{color:#ab0825;font-size:12.5px}
+.brand-header .brand-actions{
+  flex:0 0 auto;display:flex;flex-wrap:nowrap;align-items:center;
+  justify-content:flex-end;gap:10px;min-width:0;
+}
+.brand-header .brand-actions .youtube-header-btn{
+  display:inline-flex!important;flex-direction:column;align-items:center;
+  justify-content:center;gap:5px;box-sizing:border-box;
+  flex:0 0 142px;width:142px;min-width:142px;min-height:105px;height:auto;
+  padding:11px 9px 9px;margin:0;
+  border:1px solid #edc6cc;border-radius:14px;
+  background:linear-gradient(180deg,#fff 0%,#fff8f8 100%);
+  color:#102546;text-decoration:none;
+  box-shadow:0 3px 12px #580d1714;transition:box-shadow .2s,transform .2s,background .2s;
+}
+.brand-header .youtube-header-symbol{
+  display:flex;justify-content:center;align-items:center;min-height:42px;
+}
+.brand-header .youtube-header-symbol svg{
+  display:block;width:50px;height:39px;max-width:100%;flex-shrink:0;
+  filter:drop-shadow(0 2px 2px #a0001719);
+}
+.brand-header .youtube-header-label{
+  display:block;max-width:100%;line-height:1.25;text-align:center;
+  font-size:13px;font-weight:800;white-space:normal;overflow-wrap:normal;
+}
+.brand-header .youtube-header-btn:hover{
+  background:#fff1f3;box-shadow:0 5px 16px #90001824;transform:translateY(-1px);
+}
+.brand-header .youtube-header-btn:focus-visible{
+  outline:3px solid #ea5367;outline-offset:3px;
+}
+@media(max-width:980px){
+  .brand-header .brand-inner{min-height:119px;gap:12px;padding:12px 0}
+  .brand-header .site-logo{width:clamp(65px,8vw,84px)}
+  .brand-header .brand-copy .brand-title{font-size:clamp(28px,4vw,41px)}
+  .brand-header .brand-copy .brand-tagline{font-size:12px}
+  .brand-header .brand-detail-lines{column-gap:10px}
+  .brand-header .brand-editor,.brand-header .brand-registration{font-size:11.5px}
+  .brand-header .brand-actions .youtube-header-btn{
+    flex-basis:121px;width:121px;min-width:121px;min-height:96px;padding:9px 6px 8px;
+  }
+  .brand-header .youtube-header-label{font-size:11.7px}
+}
+@media(max-width:600px){
+  .brand-header .brand-inner{
+    min-height:116px;height:auto;padding:10px 0;gap:8px;align-items:center;
+    flex-wrap:nowrap;
+  }
+  .brand-header .identity{min-width:0;flex:1 1 auto;max-width:100%;gap:7px;align-items:center}
+  .brand-header .site-logo{width:clamp(45px,13.7vw,61px);height:auto;align-self:center}
+  .brand-header .brand-copy{flex:1 1 auto;min-width:0}
+  .brand-header .brand-copy .brand-title{font-size:clamp(21px,5.6vw,29px);line-height:1.12;letter-spacing:-.02em}
+  .brand-header .brand-copy .brand-tagline{font-size:10px;line-height:1.3;margin-top:4px}
+  .brand-header .brand-detail-lines{
+    display:flex;flex-direction:column;align-items:flex-start;
+    gap:2px;margin-top:5px;padding-top:0;border-top:0;min-width:0;
+  }
+  .brand-header .brand-editor,.brand-header .brand-registration,
+  .brand-header .brand-editor strong,.brand-header .brand-registration strong{
+    font-size:10.5px;line-height:1.4;letter-spacing:0;
+  }
+  .brand-header .brand-inner .brand-actions{
+    align-self:center;flex:0 0 95px;min-width:95px;margin-left:0;gap:0;
+  }
+  .brand-header .brand-actions .icon-btn{display:none}
+  .brand-header .brand-actions .youtube-header-btn{
+    display:inline-flex!important;flex:0 0 95px;width:95px;min-width:95px;
+    min-height:91px;padding:8px 5px 7px;gap:4px;border-radius:11px;
+  }
+  .brand-header .youtube-header-symbol{min-height:38px}
+  .brand-header .youtube-header-symbol svg{width:45px;height:34px}
+  .brand-header .youtube-header-label{font-size:10.5px;line-height:1.25}
 }
 @media(max-width:380px){
- .brand-actions .youtube-header-btn{flex-basis:32px;width:32px;min-width:32px;height:32px}
- .brand-actions .youtube-header-btn svg{width:22px;height:22px}
- .brand-inner .brand-actions{flex-basis:32px}
+  .brand-header .brand-inner{gap:6px;padding:9px 0}
+  .brand-header .identity{gap:6px}
+  .brand-header .site-logo{width:43px}
+  .brand-header .brand-copy .brand-title{font-size:20px}
+  .brand-header .brand-copy .brand-tagline{font-size:9.5px}
+  .brand-header .brand-editor,.brand-header .brand-registration,
+  .brand-header .brand-editor strong,.brand-header .brand-registration strong{font-size:10px}
+  .brand-header .brand-inner .brand-actions{flex-basis:84px;min-width:84px}
+  .brand-header .brand-actions .youtube-header-btn{
+    flex:0 0 84px;width:84px;min-width:84px;min-height:87px;padding:7px 3px 6px;
+  }
+  .brand-header .youtube-header-symbol svg{width:40px;height:32px}
+  .brand-header .youtube-header-label{font-size:9.7px}
+}
+@media(prefers-reduced-motion:reduce){
+  .brand-header .youtube-header-btn{transition:none}
 }
