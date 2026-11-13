@@ -1,21 +1,23 @@
 {
   "name": "लोकहित महाराष्ट्र",
   "tagline": "जनहिताच्या बातम्या, महाराष्ट्राचा डिजिटल आवाज",
-  "description": "महाराष्ट्र, मराठवाडा, शेती, दुष्काळ, शासन योजना आणि ग्रामीण विकासाच्या बातम्या व माहिती.",
+  "description": "महाराष्ट्र आणि मराठवाड्यातील ताज्या मराठी बातम्या, शेती, दुष्काळ, पाणीप्रश्न, शासकीय योजना, ग्रामीण विकास आणि समाजहिताच्या बातम्या — लोकहित महाराष्ट्र.",
   "site_url": "https://lokhitmaharashtra.com/",
   "base_path": "/",
   "github_repo": "catonpe-droid/lokhit-maharashtra",
   "contact_email": "",
   "editor_name": "",
-  "youtube_url": "https://www.youtube.com/@LokhitMaharashtra",
+  "youtube_url": "https://www.youtube.com/@LokhitMaharashtra1",
   "facebook_url": "",
   "instagram_url": "",
   "twitter_url": "",
   "youtube_live_channel_id": "",
   "youtube_live_url": "",
   "youtube_live_provider": "लोकहित महाराष्ट्र",
-  "youtube_live_channel_url": "https://www.youtube.com/@LokhitMaharashtra/live",
+  "youtube_live_channel_url": "https://www.youtube.com/@LokhitMaharashtra1/live",
   "custom_domain": "lokhitmaharashtra.com",
-  "youtube_channel_id": "UCg15PCKSlSw8r2Qwlplmeug",
-  "youtube_uploads_playlist_id": "UUg15PCKSlSw8r2Qwlplmeug"
+  "youtube_channel_id": "",
+  "youtube_uploads_playlist_id": "",
+  "publisher_legal_name": "LOKHIT MAHARASHTRA AND NAVNIRMAN EDUCATION AND INFORMATION SERVICES",
+  "udyam_registration_number": "UDYAM-MH-04-0076224"
 }

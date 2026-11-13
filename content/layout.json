@@ -59,7 +59,7 @@
     {
       "title": "व्हिडिओ",
       "href": "video/",
-      "enabled": true
+      "enabled": false
     },
     {
       "title": "विश्लेषण",
@@ -217,7 +217,7 @@
       "description": "पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी"
     },
     "live_tv": {
-      "enabled": true
+      "enabled": false
     },
     "more": {
       "enabled": true,

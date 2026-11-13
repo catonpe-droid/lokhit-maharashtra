@@ -724,3 +724,22 @@ body{background:#f5f6f8;color:#17273b}
 .page-section .home-more-news-button:focus-visible{outline:2px solid var(--red,#b60013);outline-offset:2px}
 .hero-latest .home-more-news.home-panel-more{margin-top:0;padding:9px 13px 12px;border-top:1px solid var(--line,#e0e0e0)}
 @media(max-width:600px){.page-section .home-more-news{margin-top:9px}.page-section .home-more-news-button{font-size:12px;min-height:30px;padding:4px 10px}}
+
+
+/* Channel identity: clickable at top, readable on all screen sizes */
+.channel-topbar{background:#a8071d;color:#fff;border-bottom:1px solid #880014}
+.channel-topbar-inner{display:flex;justify-content:flex-end;align-items:center;gap:15px;min-height:53px;padding-block:7px}
+.channel-topbar-label{font-size:13px;font-weight:800;white-space:nowrap;letter-spacing:.02em}
+.channel-follow{display:inline-flex;align-items:center;min-width:0;gap:11px;padding:7px 14px 7px 8px;border-radius:11px;background:#fff;color:#172139;text-decoration:none;box-shadow:0 2px 10px #00000015;transition:transform .15s,background .15s}
+.channel-follow:hover,.channel-follow:focus-visible{background:#fff5f5;transform:translateY(-1px)}
+.channel-follow:focus-visible{outline:3px solid #ffcccb;outline-offset:2px}
+.channel-follow-play{display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;border-radius:9px;background:#ed1425;color:#fff;font-size:19px}
+.channel-follow-copy{min-width:0;display:flex;flex-direction:column;gap:1px;line-height:1.3}
+.channel-follow-copy strong{font-size:16px;font-weight:850;white-space:normal}
+.channel-follow-copy small{font-size:12px;color:#465165;overflow-wrap:anywhere}
+.channel-follow-cta{font-size:13px;font-weight:850;color:#bc0618;white-space:nowrap;margin-left:4px}
+.footer-udyam{font-size:12px;line-height:1.5;color:#d4d9e1;margin-top:12px}
+.footer-udyam strong{color:#fff;font-weight:750}
+.footer-udyam span{display:block;overflow-wrap:anywhere}
+@media(max-width:760px){.channel-topbar-inner{min-height:58px;padding-block:7px;justify-content:stretch;gap:6px}.channel-topbar-label{display:none}.channel-follow{width:100%;max-width:100%;gap:8px;padding:6px 9px}.channel-follow-play{width:34px;height:34px;flex-basis:34px;font-size:16px}.channel-follow-copy{flex:1}.channel-follow-copy strong{font-size:14px}.channel-follow-copy small{font-size:11px}.channel-follow-cta{font-size:12px;margin-left:0}}
+@media(max-width:360px){.channel-follow-cta{font-size:11px}.channel-follow-copy strong{font-size:13px}}
