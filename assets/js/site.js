@@ -135,7 +135,7 @@
   const btn=event.target.closest('[data-share]');
   if(!btn)return;
   const link=(location.pathname==='/batmi/marathwada-dushkalmukti-duheri-jalmahamarg/' ? 'https://lokhitmaharashtra.com/share/anna-marathwada-jalmahamarg/' : location.href),title=document.title.replace(' | लोकहित महाराष्ट्र','');
-  const whatsappMessage='📰 *'+title+'*\n🔗 *संपूर्ण बातमी वाचा:*\n'+link+'\n\n🗞️ *लोकहित महाराष्ट्र*\nजनतेचा आवाज • सत्याचा ध्यास • समाजहिताचा विश्वास\n🌾 शेती, ग्रामीण विकास व समाजहिताच्या बातम्या\n📺 *आमचे YouTube चॅनेल:*\nhttps://www.youtube.com/@LokhitMaharashtra1';
+  const whatsappMessage='📰 *'+title+'*\n🔗 *संपूर्ण माहिती वाचा:*\n'+link+'\n\n🗞️ *लोकहित महाराष्ट्र*\nजनतेचा आवाज • सत्याचा ध्यास • समाजहिताचा विश्वास\n🌾 शेती, ग्रामीण विकास व समाजहिताच्या बातम्या\n📺 *आमचे YouTube चॅनेल:*\nhttps://www.youtube.com/@LokhitMaharashtra1';
   const t=btn.dataset.share;
   if(t==='native'){
    if(navigator.share){
