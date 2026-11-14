@@ -280,47 +280,17 @@ def govt_directory_page():
          f'<div class="gov-empty" id="gov-no-results" hidden>या नावाने कोणताही दुवा सापडला नाही. दुसरा शब्द वापरून शोधा.</div>'
          f'<p class="gov-disclaimer">सूचना: लोकहित महाराष्ट्र हे स्वतंत्र वृत्त व जनमाहिती पोर्टल आहे; शासकीय संकेतस्थळ नाही. बाह्य संकेतस्थळांवरील योजना, अर्ज, पात्रता, शुल्क आणि तारखा संबंधित शासकीय विभागाकडून तपासा. सर्व दुवे नवीन टॅबमध्ये उघडतात.</p>{GOV_SCRIPT}</div>')
 
-# Live TV is explicitly credited to the external YouTube broadcaster.
-# Compact Lokhit Maharashtra video player: featured video and four channel picks.
-# The YouTube playlist parameter allows playback to continue to the next item.
-LOKHIT_VIDEOS=[
- ('ljw_b7h6HqA','विशेष व्हिडिओ'),
- ('cYe2sc91RA8','पाण्याचा प्रत्येक थेंब'),
- ('iUp2W1r_YZ8','एक झाड'),
- ('OCE1lZ2sMYk','खोप्यामंदी खोपा'),
- ('gTxUldst0v4','पाऊस २०२५')
-]
+# Old fixed YouTube videos are intentionally removed. No legacy video IDs or
+# third-party video embeds should be published from the site template.
+# Keep the link to the verified Lokhit Maharashtra YouTube channel.
 def live_link():
  return str(CFG.get('youtube_url','https://www.youtube.com/@LokhitMaharashtra1')).rstrip('/')+'/videos'
-def video_embed_url(video_id):
- ids=[video_id]+[vid for vid,_ in LOKHIT_VIDEOS if vid!=video_id]
- return ('https://www.youtube-nocookie.com/embed/'+video_id+
-   '?autoplay=1&mute=1&playsinline=1&rel=0&loop=1&playlist='+','.join(ids))
-def live_embed(homepage=False):
- primary=LOKHIT_VIDEOS[0][0]
- player_src=video_embed_url(primary)
- source_attr=(' data-lokhit-auto-src="'+E(player_src)+'" src="about:blank"') if homepage else (' src="'+E(player_src)+'"')
- return ('<div class="tv-frame"><iframe data-lokhit-featured-player data-main-video-id="'+primary+'"'+source_attr+
-  ' title="लोकहित महाराष्ट्र विशेष व्हिडिओ" loading="eager" referrerpolicy="strict-origin-when-cross-origin"'
-  ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>')
 def live_section(homepage=False):
- picks=[]
- for i,(video_id,title) in enumerate(LOKHIT_VIDEOS[1:]):
-  picks.append('<button type="button" class="tv-video-card" data-video-id="'+E(video_id)+'" data-video-title="'+E(title)+'" aria-label="'+E(title)+' व्हिडिओ पाहा">'
-    '<img src="https://i.ytimg.com/vi/'+E(video_id)+'/mqdefault.jpg" loading="lazy" alt="">'
-    '<span class="tv-card-title">'+E(title)+'</span><span class="tv-card-play" aria-hidden="true">▶</span></button>')
- side=''.join(picks)
  return ('<section class="page-section live-tv-section">'
-  '<div class="section-head"><h2><span class="on-air-dot"></span> लोकहित महाराष्ट्र व्हिडिओ TV</h2>'
-  '<a href="'+U('live-tv/')+'">व्हिडिओ पान उघडा ›</a></div>'
-  '<div class="tv-layout tv-compact">'
-  '<div class="tv-player-col">'+live_embed(homepage)+
-  '<div class="tv-player-meta"><span class="tv-featured-label">▶ विशेष व्हिडिओ</span>'
-  '<span class="tv-current-title" aria-live="polite">लोकहित महाराष्ट्र — मुख्य व्हिडिओ</span></div></div>'
-  '<div class="tv-video-sidebar"><div class="tv-video-sidebar-title">आणखी व्हिडिओ <small>लोकहित महाराष्ट्र</small></div>'
-  '<div class="tv-video-list">'+side+'</div>'
-  '<a class="tv-all-videos" href="'+E(live_link())+'" target="_blank" rel="noopener noreferrer">सर्व YouTube व्हिडिओ पहा ↗</a>'
-  '</div></div></section>')
+   '<div class="section-head"><h2>लोकहित महाराष्ट्र YouTube</h2></div>'
+   '<p>नवीन व्हिडिओंसाठी आमच्या अधिकृत YouTube चॅनेलला भेट द्या.</p>'
+   '<p><a class="tv-all-videos" href="'+E(live_link())+'" target="_blank" rel="noopener noreferrer">आमच्या YouTube चॅनेलवरील व्हिडिओ पाहा ↗</a></p>'
+   '</section>')
 
 # Homepage carousel is rendered from the editor-managed slider list.
 lead=next((p for p in POSTS if p.get('featured')),POSTS[0] if POSTS else None)
