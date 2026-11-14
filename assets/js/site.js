@@ -135,10 +135,11 @@
   const btn=event.target.closest('[data-share]');
   if(!btn)return;
   const link=(location.pathname==='/batmi/marathwada-dushkalmukti-duheri-jalmahamarg/' ? 'https://lokhitmaharashtra.com/share/anna-marathwada-jalmahamarg/' : location.href),title=document.title.replace(' | लोकहित महाराष्ट्र','');
+  const whatsappMessage='📰 *'+title+'*\\n🔗 *संपूर्ण बातमी वाचा:*\\n'+link+'\n\n🗞️ *लोकहित महाराष्ट्र*\nजनतेचा आवाज • सत्याचा ध्यास • समाजहिताचा विश्वास\n🌾 शेती, ग्रामीण विकास व समाजहिताच्या बातम्या\n📺 *आमचे YouTube चॅनेल:*\nhttps://www.youtube.com/@LokhitMaharashtra1';
   const t=btn.dataset.share;
   if(t==='native'){
    if(navigator.share){
-    try{await navigator.share({title,url:link,text:title})}
+    try{await navigator.share({title,text:whatsappMessage})}
     catch(e){if(e?.name!=='AbortError')notify('शेअर करता आले नाही. लिंक कॉपी वापरा.')}
    }else{const done=await copyShareUrl(link);if(done)notify('बातमीची लिंक कॉपी झाली')}
    return;
@@ -149,7 +150,7 @@
    return;
   }
   const links={
-   wa:'https://api.whatsapp.com/send?text='+encodeURIComponent(title+'\n'+link),
+   wa:'https://api.whatsapp.com/send?text='+encodeURIComponent(whatsappMessage),
    fb:'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(link),
    x:'https://twitter.com/intent/tweet?text='+encodeURIComponent(title)+'&url='+encodeURIComponent(link),
    tg:'https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent(title)

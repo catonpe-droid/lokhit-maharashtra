@@ -109,7 +109,8 @@
   // Real anchors work in mobile, WhatsApp Web and browsers that block pop-ups.
   const wrap=make('div','share-bar');
   wrap.append(make('strong','','ही बातमी शेअर करा :'));
-  const link=urlFor(p),txt=String(p.title||'बातमी')+'\n'+location.origin+link;
+  const link=urlFor(p),articleLink=location.origin+link;
+  const txt='📰 *'+String(p.title||'बातमी')+'*\\n🔗 *संपूर्ण बातमी वाचा:*\\n'+articleLink+'\n\n🗞️ *लोकहित महाराष्ट्र*\nजनतेचा आवाज • सत्याचा ध्यास • समाजहिताचा विश्वास\n🌾 शेती, ग्रामीण विकास व समाजहिताच्या बातम्या\n📺 *आमचे YouTube चॅनेल:*\nhttps://www.youtube.com/@LokhitMaharashtra1';
   const destinations=[
    ['wa','WhatsApp','https://api.whatsapp.com/send?text='+encodeURIComponent(txt)],
    ['fb','Facebook','https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.origin+link)],
