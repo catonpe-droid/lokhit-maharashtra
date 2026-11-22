@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-22 17:42:50",
+  "snapshotAt": "2026-11-22 18:33:59",
   "generatedOn": "2026-11-22",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 126,
-    "districtsWithRegistrations": 21,
+    "organizations": 132,
+    "districtsWithRegistrations": 22,
     "districtsTotal": 36,
-    "workers": 2059,
-    "villages": 9140,
+    "workers": 2126,
+    "villages": 9226,
     "verified": 0
   },
   "districts": [
@@ -67,16 +67,16 @@
     },
     {
       "name": "छत्रपती संभाजीनगर",
-      "count": 19,
+      "count": 20,
       "workers": 263,
-      "villages": 1146,
+      "villages": 1147,
       "verified": 0,
       "activities": {
         "water": 12,
         "livestock": 6,
         "survey": 7,
         "scheme": 1,
-        "awareness": 7,
+        "awareness": 8,
         "relief": 5,
         "livelihood": 1,
         "community": 3
@@ -152,18 +152,18 @@
     },
     {
       "name": "धाराशिव",
-      "count": 19,
-      "workers": 333,
-      "villages": 1365,
+      "count": 21,
+      "workers": 365,
+      "villages": 1405,
       "verified": 0,
       "activities": {
-        "water": 10,
-        "livestock": 15,
-        "survey": 13,
-        "scheme": 4,
+        "water": 11,
+        "livestock": 16,
+        "survey": 15,
+        "scheme": 5,
         "awareness": 4,
         "relief": 4,
-        "livelihood": 3,
+        "livelihood": 4,
         "community": 2
       }
     },
@@ -220,17 +220,17 @@
     },
     {
       "name": "हिंगोली",
-      "count": 6,
-      "workers": 142,
-      "villages": 96,
+      "count": 7,
+      "workers": 147,
+      "villages": 106,
       "verified": 0,
       "activities": {
-        "water": 5,
-        "livestock": 3,
+        "water": 6,
+        "livestock": 4,
         "survey": 3,
         "scheme": 4,
-        "awareness": 4,
-        "relief": 3,
+        "awareness": 5,
+        "relief": 4,
         "livelihood": 1,
         "community": 1
       }
@@ -577,17 +577,17 @@
     },
     {
       "name": "वर्धा",
-      "count": 0,
-      "workers": 0,
-      "villages": 0,
+      "count": 1,
+      "workers": 10,
+      "villages": 25,
       "verified": 0,
       "activities": {
-        "water": 0,
-        "livestock": 0,
-        "survey": 0,
-        "scheme": 0,
-        "awareness": 0,
-        "relief": 0,
+        "water": 1,
+        "livestock": 1,
+        "survey": 1,
+        "scheme": 1,
+        "awareness": 1,
+        "relief": 1,
         "livelihood": 0,
         "community": 0
       }
@@ -611,13 +611,13 @@
     },
     {
       "name": "यवतमाळ",
-      "count": 6,
-      "workers": 175,
-      "villages": 340,
+      "count": 7,
+      "workers": 195,
+      "villages": 350,
       "verified": 0,
       "activities": {
-        "water": 2,
-        "livestock": 2,
+        "water": 3,
+        "livestock": 3,
         "survey": 4,
         "scheme": 0,
         "awareness": 3,
@@ -631,37 +631,37 @@
     {
       "key": "water",
       "label": "जलसंधारण व पाणी",
-      "count": 81
+      "count": 85
     },
     {
       "key": "livestock",
       "label": "चारा व पशुधन",
-      "count": 68
+      "count": 72
     },
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 67
+      "count": 70
     },
     {
       "key": "scheme",
       "label": "शासकीय योजना व समन्वय",
-      "count": 24
+      "count": 26
     },
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 53
+      "count": 56
     },
     {
       "key": "relief",
       "label": "मदत व साहित्य वितरण",
-      "count": 41
+      "count": 43
     },
     {
       "key": "livelihood",
       "label": "शेती व उपजीविका",
-      "count": 12
+      "count": 13
     },
     {
       "key": "community",
@@ -676,12 +676,12 @@
     },
     {
       "date": "2026-11-22",
-      "count": 53
+      "count": 59
     }
   ],
   "quality": {
-    "notYetVerified": 126,
+    "notYetVerified": 132,
     "noMatchedCapacityCategory": 7,
-    "taggedCapacity": 119
+    "taggedCapacity": 125
   }
 }
