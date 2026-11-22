@@ -54,7 +54,7 @@ const sample={title:"शेतकऱ्यांसाठी पाणी नि
 {
  const resp=await worker.fetch(req("GET","/health"),env);
  assert.equal(resp.status,200);
- const health=await resp.json();assert.equal(health.ready,true);assert.ok(health.features.includes("editor"));assert.ok(health.features.includes("section-counts"));
+ const health=await resp.json();assert.equal(health.ready,true);assert.ok(health.features.includes("editor"));assert.ok(health.features.includes("section-counts"));assert.ok(health.features.includes("custom-slug"));
 }
 {
  const resp=await worker.fetch(req("POST","/publish","invalid-secret",sample),env);
@@ -194,5 +194,21 @@ let latestSha=docs.get("content/posts/"+savedSlug+".json").sha;
  const d=await res.json();
  assert.equal(d.saved,true);
  assert.equal(docs.get("content/posts/"+d.slug+".json").item.category,"युवा घडामोडी");
+}
+{
+  const desired="shetkari-pani-yojana";
+  const result=await worker.fetch(req("POST","/save",KEY,{article:{...sample,requested_slug:desired,status:"published",body_changed:true}}),env);
+  assert.equal(result.status,200);
+  const saved=await result.json();assert.equal(saved.slug,desired);
+  assert.equal(saved.url.endsWith("/batmi/"+desired+"/"),true);
+  const file=docs.get("content/posts/"+desired+".json");assert.equal(file.item.slug,desired);
+  const duplicate=await worker.fetch(req("POST","/save",KEY,{article:{...sample,requested_slug:desired,status:"published",body_changed:true}}),env);
+  assert.equal(duplicate.status,409);
+  const invalid=await worker.fetch(req("POST","/save",KEY,{article:{...sample,requested_slug:"Invalid Slug!",status:"published",body_changed:true}}),env);
+  assert.equal(invalid.status,400);
+  const update=await worker.fetch(req("POST","/save",KEY,{article:{...sample,slug:desired,expected_sha:file.sha,requested_slug:"must-not-rename",status:"draft",body_changed:false}}),env);
+  assert.equal(update.status,200);
+  assert.equal((await update.json()).slug,desired);
+  assert.equal(docs.has("content/posts/must-not-rename.json"),false);
 }
 console.log("Secret Publisher + Admin Studio tests passed. No live API writes.");
