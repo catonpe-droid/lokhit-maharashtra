@@ -1,31 +1,31 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-22 18:33:59",
+  "snapshotAt": "2026-11-22 20:10:03",
   "generatedOn": "2026-11-22",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 132,
+    "organizations": 135,
     "districtsWithRegistrations": 22,
     "districtsTotal": 36,
-    "workers": 2126,
-    "villages": 9226,
+    "workers": 2158,
+    "villages": 9296,
     "verified": 0
   },
   "districts": [
     {
       "name": "अहिल्यानगर",
-      "count": 1,
-      "workers": 5,
-      "villages": 122,
+      "count": 2,
+      "workers": 10,
+      "villages": 142,
       "verified": 0,
       "activities": {
         "water": 1,
         "livestock": 1,
         "survey": 1,
-        "scheme": 0,
-        "awareness": 0,
+        "scheme": 1,
+        "awareness": 1,
         "relief": 0,
         "livelihood": 0,
         "community": 0
@@ -356,16 +356,16 @@
     },
     {
       "name": "नांदेड",
-      "count": 10,
-      "workers": 189,
-      "villages": 815,
+      "count": 12,
+      "workers": 216,
+      "villages": 865,
       "verified": 0,
       "activities": {
-        "water": 5,
+        "water": 7,
         "livestock": 5,
         "survey": 6,
         "scheme": 1,
-        "awareness": 3,
+        "awareness": 4,
         "relief": 4,
         "livelihood": 0,
         "community": 0
@@ -631,7 +631,7 @@
     {
       "key": "water",
       "label": "जलसंधारण व पाणी",
-      "count": 85
+      "count": 87
     },
     {
       "key": "livestock",
@@ -646,12 +646,12 @@
     {
       "key": "scheme",
       "label": "शासकीय योजना व समन्वय",
-      "count": 26
+      "count": 27
     },
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 56
+      "count": 58
     },
     {
       "key": "relief",
@@ -676,12 +676,12 @@
     },
     {
       "date": "2026-11-22",
-      "count": 59
+      "count": 62
     }
   ],
   "quality": {
-    "notYetVerified": 132,
+    "notYetVerified": 135,
     "noMatchedCapacityCategory": 7,
-    "taggedCapacity": 125
+    "taggedCapacity": 128
   }
 }
