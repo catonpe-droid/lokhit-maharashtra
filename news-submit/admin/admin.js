@@ -6,7 +6,7 @@
   const raw=location.hash.startsWith('#key=')?location.hash.slice(5):'';
   let key='';
   try{key=decodeURIComponent(raw).trim()}catch{key=raw.trim()}
-  let worker='',ready=false,busy=false,quill=null,posts=[],active=null,baseline=null,editorChanged=false,plainMode=false,page=1,hasMore=false,filter='all',imageURL='',pendingPhoto='';
+  let worker='',ready=false,customSlugReady=false,busy=false,quill=null,posts=[],active=null,baseline=null,editorChanged=false,plainMode=false,page=1,hasMore=false,filter='all',imageURL='',pendingPhoto='';
   const alertMsg=(message,bad=false)=>{
     const el=$('status');el.textContent=message;el.className='state '+(bad?'bad':'ok');
   };
@@ -15,6 +15,13 @@
     const img=$('cover-preview');img.classList.add('hidden');img.removeAttribute('src');
   }
   function postURL(slug){return SITE+'batmi/'+encodeURIComponent(slug)+'/';}
+  const CUSTOM_SLUG=/^[a-z0-9][a-z0-9-]{1,78}[a-z0-9]$/;
+  function updateSlugPreview(){
+    const el=$('slug'),current=el.value.trim();
+    el.readOnly=!!active;
+    $('slug-help').textContent=active?'जुन्या बातमीची URL बदलणार नाही. नवीन बातमीसाठी वेगळी URL निवडता येईल.':'नवीन बातमी: ३–८० लहान इंग्रजी अक्षरे, अंक किंवा hyphen (-) वापरा. रिकामे ठेवल्यास URL आपोआप तयार होईल.';
+    $('slug-preview').textContent=active?'सध्याची लिंक: '+postURL(active.slug):(current?'नवीन लिंक: '+postURL(current):'URL रिकामी असल्यास बातमी Save करताना स्वयंचलित लिंक मिळेल.');
+  }
   async function api(path,method='GET',body=null){
     if(!worker||key.length<32)throw Error('गुप्त प्रकाशन Key आणि Worker जोडणी आवश्यक आहे.');
     const options={method,cache:'no-store',headers:{Authorization:'Bearer '+key,...(body?{'Content-Type':'application/json'}:{})}};
@@ -68,7 +75,7 @@
     $('post-form').reset();$('title').value='';$('author').value='लोकहित महाराष्ट्र डिजिटल डेस्क';$('category').value='महाराष्ट्र';$('post-status').value='published';
     $('featured').checked=false;$('slug').value='';$('tags').value='';$('video').value='';$('description').value='';$('post-date').textContent='नवीन बातमी';
     $('editor-heading').textContent='📰 नवीन बातमी';$('delete').classList.add('hidden');$('published').classList.add('hidden');
-    resetPreviewPhoto();setBody({body:''});countDesc();renderList();
+    resetPreviewPhoto();setBody({body:''});countDesc();updateSlugPreview();renderList();
   }
   function countDesc(){$('desc-count').textContent=String($('description').value||'').length}
   function renderList(){
@@ -112,7 +119,7 @@
       $('author').value=p.author||'लोकहित महाराष्ट्र डिजिटल डेस्क';$('description').value=p.description||'';
       $('tags').value=Array.isArray(p.tags)?p.tags.join(', '):'';$('video').value=p.video||'';
       $('post-status').value=p.status==='draft'?'draft':'published';$('featured').checked=!!p.featured;
-      $('slug').value=p.slug;$('post-date').textContent=String(p.date||'').slice(0,19).replace('T',' ')||'—';
+      $('slug').value=p.slug;updateSlugPreview();$('post-date').textContent=String(p.date||'').slice(0,19).replace('T',' ')||'—';
       $('editor-heading').textContent='✏️ बातमी संपादित करा';
       $('delete').classList.remove('hidden');$('published').classList.add('hidden');
       resetPreviewPhoto();pendingPhoto='';
@@ -149,7 +156,7 @@
     const bodyData=articleBodyPayload();
     const title=$('title').value.trim(),description=$('description').value.trim();
     return {article:{
-      ...(active?{slug:active.slug,expected_sha:active.sha}:{}),
+      ...(active?{slug:active.slug,expected_sha:active.sha}:($('slug').value.trim()?{requested_slug:$('slug').value.trim()}:{})),
       title,category:$('category').value,author:$('author').value.trim(),
       description,body:bodyData.body,
       ...(bodyData.body_changed?{rich_delta:bodyData.rich_delta}:{}),
@@ -172,13 +179,15 @@
     if(!$('post-form').reportValidity())return;
     const data=dataFromForm(status);
     if(data.article.title.length<8||data.article.body.length<30){alertMsg('शीर्षक आणि किमान ३० अक्षरांची बातमी लिहा.',true);return}
+    if(data.article.requested_slug&&!CUSTOM_SLUG.test(data.article.requested_slug)){alertMsg('URL साठी ३–८० लहान इंग्रजी अक्षरे, अंक व hyphen वापरा. सुरुवात/शेवट hyphen ने नको.',true);return}
+    if(data.article.requested_slug&&!customSlugReady){alertMsg('Custom URL साठी Cloudflare Worker ची नवीन आवृत्ती Deploy करणे आवश्यक आहे. त्यानंतर Save करा.',true);return}
     setBusy(true);alertMsg('🕓 बातमी जतन होत आहे…');
     try{
       data.photo=await photoAsJPEG($('photo').files[0]);
       const result=await api('/save','POST',data);
       const url=postURL(result.slug);
       active={slug:result.slug,sha:result.sha,status};
-      $('slug').value=result.slug;$('delete').classList.remove('hidden');
+      $('slug').value=result.slug;updateSlugPreview();$('delete').classList.remove('hidden');
       $('post-status').value=status;
       $('post-date').textContent=String(result.date||new Date().toISOString()).slice(0,19).replace('T',' ');
       $('editor-heading').textContent='✏️ बातमी संपादित करा';
@@ -451,6 +460,11 @@
     $('preview').addEventListener('click',preview);
     $('close-preview').addEventListener('click',()=>$('preview-dialog').close());
     $('description').addEventListener('input',countDesc);
+    $('slug').addEventListener('input',()=>{
+      if(active)return;
+      const el=$('slug');el.value=el.value.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'').replace(/-+/g,'-').slice(0,80);
+      updateSlugPreview();
+    });
     $('search').addEventListener('input',renderList);
     document.querySelectorAll('[data-status]').forEach(b=>b.addEventListener('click',()=>{
       filter=b.dataset.status;document.querySelectorAll('[data-status]').forEach(x=>x.classList.toggle('active',x===b));renderList();
@@ -508,6 +522,7 @@
       if(!status.ready)throw Error('Cloudflare Worker अजून Configure झालेला नाही.');
       siteSettingsReady=Array.isArray(status.features)&&status.features.includes('homepage')&&status.features.includes('categories');
       sectionCountsReady=Array.isArray(status.features)&&status.features.includes('section-counts');
+      customSlugReady=Array.isArray(status.features)&&status.features.includes('custom-slug');
       if(!Array.isArray(status.features)||!status.features.includes('editor')) {
         alertMsg('Admin UI तयार आहे. जुनी बातमी Edit/Delete करण्यासाठी अद्ययावत Worker Code Cloudflare मध्ये Deploy करणे आवश्यक आहे.',true);
         return;
