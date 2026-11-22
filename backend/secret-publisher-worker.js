@@ -133,6 +133,7 @@ async function publish(env, request) {
  * GitHub token remains a Worker secret; no credentials are sent to GitHub Pages.
  */
 const slugAllowed=s=>typeof s==="string"&&/^[a-z0-9][a-z0-9_-]{2,115}$/.test(s);
+const customSlugAllowed=s=>typeof s==="string"&&/^[a-z0-9][a-z0-9-]{1,78}[a-z0-9]$/.test(s);
 async function githubRequest(env,path,method="GET",body){
   const headers={
     "Accept":"application/vnd.github+json",
@@ -259,6 +260,15 @@ async function isAllowedCategory(env,category){
   }catch{return false}
 }
 
+async function ensureUnusedNewsSlug(env,slug){
+  try{
+    await githubRequest(env,"contents/content/posts/"+encodeURIComponent(slug)+".json?ref=main");
+  }catch(e){
+    if(e.status===404)return;
+    throw e;
+  }
+  fail("ही बातमी URL आधीच वापरली आहे. दुसरी URL निवडा.",409);
+}
 async function saveArticle(env,request){
   const raw=await request.text();
   if(encoder.encode(raw).byteLength>MAX_REQUEST)fail("बातमी / फोटो खूप मोठा आहे.",413);
@@ -283,8 +293,15 @@ async function saveArticle(env,request){
     if(!p.expected_sha||p.expected_sha!==file.sha)fail("ही बातमी दुसऱ्या ठिकाणी बदलली आहे. Refresh करून पुन्हा Edit करा.",409);
     old=decodeGitHub(file);
   }else{
-    const nonce=Array.from(crypto.getRandomValues(new Uint8Array(6)),x=>x.toString(16).padStart(2,"0")).join("");
-    slug="news-"+now.replace(/\D/g,"").slice(0,14)+"-"+nonce;
+    const requested=clean(p.requested_slug,120);
+    if(requested){
+      if(!customSlugAllowed(requested))fail("Custom URL साठी ३–८० लहान इंग्रजी अक्षरे, अंक व hyphen वापरा.");
+      await ensureUnusedNewsSlug(env,requested);
+      slug=requested;
+    }else{
+      const nonce=Array.from(crypto.getRandomValues(new Uint8Array(6)),x=>x.toString(16).padStart(2,"0")).join("");
+      slug="news-"+now.replace(/\D/g,"").slice(0,14)+"-"+nonce;
+    }
   }
   let image=old.image||"assets/img/logo.webp";
   if(photo){
@@ -421,7 +438,7 @@ export default {
     if(request.method==="OPTIONS") return new Response(null,{status:204,headers:cors});
     const url = new URL(request.url);
     if(url.pathname==="/health" && request.method==="GET") {
-      return json({ready:!!(env.GITHUB_TOKEN && env.PUBLISH_KEY),features:["publish","editor","list","edit","draft","delete","layout","homepage","categories","section-counts"]},200,cors);
+      return json({ready:!!(env.GITHUB_TOKEN && env.PUBLISH_KEY),features:["publish","editor","list","edit","draft","delete","layout","homepage","categories","section-counts","custom-slug"]},200,cors);
     }
     const route=url.pathname,method=request.method;
     const valid=(route==="/publish"&&method==="POST")||
