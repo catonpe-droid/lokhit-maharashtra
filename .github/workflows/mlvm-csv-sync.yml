@@ -1,0 +1,47 @@
+name: MLVM published CSV dashboard sync
+
+on:
+  push:
+    paths:
+      - ".github/workflows/mlvm-csv-sync.yml"
+      - "MLVMData/dashboard/sync_live_csv.py"
+      - "MLVMData/dashboard/build_map.py"
+  schedule:
+    # GitHub Actions cron is best-effort (usually every ~5 minutes, sometimes delayed).
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mlvm-dashboard-csv-sync
+  cancel-in-progress: false
+
+jobs:
+  sync-dashboard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out public dashboard
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Aggregate published CSV without storing personal information
+        run: python3 MLVMData/dashboard/sync_live_csv.py
+      - name: Build district map if missing
+        run: |
+          if [ ! -s MLVMData/dashboard/map.json ]; then
+            python3 MLVMData/dashboard/build_map.py || echo "Map temporarily unavailable; dashboard data remains available."
+          fi
+      - name: Commit only if aggregate data or map changed
+        run: |
+          git add -A -- MLVMData/dashboard/data.json MLVMData/dashboard/map.json
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore(mlvm): refresh aggregated registration dashboard"
+            git push
+          else
+            echo "No changed aggregate statistics or map."
+          fi
