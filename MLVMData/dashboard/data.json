@@ -1,0 +1,687 @@
+{
+  "schemaVersion": 1,
+  "snapshotAt": "2026-11-22 17:25:38",
+  "generatedOn": "2026-11-22",
+  "live": false,
+  "sourceMode": "published_csv",
+  "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
+  "totals": {
+    "organizations": 125,
+    "districtsWithRegistrations": 20,
+    "districtsTotal": 36,
+    "workers": 2052,
+    "villages": 9118,
+    "verified": 0
+  },
+  "districts": [
+    {
+      "name": "अहिल्यानगर",
+      "count": 1,
+      "workers": 5,
+      "villages": 122,
+      "verified": 0,
+      "activities": {
+        "water": 1,
+        "livestock": 1,
+        "survey": 1,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "अकोला",
+      "count": 1,
+      "workers": 4,
+      "villages": 7,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 1,
+        "scheme": 0,
+        "awareness": 1,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "अमरावती",
+      "count": 1,
+      "workers": 5,
+      "villages": 10,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 1,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "छत्रपती संभाजीनगर",
+      "count": 19,
+      "workers": 263,
+      "villages": 1146,
+      "verified": 0,
+      "activities": {
+        "water": 12,
+        "livestock": 6,
+        "survey": 7,
+        "scheme": 1,
+        "awareness": 7,
+        "relief": 5,
+        "livelihood": 1,
+        "community": 3
+      }
+    },
+    {
+      "name": "बीड",
+      "count": 11,
+      "workers": 196,
+      "villages": 318,
+      "verified": 0,
+      "activities": {
+        "water": 11,
+        "livestock": 9,
+        "survey": 6,
+        "scheme": 3,
+        "awareness": 7,
+        "relief": 8,
+        "livelihood": 1,
+        "community": 2
+      }
+    },
+    {
+      "name": "भंडारा",
+      "count": 2,
+      "workers": 35,
+      "villages": 35,
+      "verified": 0,
+      "activities": {
+        "water": 1,
+        "livestock": 1,
+        "survey": 1,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "बुलढाणा",
+      "count": 3,
+      "workers": 41,
+      "villages": 100,
+      "verified": 0,
+      "activities": {
+        "water": 3,
+        "livestock": 0,
+        "survey": 2,
+        "scheme": 1,
+        "awareness": 3,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "चंद्रपूर",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "धाराशिव",
+      "count": 19,
+      "workers": 333,
+      "villages": 1365,
+      "verified": 0,
+      "activities": {
+        "water": 10,
+        "livestock": 15,
+        "survey": 13,
+        "scheme": 4,
+        "awareness": 4,
+        "relief": 4,
+        "livelihood": 3,
+        "community": 2
+      }
+    },
+    {
+      "name": "धुळे",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "गडचिरोली",
+      "count": 3,
+      "workers": 55,
+      "villages": 135,
+      "verified": 0,
+      "activities": {
+        "water": 2,
+        "livestock": 2,
+        "survey": 1,
+        "scheme": 1,
+        "awareness": 2,
+        "relief": 2,
+        "livelihood": 0,
+        "community": 1
+      }
+    },
+    {
+      "name": "गोंदिया",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "हिंगोली",
+      "count": 6,
+      "workers": 142,
+      "villages": 96,
+      "verified": 0,
+      "activities": {
+        "water": 5,
+        "livestock": 3,
+        "survey": 3,
+        "scheme": 4,
+        "awareness": 4,
+        "relief": 3,
+        "livelihood": 1,
+        "community": 1
+      }
+    },
+    {
+      "name": "जळगाव",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "जालना",
+      "count": 12,
+      "workers": 190,
+      "villages": 475,
+      "verified": 0,
+      "activities": {
+        "water": 10,
+        "livestock": 8,
+        "survey": 7,
+        "scheme": 2,
+        "awareness": 4,
+        "relief": 3,
+        "livelihood": 2,
+        "community": 0
+      }
+    },
+    {
+      "name": "कोल्हापूर",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "लातूर",
+      "count": 18,
+      "workers": 204,
+      "villages": 1511,
+      "verified": 0,
+      "activities": {
+        "water": 12,
+        "livestock": 10,
+        "survey": 9,
+        "scheme": 7,
+        "awareness": 8,
+        "relief": 6,
+        "livelihood": 2,
+        "community": 2
+      }
+    },
+    {
+      "name": "मुंबई शहर",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "मुंबई उपनगर",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "नागपूर",
+      "count": 1,
+      "workers": 5,
+      "villages": 10,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 1,
+        "scheme": 0,
+        "awareness": 1,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 1
+      }
+    },
+    {
+      "name": "नांदेड",
+      "count": 10,
+      "workers": 189,
+      "villages": 815,
+      "verified": 0,
+      "activities": {
+        "water": 5,
+        "livestock": 5,
+        "survey": 6,
+        "scheme": 1,
+        "awareness": 3,
+        "relief": 4,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "नंदुरबार",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "नाशिक",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "पालघर",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "परभणी",
+      "count": 5,
+      "workers": 58,
+      "villages": 2169,
+      "verified": 0,
+      "activities": {
+        "water": 4,
+        "livestock": 4,
+        "survey": 2,
+        "scheme": 0,
+        "awareness": 1,
+        "relief": 4,
+        "livelihood": 1,
+        "community": 1
+      }
+    },
+    {
+      "name": "पुणे",
+      "count": 1,
+      "workers": 50,
+      "villages": 53,
+      "verified": 0,
+      "activities": {
+        "water": 1,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "रायगड",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "रत्नागिरी",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "सांगली",
+      "count": 3,
+      "workers": 36,
+      "villages": 91,
+      "verified": 0,
+      "activities": {
+        "water": 1,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 1,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "सातारा",
+      "count": 2,
+      "workers": 56,
+      "villages": 220,
+      "verified": 0,
+      "activities": {
+        "water": 1,
+        "livestock": 2,
+        "survey": 1,
+        "scheme": 0,
+        "awareness": 2,
+        "relief": 1,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "सिंधुदुर्ग",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "सोलापूर",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "ठाणे",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "वर्धा",
+      "count": 0,
+      "workers": 0,
+      "villages": 0,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 0,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "वाशिम",
+      "count": 1,
+      "workers": 10,
+      "villages": 100,
+      "verified": 0,
+      "activities": {
+        "water": 0,
+        "livestock": 0,
+        "survey": 0,
+        "scheme": 0,
+        "awareness": 1,
+        "relief": 0,
+        "livelihood": 0,
+        "community": 0
+      }
+    },
+    {
+      "name": "यवतमाळ",
+      "count": 6,
+      "workers": 175,
+      "villages": 340,
+      "verified": 0,
+      "activities": {
+        "water": 2,
+        "livestock": 2,
+        "survey": 4,
+        "scheme": 0,
+        "awareness": 3,
+        "relief": 1,
+        "livelihood": 1,
+        "community": 0
+      }
+    }
+  ],
+  "activities": [
+    {
+      "key": "water",
+      "label": "जलसंधारण व पाणी",
+      "count": 81
+    },
+    {
+      "key": "livestock",
+      "label": "चारा व पशुधन",
+      "count": 68
+    },
+    {
+      "key": "survey",
+      "label": "सर्वेक्षण व लाभार्थी",
+      "count": 66
+    },
+    {
+      "key": "scheme",
+      "label": "शासकीय योजना व समन्वय",
+      "count": 24
+    },
+    {
+      "key": "awareness",
+      "label": "जनजागृती व प्रशिक्षण",
+      "count": 52
+    },
+    {
+      "key": "relief",
+      "label": "मदत व साहित्य वितरण",
+      "count": 41
+    },
+    {
+      "key": "livelihood",
+      "label": "शेती व उपजीविका",
+      "count": 12
+    },
+    {
+      "key": "community",
+      "label": "समुदाय व सामाजिक आधार",
+      "count": 13
+    }
+  ],
+  "dates": [
+    {
+      "date": "2026-11-21",
+      "count": 73
+    },
+    {
+      "date": "2026-11-22",
+      "count": 52
+    }
+  ],
+  "quality": {
+    "notYetVerified": 125,
+    "noMatchedCapacityCategory": 7,
+    "taggedCapacity": 118
+  }
+}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="mr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>महाराष्ट्र लोक विकास मंच | ड्राऊट वॉरियर संस्था नोंदणी</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ad262b;--ink:#24332d;--muted:#718078;--gold:#f3c85e;--line:#e5e8e4;--soft:#f8f9f5}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(150deg,#f2f5ed,#fff8ec);font-family:Mukta,system-ui,sans-serif;color:var(--ink);font-size:16px;min-height:100vh}
+header{background:#fff;border-bottom:1px solid #eee;box-shadow:0 2px 22px #23402b10}
+.top{max-width:980px;margin:auto;padding:14px 18px;display:flex;align-items:center;gap:16px}
+.logo{width:80px;height:80px;object-fit:contain;flex-shrink:0}.brand{font-size:21px;font-weight:800;line-height:1.25;color:#792522}.subbrand{font-size:14px;color:#526054;font-weight:600}
+.wrap{max-width:980px;margin:24px auto 40px;padding:0 16px}
+.hero{background:linear-gradient(115deg,#842b28,#b23d30);color:#fff;border-radius:18px;padding:22px 26px;box-shadow:0 10px 24px #952e2b22;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;border:16px solid #ffffff0f;width:220px;height:220px;border-radius:50%;right:-50px;top:-130px}
+.eyebrow{display:inline-block;padding:4px 11px;border-radius:100px;background:#ffffff2a;font-size:13px;font-weight:700;letter-spacing:.2px}
+.hero h1{margin:10px 0 6px;font-size:clamp(25px,4vw,36px);line-height:1.25;font-weight:800}.hero p{font-size:16px;max-width:780px;margin:0;opacity:.95}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:17px;margin-top:17px;align-items:start}
+.panel{background:white;border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px #324b3610;overflow:hidden}
+.panelhead{padding:21px 24px 10px}.panelhead h2{font-size:22px;margin:0 0 5px;color:#742822}.panelhead p{margin:0;color:var(--muted);font-size:14px}
+form{padding:8px 24px 24px}.divider{font-size:16px;font-weight:800;color:#8b302b;margin:17px 0 9px;border-bottom:1px solid #f2e9df;padding-bottom:5px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}.field.full{grid-column:1/-1}
+label{display:block;font-size:14px;font-weight:700;margin-bottom:5px;color:#38473f}
+.star{color:#c33030}input,select,textarea{width:100%;border:1px solid #d9dfd8;background:#fff;border-radius:9px;padding:11px 12px;font:500 16px Mukta,system-ui,sans-serif;color:var(--ink);outline:none;transition:border .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{border-color:#aa6142;box-shadow:0 0 0 3px #cc9a6528}
+textarea{min-height:100px;resize:vertical}.hint{font-size:12px;color:#829089;margin-top:3px}
+.checkline{display:flex;align-items:start;gap:9px;margin:18px 0 12px;padding:13px;background:#faf9f3;border:1px solid #e9e3d5;border-radius:9px;font-size:13px;line-height:1.5}.checkline input{width:18px;height:18px;margin-top:3px;flex-shrink:0;accent-color:#8e342c}
+.submit{width:100%;border:0;border-radius:11px;padding:13px;background:#96372e;color:#fff;font:800 18px Mukta,system-ui,sans-serif;cursor:pointer;box-shadow:0 5px 14px #7f2b2833}.submit:disabled{opacity:.55;cursor:wait}.submit:hover:not(:disabled){background:#782820}
+.alert{display:none;padding:12px 14px;background:#fff1ed;border:1px solid #f4cbc2;color:#9d2821;border-radius:9px;font-size:14px;margin:12px 0}
+.side{padding:18px 20px}.side h3{margin:0 0 10px;font-size:18px;color:#7a2e28}.side p{font-size:14px;color:#546258;line-height:1.55;margin:5px 0 13px}.side ul{padding-left:0;list-style:none;margin:0}.side li{display:flex;gap:8px;padding:9px 0;border-bottom:1px solid #f0f0ef;font-size:14px}.tick{color:#277848;font-weight:800}
+.side .note{font-size:13px;line-height:1.55;background:#f8f4e9;padding:12px;border-radius:9px;margin-top:14px;color:#655238}
+footer{padding:20px 10px;text-align:center;font-size:13px;color:#7b837a}
+.success{display:none;padding:28px 21px;text-align:center}.success .seal{font-size:48px}.success h2{color:#267349;font-size:27px;margin:6px 0 3px}.success p{font-size:15px;color:#51685a}.receipt{padding:14px 16px;background:#f3f8f2;border:1px dashed #a8c7ae;border-radius:12px;margin:19px auto;max-width:420px}.receipt b{font-size:23px;color:#24683e;display:block;letter-spacing:1px;user-select:all}.actions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}.actions button{padding:10px 14px;border:1px solid #9db7a2;background:#fff;border-radius:9px;font:700 15px Mukta;cursor:pointer;color:#2c6542}
+.offline{display:none;padding:12px 18px;border:1px solid #efb5a5;background:#fff0ec;color:#8c251a;border-radius:10px;margin:16px 0;font-weight:700}
+.hp{position:absolute;left:-9999px;opacity:0;pointer-events:none}
+@media(max-width:750px){.layout{grid-template-columns:1fr}.side{display:none}.wrap{margin-top:12px}.hero{padding:20px}.top{padding:11px 15px}.logo{width:66px;height:66px}.brand{font-size:18px}.subbrand{font-size:12px}.hero h1{font-size:27px}.panelhead{padding:18px 17px 6px}form{padding:6px 17px 22px}}
+@media(max-width:430px){.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.hero{border-radius:13px}.panel{border-radius:12px}}
+</style></head>
+<body>
+<header><div class="top"><img class="logo" src="https://lokhitmaharashtra.com/MLVMData/logo.svg" alt="महाराष्ट्र लोक विकास मंचचा लोगो" onerror="this.style.display='none'"><div><div class="brand">महाराष्ट्र लोक विकास मंच</div><div class="subbrand">ड्राऊट वॉरियर ऑर्गनायझेशन • संस्था माहिती संकलन</div></div></div></header>
+<main class="wrap">
+<section class="hero"><span class="eyebrow">महाराष्ट्रातील सर्व जिल्ह्यांसाठी</span><h1>ड्राऊट वॉरियर संस्था नोंदणी</h1><p>दुष्काळ निवारणाच्या उपक्रमांसाठी आपल्या जिल्ह्यातील महाराष्ट्र लोक विकास मंच संलग्न संस्थांची माहिती नोंदवा. जिल्हानिहाय समन्वय आणि शासनाशी प्रस्तावित संवादासाठी हे संकलन आहे.</p></section>
+<div id="offline" class="offline">ऑनलाइन नोंदणी सध्या उपलब्ध नाही. कृपया नंतर पुन्हा प्रयत्न करा.</div>
+<div class="layout"><section class="panel" id="formPanel"><div id="entry">
+<div class="panelhead"><h2>संस्थेची माहिती भरा</h2><p><span class="star">*</span> असलेली माहिती आवश्यक आहे. एका संस्थेची नोंदणी एकदाच होईल.</p></div>
+<form id="ngoForm" novalidate><input type="text" class="hp" name="honeypot" tabindex="-1" autocomplete="off">
+<div class="divider">१. संस्था आणि संपर्क</div>
+<div class="fields">
+<div class="field"><label for="district">जिल्हा <span class="star">*</span></label><select name="district" id="district" required><option value="">जिल्हा निवडा</option></select></div>
+<div class="field"><label for="name">संस्थेचे नाव <span class="star">*</span></label><input id="name" name="name" required minlength="3" maxlength="150" placeholder="संस्थेचे संपूर्ण नाव"></div>
+<div class="field"><label for="head">संस्थाप्रमुखाचे नाव <span class="star">*</span></label><input id="head" name="head" required minlength="3" maxlength="120" placeholder="पूर्ण नाव"></div>
+<div class="field"><label for="phone">संपर्क क्रमांक <span class="star">*</span></label><input id="phone" name="phone" required type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" minlength="10" maxlength="10" placeholder="१० अंकी मोबाइल"></div>
+<div class="field"><label for="reg">संस्थेचा नोंदणी क्रमांक</label><input id="reg" name="reg" maxlength="90" placeholder="असल्यास लिहा"></div>
+<div class="field"><label for="email">ई-मेल</label><input id="email" name="email" type="email" maxlength="160" placeholder="ऐच्छिक"></div>
+</div>
+<div class="divider">२. कार्यक्षेत्र आणि क्षमता</div>
+<div class="fields">
+<div class="field full"><label for="taluka">कार्यक्षेत्रातील तालुका <span class="star">*</span></label><input name="taluka" id="taluka" required minlength="2" maxlength="180" placeholder="उदा. कळंब, भूम, परंडा (अनेक असल्यास स्वल्पविराम द्या)"></div>
+<div class="field"><label for="villages">कार्यक्षेत्रातील गावांची संख्या <span class="star">*</span></label><input type="number" name="villages" id="villages" required min="1" max="10000" step="1" placeholder="उदा. २५"></div>
+<div class="field"><label for="workers">उपलब्ध कार्यकर्त्यांची संख्या <span class="star">*</span></label><input type="number" name="workers" id="workers" required min="0" max="100000" step="1" placeholder="उदा. १०"></div>
+<div class="field full"><label for="capacity">दुष्काळ निवारणासाठी आपण काय करू शकाल? <span class="star">*</span></label><textarea name="capacity" id="capacity" required minlength="12" maxlength="1000" placeholder="उदा. गावनिहाय सर्वेक्षण, पाणी व चारा नियोजन, लाभार्थी यादी, जनजागृती, मदत वितरण, स्वयंसेवक समन्वय..."></textarea><div class="hint">कृपया आपल्या संस्थेची प्रत्यक्ष क्षमता व उपलब्ध साधने लिहा.</div></div>
+</div>
+<label class="checkline"><input type="checkbox" id="consent" name="consent" required><span>मी दिलेली माहिती खरी असल्याचे घोषित करतो/करते आणि महाराष्ट्र लोक विकास मंचच्या जिल्हानिहाय समन्वय व संबंधित प्रस्तावित उपक्रमांसाठी वापरण्यास संमती देतो/देते.</span></label>
+<div id="alert" class="alert" role="alert"></div>
+<button type="submit" class="submit" id="submitBtn">संस्थेची नोंदणी पूर्ण करा</button>
+<div class="hint" style="text-align:center;margin-top:9px">नोंदणीनंतर आपल्याला स्वतंत्र MLVM नोंदणी क्रमांक मिळेल.</div>
+</form></div>
+<div id="success" class="success" role="status"><div class="seal">✅</div><h2>नोंदणी यशस्वी!</h2><p id="successMsg">आपली संस्थेची माहिती सुरक्षितपणे नोंद झाली आहे.</p><div class="receipt"><div>आपला नोंदणी क्रमांक</div><b id="receiptId"></b><div id="receiptName"></div></div><p>हा क्रमांक पुढील समन्वयासाठी जतन करून ठेवा. नोंदणी म्हणजे शासनाची मान्यता किंवा अनुदान मंजुरी नाही.</p><div class="actions"><button type="button" id="copyBtn">नोंदणी क्रमांक कॉपी करा</button><button type="button" id="newBtn">दुसरी संस्था नोंदवा</button></div></div>
+</section>
+<aside class="panel side"><h3>नोंदणीसाठी काय लागेल?</h3><ul><li><span class="tick">✓</span>संस्थेचे पूर्ण नाव आणि जिल्हा</li><li><span class="tick">✓</span>संस्थाप्रमुख व मोबाइल क्रमांक</li><li><span class="tick">✓</span>कार्यक्षेत्रातील तालुके आणि गावसंख्या</li><li><span class="tick">✓</span>दुष्काळ निवारणातील कार्यक्षमता</li><li><span class="tick">✓</span>उपलब्ध कार्यकर्त्यांची संख्या</li></ul><p class="note"><b>महत्त्वाचे:</b> ही मंचाशी संलग्न संस्थांची माहिती संकलन प्रक्रिया आहे. शासनाची अधिकृत योजना, अनुदान, निवड किंवा मान्यता मिळाल्याचा दावा नाही. संस्थांची व्यक्तिगत संपर्क माहिती सार्वजनिक केली जाणार नाही.</p></aside>
+</div></main>
+<footer>© महाराष्ट्र लोक विकास मंच • समाजहितासाठी संस्थांचे एकत्रीकरण</footer>
+<script>
+const notifyParent=()=>{try{if(window.parent!==window)window.parent.postMessage({mlvm:true,height:document.documentElement.scrollHeight},'*')}catch(e){}};
+window.addEventListener('load',notifyParent);
+if(window.ResizeObserver) new ResizeObserver(notifyParent).observe(document.body);
+const districts='अहिल्यानगर|अकोला|अमरावती|छत्रपती संभाजीनगर|बीड|भंडारा|बुलढाणा|चंद्रपूर|धाराशिव|धुळे|गडचिरोली|गोंदिया|हिंगोली|जळगाव|जालना|कोल्हापूर|लातूर|मुंबई शहर|मुंबई उपनगर|नागपूर|नांदेड|नंदुरबार|नाशिक|पालघर|परभणी|पुणे|रायगड|रत्नागिरी|सांगली|सातारा|सिंधुदुर्ग|सोलापूर|ठाणे|वर्धा|वाशिम|यवतमाळ'.split('|');
+const select=document.querySelector('#district');districts.forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;select.append(o)});
+const form=document.querySelector('#ngoForm');const started=Date.now();const alertBox=document.querySelector('#alert');const btn=document.querySelector('#submitBtn');
+if(!window.google?.script?.run){document.querySelector('#offline').style.display='block';btn.disabled=true;btn.textContent='नोंदणी लवकरच सुरू होईल';}
+function fail(s){alertBox.textContent=s;alertBox.style.display='block';btn.disabled=false;btn.textContent='संस्थेची नोंदणी पूर्ण करा';alertBox.scrollIntoView({block:'center',behavior:'smooth'})}
+form.addEventListener('submit',e=>{e.preventDefault();alertBox.style.display='none';if(!form.reportValidity())return;const d=Object.fromEntries(new FormData(form).entries());d.consent=document.querySelector('#consent').checked;d.formStarted=started;btn.disabled=true;btn.textContent='नोंदणी साठवत आहे...';
+google.script.run.withSuccessHandler(x=>{if(!x?.ok){fail(x?.message||'नोंदणी अयशस्वी.');return;}document.querySelector('#entry').style.display='none';document.querySelector('#success').style.display='block';document.querySelector('#receiptId').textContent=x.id;document.querySelector('#receiptName').textContent=x.organization+' • '+x.district;document.querySelector('#successMsg').textContent=x.message;window.scrollTo({top:0,behavior:'smooth'});}).withFailureHandler(e=>fail('जोडणीमध्ये अडथळा आला. इंटरनेट तपासून पुन्हा प्रयत्न करा.')).saveNgo(d);
+});
+document.querySelector('#copyBtn').onclick=async()=>{const v=document.querySelector('#receiptId').textContent;try{await navigator.clipboard.writeText(v);document.querySelector('#copyBtn').textContent='कॉपी केले ✓';}catch(e){alert('नोंदणी क्रमांक: '+v)}};
+document.querySelector('#newBtn').onclick=()=>{location.reload()};
+</script></body></html>

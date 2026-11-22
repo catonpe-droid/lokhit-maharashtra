@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="mr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>महाराष्ट्र डॅशबोर्ड | महाराष्ट्र लोक विकास मंच</title>
+<meta name="description" content="महाराष्ट्र लोक विकास मंच — ड्राऊट वॉरियर संस्थांची जिल्हानिहाय नोंदणी, नकाशा, कार्यकर्ते, गावसंख्या आणि कामाच्या क्षमतांचा डॅशबोर्ड.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="mr_IN">
+<meta property="og:title" content="MLVM | महाराष्ट्र ड्राऊट वॉरियर डॅशबोर्ड">
+<meta property="og:description" content="जिल्हानिहाय नोंदणी, महाराष्ट्र नकाशा, संस्थांची क्षमता आणि अद्ययावत राज्यस्तरीय माहिती.">
+<meta property="og:url" content="https://lokhitmaharashtra.com/MLVMData/dashboard/">
+<meta property="og:image" content="https://lokhitmaharashtra.com/MLVMData/share-preview.png">
+<meta name="theme-color" content="#152f3a">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../logo.svg">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div class="app">
+ <aside class="side-nav">
+  <div class="side-brand"><img src="../logo.svg" alt="महाराष्ट्र लोक विकास मंच लोगो"><div><strong>MLVM <small>ANALYTICS</small></strong><span>महाराष्ट्र लोक विकास मंच</span></div></div>
+  <div class="side-section">मुख्य मेनू</div>
+  <a class="nav-link active" href="#overview"><span class="nicon">▦</span> राज्य आढावा</a>
+  <a class="nav-link" href="#mapSection"><span class="nicon">◇</span> जिल्हानिहाय नकाशा</a>
+  <a class="nav-link" href="#activities"><span class="nicon">◉</span> संस्थांची क्षमता</a>
+  <a class="nav-link" href="#districtTable"><span class="nicon">▤</span> जिल्हा तुलना</a>
+  <div class="nav-bottom"><div class="nav-fact"><span class="mini-dot"></span> सार्वजनिक संकलित माहिती<div>व्यक्तिगत संपर्क माहिती दाखवली जात नाही.</div></div><a class="nav-cta" href="../" target="_blank" rel="noopener">+ नवीन संस्था नोंदणी <span>↗</span></a><a class="text-link" href="https://lokhitmaharashtra.com/" target="_blank" rel="noopener">लोकहित महाराष्ट्र ↗</a></div>
+ </aside>
+ <div class="main">
+  <header class="topbar"><div class="mobile-brand"><img src="../logo.svg" alt=""><strong>MLVM <span>Dashboard</span></strong></div><div class="breadcrumb"><span>महाराष्ट्र लोक विकास मंच</span><span class="crumb">/</span><strong>डेटा इंटेलिजन्स</strong></div><div class="top-actions"><span class="status-dot"></span><span class="top-status">संकलित आकडेवारी</span><a class="head-link" href="../">नोंदणी फॉर्म ↗</a></div></header>
+  <main class="content" id="overview">
+   <div class="page-heading"><div><div class="overline">महाराष्ट्र • ३६ जिल्हे • ड्राऊट वॉरियर अभियान</div><h1>महाराष्ट्र संस्था नोंदणी डॅशबोर्ड</h1><p>किती संस्था कुठून जोडल्या गेल्या, त्यांची कार्यक्षमता आणि जिल्हानिहाय सहभाग — सर्व एका ठिकाणी.</p></div><div class="header-tools"><span class="snapshot-label" id="updatedStamp">डेटा वाचला जात आहे...</span><button class="btn btn-outline" id="refreshBtn" type="button">⟳ अपडेट करा</button></div></div>
+   <section class="hero" aria-label="मोहिमेची माहिती"><div class="hero-copy"><span class="hero-chip">MAHARASHTRA DROUGHT WARRIOR NETWORK</span><h2>संस्थांची ताकद.<br><em>दुष्काळमुक्तीचा संकल्प.</em></h2><p>प्रत्येक जिल्ह्यातील स्वयंसेवी संस्था, कार्यकर्ते आणि गावपातळीवरील कार्यक्षमता एका नकाशावर.</p><div class="hero-tags"><span>जिल्हानिहाय चित्र</span><span>क्षमता विश्लेषण</span><span>संस्थांची जोडणी</span></div></div><div class="hero-mark"><div class="hero-mark-ring"><img src="../logo.svg" alt="महाराष्ट्र लोक विकास मंच"></div></div></section>
+   <section class="metrics" aria-label="राज्यस्तरीय महत्त्वाचे आकडे">
+    <article class="metric"><div class="metric-top"><span>नोंदणीकृत संस्था</span><span class="metric-icon burg">⌂</span></div><div class="metric-number" id="mOrganizations">—</div><div class="metric-note"><span class="green-pill">प्राप्त अर्ज</span> एकूण संकलन</div></article>
+    <article class="metric"><div class="metric-top"><span>सक्रिय नोंदणी जिल्हे</span><span class="metric-icon blue">◇</span></div><div class="metric-number"><span id="mDistricts">—</span><small>/ 36</small></div><div class="metric-note" id="districtCoverage">राज्यातील जिल्हे</div></article>
+    <article class="metric"><div class="metric-top"><span>नोंदवलेले कार्यकर्ते</span><span class="metric-icon amber">♧</span></div><div class="metric-number" id="mWorkers">—</div><div class="metric-note">संस्थांनी नमूद केलेले मनुष्यबळ</div></article>
+    <article class="metric"><div class="metric-top"><span>कार्यक्षेत्रातील गावसंख्या</span><span class="metric-icon green">▤</span></div><div class="metric-number" id="mVillages">—</div><div class="metric-note">संस्थांचे क्षेत्र मिळून; अद्वितीय गावे नाहीत</div></article>
+    <article class="metric metric-estimate"><div class="metric-top"><span>अपेक्षित लाभार्थी लोकसंख्या</span><span class="metric-icon amber">♙</span></div><div class="metric-number" id="mBeneficiaries">—</div><div class="metric-note"><span class="estimate-pill">अंदाज</span> प्रति गाव ७०० व्यक्ती गृहीत; गावांची पुनरावृत्ती शक्य</div></article>
+   </section>
+   <section class="map-grid" id="mapSection">
+    <article class="panel map-panel"><div class="panel-title-row"><div><div class="kicker">01 / DISTRICT REACH</div><h3>महाराष्ट्र नोंदणी नकाशा</h3><p>जिल्ह्याचा रंग तेथील संस्थांची संख्या दर्शवतो. जिल्ह्यावर क्लिक केल्यास तपशील दिसेल.</p></div><div class="map-control"><label class="sr-only" for="districtSelect">जिल्हा निवडा</label><select id="districtSelect"><option value="">संपूर्ण महाराष्ट्र</option></select></div></div>
+      <div class="map-body"><div class="map-wrap"><svg id="mahaMap" viewBox="0 0 670 465" role="img" aria-label="महाराष्ट्रातील ३६ जिल्ह्यांचा निवडता येणारा नकाशा"><text x="50%" y="50%" text-anchor="middle" fill="#64748b">नकाशा लोड होत आहे...</text></svg><div id="mapTooltip" class="map-tooltip" role="tooltip"></div><div class="map-note">जास्त गडद रंग = अधिक नोंदणी</div></div><div class="map-details"><div class="selection-head"><span class="select-tag">निवडलेला जिल्हा</span><button class="reset" id="resetDistrict" type="button">सर्व दाखवा ↗</button></div><h4 id="selectedName">संपूर्ण महाराष्ट्र</h4><div class="district-kpis"><div><small>संस्था</small><b id="selectedCount">—</b></div><div><small>कार्यकर्ते</small><b id="selectedWorkers">—</b></div><div><small>गावसंख्या*</small><b id="selectedVillages">—</b></div></div><div class="detail-rule"></div><div class="detail-title">या जिल्ह्यातील कार्यक्षमता</div><div id="selectedActivities" class="activity-chips"><span>डेटा उपलब्ध होत आहे...</span></div><div class="detail-foot" id="selectedFoot">जिल्हा निवडा आणि तपशील पाहा.</div></div></div>
+      <div class="map-legend"><span>नोंदणी नाही</span><div class="legend-dots"><i style="background:#e6edf0"></i><i style="background:#f2dcae"></i><i style="background:#eab77d"></i><i style="background:#d88568"></i><i style="background:#a74243"></i></div><span>जास्त नोंदणी</span><span class="legend-count" id="mapCoverage">— जिल्ह्यांत नोंदणी</span></div>
+    </article>
+    <article class="panel rank-panel"><div class="panel-title-row compact"><div><div class="kicker">02 / TOP DISTRICTS</div><h3>आघाडीचे जिल्हे</h3><p>नोंदणी संख्येनुसार क्रमवारी</p></div><span class="mini-mark">TOP 10</span></div><div id="topDistricts" class="rank-list"></div><div class="rank-footer"><span class="soft-dot"></span> जिल्हा निवडण्यासाठी पट्टीवर क्लिक करा</div></article>
+   </section>
+   <section class="analysis-grid" id="activities">
+    <article class="panel capability-panel"><div class="panel-title-row"><div><div class="kicker">03 / ORGANISATION CAPABILITY</div><h3>संस्था काय काम करू शकतात?</h3><p>संस्थांच्या स्वघोषित उत्तरांवरून विषयानुसार वर्गीकरण</p></div></div><div class="cap-grid"><div class="donut-box"><svg id="donut" viewBox="0 0 280 280" role="img" aria-label="संस्थांच्या कामाच्या क्षमतांचा डोनट चार्ट"></svg><div class="donut-core"><strong id="donutTotal">—</strong><small>विषय नोंदी*</small></div></div><div class="cap-legend" id="capLegend"></div></div><div class="chart-foot">*एका संस्थेचा एकापेक्षा जास्त विषयांत समावेश होऊ शकतो. हे स्वयंचलित शब्दाधारित वर्गीकरण आहे.</div></article>
+    <article class="panel trend-panel"><div class="panel-title-row"><div><div class="kicker">04 / REGISTRATION MOMENTUM</div><h3>दिवसनिहाय नवीन नोंदणी</h3><p>नोंदणी सुरू झाल्यापासून प्राप्त नोंदी</p></div></div><div id="trendChart" class="trend-chart"><div class="load-state">चार्ट तयार होत आहे...</div></div><div class="trend-total"><span>संकलित एकूण</span><strong id="trendTotal">— संस्था</strong></div></article>
+   </section>
+   <section class="insights-grid">
+    <article class="panel insight-panel"><div class="panel-title-row"><div><div class="kicker">05 / SMART INSIGHTS</div><h3>आकडेवारी काय सांगते?</h3><p>नोंदणीतून दिसणारे मुद्दे — स्वयंचलित नियमाधारित मराठी सारांश</p></div><span class="smart-tag">✦ SMART</span></div><div id="smartInsights" class="insight-list"></div></article>
+    <article class="panel readiness-panel"><div class="panel-title-row"><div><div class="kicker">06 / DATA QUALITY</div><h3>पडताळणी आणि तयारी</h3><p>प्राप्त अर्ज आणि पुष्टी झालेली माहिती यातील फरक</p></div></div><div class="quality-top"><div class="quality-bignum" id="qualityVerified">—</div><div><strong>पडताळलेल्या संस्था</strong><span>नोंदणी प्राप्त होणे म्हणजे पडताळणी पूर्ण नव्हे.</span></div></div><div class="quality-progress"><span id="qualityProgress"></span></div><div class="quality-stats"><div><b id="qualityPending">—</b><small>पडताळणी प्रलंबित</small></div><div><b id="qualityUnclear">—</b><small>क्षमता वर्गीकरण अस्पष्ट</small></div></div><div class="quality-alert">डेटा स्वयंघोषित आहे. शासन मान्यता, निवड किंवा अनुदान मंजुरी म्हणून याचा अर्थ घेऊ नये.</div></article>
+   </section>
+   <section class="panel table-panel" id="districtTable"><div class="panel-title-row table-header"><div><div class="kicker">07 / ALL DISTRICTS</div><h3>जिल्हानिहाय संपूर्ण आकडेवारी</h3><p>३६ जिल्ह्यांची तुलना, शोध आणि क्रमवारी</p></div><div class="table-tools"><label class="search-box"><span>⌕</span><input id="tableSearch" type="search" placeholder="जिल्हा शोधा..." aria-label="जिल्हा शोधा"></label><button id="csvBtn" class="btn btn-outline" type="button">↓ CSV डाउनलोड</button></div></div><div class="table-scroll"><table><thead><tr><th>क्र.</th><th>जिल्हा</th><th data-sort="count" class="sortable" tabindex="0">संस्था ↕</th><th data-sort="workers" class="sortable" tabindex="0">कार्यकर्ते ↕</th><th data-sort="villages" class="sortable" tabindex="0">गावसंख्या ↕</th><th>नोंदणी स्थिती</th><th>संपूर्ण माहिती</th></tr></thead><tbody id="districtRows"></tbody></table></div><div class="table-footer" id="tableCaption">फक्त एकत्रित आकडेवारी दाखवली जाते.</div></section>
+   <footer><div>© महाराष्ट्र लोक विकास मंच • MLVM Data Intelligence <span id="footerTime"></span></div><div>माहिती: स्वयंघोषित संस्था नोंदणी. गावे ही संस्थानिहाय बेरीज आहे. <a href="https://github.com/Hari31416/india-geojson-assets" target="_blank" rel="noopener">नकाशा संदर्भ</a> • प्रशासकीय सीमांसाठी अधिकृत स्रोत तपासावेत.</div></footer>
+  </main>
+ </div>
+</div>
+<script src="./live-config.js"></script>
+<script src="./dashboard.js" defer></script>
+</body></html>
