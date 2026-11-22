@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-22 21:38:38",
+  "snapshotAt": "2026-11-22 22:20:53",
   "generatedOn": "2026-11-22",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 137,
+    "organizations": 138,
     "districtsWithRegistrations": 23,
     "districtsTotal": 36,
-    "workers": 2177,
-    "villages": 9499,
+    "workers": 2189,
+    "villages": 9609,
     "verified": 0
   },
   "districts": [
@@ -458,17 +458,17 @@
     },
     {
       "name": "रायगड",
-      "count": 1,
-      "workers": 15,
-      "villages": 151,
+      "count": 2,
+      "workers": 27,
+      "villages": 261,
       "verified": 0,
       "activities": {
         "water": 1,
         "livestock": 0,
-        "survey": 0,
+        "survey": 1,
         "scheme": 0,
-        "awareness": 1,
-        "relief": 0,
+        "awareness": 2,
+        "relief": 1,
         "livelihood": 0,
         "community": 0
       }
@@ -641,7 +641,7 @@
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 70
+      "count": 71
     },
     {
       "key": "scheme",
@@ -651,12 +651,12 @@
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 60
+      "count": 61
     },
     {
       "key": "relief",
       "label": "मदत व साहित्य वितरण",
-      "count": 43
+      "count": 44
     },
     {
       "key": "livelihood",
@@ -676,12 +676,12 @@
     },
     {
       "date": "2026-11-22",
-      "count": 64
+      "count": 65
     }
   ],
   "quality": {
-    "notYetVerified": 137,
+    "notYetVerified": 138,
     "noMatchedCapacityCategory": 7,
-    "taggedCapacity": 130
+    "taggedCapacity": 131
   }
 }
