@@ -127,7 +127,7 @@ dialog::backdrop{background:#162d4ca9}
     <div class="field"><label class="check"><input id="featured" type="checkbox"> मुख्य बातमी (Featured)</label></div>
     <div class="field"><label for="tags">Tags / Keywords</label><input id="tags" placeholder="शेती, दुष्काळ, मराठवाडा"><small class="muted">स्वल्पविरामाने वेगळे करा</small></div>
     <div class="field"><label for="video">YouTube व्हिडिओ URL</label><input id="video" type="url" placeholder="https://www.youtube.com/watch?v=..."></div>
-    <div class="field"><label for="slug">बातमी URL (Slug)</label><input id="slug" disabled placeholder="बातमी Save झाल्यावर तयार होईल"></div>
+    <div class="field"><label for="slug">बातमीची URL (Custom Slug)</label><input id="slug" maxlength="80" pattern="[a-z0-9][a-z0-9-]{1,78}[a-z0-9]" placeholder="उदा. shetkari-pani-yojana" autocomplete="off" spellcheck="false" aria-describedby="slug-help slug-preview"><small class="muted" id="slug-help">नवीन बातमीसाठी इंग्रजी छोटी अक्षरे, अंक आणि hyphen वापरा (३–८० अक्षरे). रिकामी ठेवल्यास URL आपोआप तयार होईल.</small><small class="muted" id="slug-preview" aria-live="polite">लिंक Save झाल्यावर दिसेल.</small></div>
     <div class="field"><label>Published Date</label><div class="code-box" id="post-date">नवीन बातमी</div></div>
     <div class="notice">🔐 ही गुप्त लिंकच प्रकाशनाची परवानगी आहे. ती फक्त विश्वासू संपादकांकडे ठेवा. गुप्त Key कुणालाही पाठवू नका.</div>
     <p class="muted">जुन्या बातमीचा URL कायम राहतो. Save केल्यावर Server वरून वेबसाइट आपोआप अपडेट होते.</p>
