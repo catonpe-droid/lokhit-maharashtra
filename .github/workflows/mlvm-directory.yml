@@ -1,0 +1,31 @@
+name: Update MLVM public registered NGO list
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mlvm-public-directory-sync
+  cancel-in-progress: false
+jobs:
+  sync-public-organizations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout public website
+        uses: actions/checkout@v4
+      - name: Build public directory (no mobile numbers or emails)
+        run: python3 scripts/sync_mlvm_directory.py
+      - name: Commit the updated public directory if changed
+        shell: bash
+        run: |
+          git add MLVMData/dashboard/organizations.json
+          if git diff --cached --quiet; then
+            echo "No new MLVM registrations"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Sync public MLVM registered NGOs"
+          git push
