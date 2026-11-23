@@ -83,7 +83,7 @@
  function setRecords(arr,source,stamp) {
    const clean=cleanRows(arr);
    if(!clean.length)throw Error('No valid MLVM organisation records');
-   if(records.length && clean.length < records.length) return; // Avoid replacing newer data with a lagging published CSV.
+   if(records.length && clean.length < records.length){$('orgSource').textContent=lastSource+' • नवीन नोंदी असलेली जतन केलेली यादी दाखवत आहोत';return;} // Avoid replacing newer data with a lagging published CSV.
    records=clean;lastSource=source;
    const districts=[...new Set(records.map(r=>r.district))].sort((a,b)=>a.localeCompare(b,'mr'));
    const current=$('orgDistrict').value;
