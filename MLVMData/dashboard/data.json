@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-23 21:18:43",
+  "snapshotAt": "2026-11-23 23:05:54",
   "generatedOn": "2026-11-23",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 175,
+    "organizations": 176,
     "districtsWithRegistrations": 24,
     "districtsTotal": 36,
-    "workers": 2677,
-    "villages": 11715,
+    "workers": 2699,
+    "villages": 11905,
     "verified": 0
   },
   "districts": [
@@ -135,16 +135,16 @@
     },
     {
       "name": "चंद्रपूर",
-      "count": 2,
-      "workers": 16,
-      "villages": 35,
+      "count": 3,
+      "workers": 38,
+      "villages": 225,
       "verified": 0,
       "activities": {
         "water": 1,
         "livestock": 0,
-        "survey": 1,
+        "survey": 2,
         "scheme": 0,
-        "awareness": 2,
+        "awareness": 3,
         "relief": 1,
         "livelihood": 0,
         "community": 0
@@ -641,7 +641,7 @@
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 88
+      "count": 89
     },
     {
       "key": "scheme",
@@ -651,7 +651,7 @@
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 79
+      "count": 80
     },
     {
       "key": "relief",
@@ -680,12 +680,12 @@
     },
     {
       "date": "2026-11-23",
-      "count": 37
+      "count": 38
     }
   ],
   "quality": {
-    "notYetVerified": 175,
+    "notYetVerified": 176,
     "noMatchedCapacityCategory": 14,
-    "taggedCapacity": 161
+    "taggedCapacity": 162
   }
 }
