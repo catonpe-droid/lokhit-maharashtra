@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-22 22:20:53",
-  "generatedOn": "2026-11-22",
+  "snapshotAt": "2026-11-23 05:56:42",
+  "generatedOn": "2026-11-23",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 138,
+    "organizations": 139,
     "districtsWithRegistrations": 23,
     "districtsTotal": 36,
-    "workers": 2189,
-    "villages": 9609,
+    "workers": 2191,
+    "villages": 9619,
     "verified": 0
   },
   "districts": [
@@ -356,9 +356,9 @@
     },
     {
       "name": "नांदेड",
-      "count": 12,
-      "workers": 216,
-      "villages": 865,
+      "count": 13,
+      "workers": 218,
+      "villages": 875,
       "verified": 0,
       "activities": {
         "water": 7,
@@ -677,11 +677,15 @@
     {
       "date": "2026-11-22",
       "count": 65
+    },
+    {
+      "date": "2026-11-23",
+      "count": 1
     }
   ],
   "quality": {
-    "notYetVerified": 138,
-    "noMatchedCapacityCategory": 7,
+    "notYetVerified": 139,
+    "noMatchedCapacityCategory": 8,
     "taggedCapacity": 131
   }
 }
