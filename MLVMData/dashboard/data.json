@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-23 17:02:11",
+  "snapshotAt": "2026-11-23 19:24:40",
   "generatedOn": "2026-11-23",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 168,
+    "organizations": 170,
     "districtsWithRegistrations": 24,
     "districtsTotal": 36,
-    "workers": 2618,
-    "villages": 11600,
+    "workers": 2627,
+    "villages": 11618,
     "verified": 0
   },
   "districts": [
@@ -220,16 +220,16 @@
     },
     {
       "name": "हिंगोली",
-      "count": 9,
-      "workers": 193,
-      "villages": 151,
+      "count": 11,
+      "workers": 202,
+      "villages": 169,
       "verified": 0,
       "activities": {
-        "water": 8,
-        "livestock": 6,
-        "survey": 4,
+        "water": 10,
+        "livestock": 8,
+        "survey": 6,
         "scheme": 5,
-        "awareness": 6,
+        "awareness": 7,
         "relief": 5,
         "livelihood": 1,
         "community": 2
@@ -631,17 +631,17 @@
     {
       "key": "water",
       "label": "जलसंधारण व पाणी",
-      "count": 105
+      "count": 107
     },
     {
       "key": "livestock",
       "label": "चारा व पशुधन",
-      "count": 83
+      "count": 85
     },
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 84
+      "count": 86
     },
     {
       "key": "scheme",
@@ -651,7 +651,7 @@
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 76
+      "count": 77
     },
     {
       "key": "relief",
@@ -680,12 +680,12 @@
     },
     {
       "date": "2026-11-23",
-      "count": 30
+      "count": 32
     }
   ],
   "quality": {
-    "notYetVerified": 168,
+    "notYetVerified": 170,
     "noMatchedCapacityCategory": 13,
-    "taggedCapacity": 155
+    "taggedCapacity": 157
   }
 }
