@@ -22,6 +22,7 @@
   <div class="side-brand"><img src="../logo.svg" alt="महाराष्ट्र लोक विकास मंच लोगो"><div><strong>MLVM <small>ANALYTICS</small></strong><span>महाराष्ट्र लोक विकास मंच</span></div></div>
   <div class="side-section">मुख्य मेनू</div>
   <a class="nav-link active" href="#overview"><span class="nicon">▦</span> राज्य आढावा</a>
+  <a class="nav-link" href="#organizations"><span class="nicon">⌕</span> नोंदणीकृत संस्थांची यादी</a>
   <a class="nav-link" href="#mapSection"><span class="nicon">◇</span> जिल्हानिहाय नकाशा</a>
   <a class="nav-link" href="#activities"><span class="nicon">◉</span> संस्थांची क्षमता</a>
   <a class="nav-link" href="#districtTable"><span class="nicon">▤</span> जिल्हा तुलना</a>
@@ -38,6 +39,29 @@
     <article class="metric"><div class="metric-top"><span>नोंदवलेले कार्यकर्ते</span><span class="metric-icon amber">♧</span></div><div class="metric-number" id="mWorkers">—</div><div class="metric-note">संस्थांनी नमूद केलेले मनुष्यबळ</div></article>
     <article class="metric"><div class="metric-top"><span>कार्यक्षेत्रातील गावसंख्या</span><span class="metric-icon green">▤</span></div><div class="metric-number" id="mVillages">—</div><div class="metric-note">संस्थांचे क्षेत्र मिळून; अद्वितीय गावे नाहीत</div></article>
     <article class="metric metric-estimate"><div class="metric-top"><span>अपेक्षित लाभार्थी लोकसंख्या</span><span class="metric-icon amber">♙</span></div><div class="metric-number" id="mBeneficiaries">—</div><div class="metric-note"><span class="estimate-pill">अंदाज</span> प्रति गाव ७०० व्यक्ती गृहीत; गावांची पुनरावृत्ती शक्य</div></article>
+   </section>
+
+   <section class="panel directory-panel" id="organizations" aria-label="नोंदणीकृत संस्थांची यादी">
+    <div class="directory-topline"></div>
+    <div class="panel-title-row directory-heading">
+     <div><div class="kicker">PUBLIC ORGANISATION DIRECTORY / संस्थांची नोंदणी</div>
+       <h3>नोंदणीकृत संस्थांची यादी <span class="directory-count" id="orgCount">—</span></h3>
+       <p>आपल्या संस्थेचे नाव किंवा MLVM क्रमांक टाका आणि नोंदणी झाली आहे का ते लगेच तपासा.</p>
+     </div>
+     <div class="directory-symbol">☷ <span>MLVM</span></div>
+    </div>
+    <div class="directory-tools">
+     <label class="directory-search"><span aria-hidden="true">⌕</span><input type="search" id="orgSearch" placeholder="संस्थेचे नाव, MLVM क्रमांक, तालुका शोधा..." aria-label="संस्थेचे नाव किंवा नोंदणी क्रमांक शोधा" autocomplete="off"></label>
+     <label class="sr-only" for="orgDistrict">जिल्हानिहाय संस्थांची यादी</label>
+     <select id="orgDistrict" aria-label="जिल्हा निवडून संस्था शोधा"><option value="">सर्व जिल्हे</option></select>
+     <button class="btn btn-outline" id="orgClear" type="button">फिल्टर काढा</button>
+     <button class="btn btn-outline" id="orgCsv" type="button">↓ CSV यादी</button>
+    </div>
+    <div class="directory-info"><strong id="orgSummary" role="status" aria-live="polite">संस्थांची यादी उघडत आहे...</strong><span class="directory-source" id="orgSource">नोंदणी माहिती तपासत आहोत</span></div>
+    <div class="directory-scroll"><table class="directory-table"><thead><tr><th>क्र.</th><th>MLVM नोंदणी ID</th><th>संस्थेचे नाव</th><th>जिल्हा</th><th>तालुका</th><th>संस्थेचा अधिकृत नोंदणी क्र.</th><th>नोंदणी स्थिती</th></tr></thead><tbody id="orgRows"></tbody></table></div>
+    <div class="directory-cards" id="orgCards"></div>
+    <div class="directory-pagination"><span id="orgPageInfo">—</span><div><button id="orgPrev" class="btn btn-outline" type="button">← मागील</button><button id="orgNext" class="btn btn-outline" type="button">पुढील →</button></div></div>
+    <p class="directory-note">ही प्राप्त संस्था नोंदणीची सार्वजनिक यादी आहे. यादीत नाव असणे म्हणजे पडताळणी, शासन मान्यता किंवा अनुदान मंजुरी नाही. वैयक्तिक मोबाइल क्रमांक व ई-मेल दाखवले जात नाहीत.</p>
    </section>
    <section class="map-grid" id="mapSection">
     <article class="panel map-panel"><div class="panel-title-row"><div><div class="kicker">01 / DISTRICT REACH</div><h3>महाराष्ट्र नोंदणी नकाशा</h3><p>जिल्ह्याचा रंग तेथील संस्थांची संख्या दर्शवतो. जिल्ह्यावर क्लिक केल्यास तपशील दिसेल.</p></div><div class="map-control"><label class="sr-only" for="districtSelect">जिल्हा निवडा</label><select id="districtSelect"><option value="">संपूर्ण महाराष्ट्र</option></select></div></div>
