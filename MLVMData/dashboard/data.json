@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-23 11:20:21",
+  "snapshotAt": "2026-11-23 12:25:13",
   "generatedOn": "2026-11-23",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 153,
+    "organizations": 159,
     "districtsWithRegistrations": 23,
     "districtsTotal": 36,
-    "workers": 2404,
-    "villages": 10140,
+    "workers": 2495,
+    "villages": 10928,
     "verified": 0
   },
   "districts": [
@@ -101,9 +101,9 @@
     },
     {
       "name": "भंडारा",
-      "count": 2,
-      "workers": 35,
-      "villages": 35,
+      "count": 3,
+      "workers": 41,
+      "villages": 95,
       "verified": 0,
       "activities": {
         "water": 1,
@@ -118,18 +118,18 @@
     },
     {
       "name": "बुलढाणा",
-      "count": 3,
-      "workers": 41,
-      "villages": 100,
+      "count": 5,
+      "workers": 55,
+      "villages": 156,
       "verified": 0,
       "activities": {
-        "water": 3,
-        "livestock": 0,
+        "water": 5,
+        "livestock": 1,
         "survey": 2,
         "scheme": 1,
-        "awareness": 3,
+        "awareness": 5,
         "relief": 0,
-        "livelihood": 0,
+        "livelihood": 1,
         "community": 0
       }
     },
@@ -186,18 +186,18 @@
     },
     {
       "name": "गडचिरोली",
-      "count": 3,
-      "workers": 55,
-      "villages": 135,
+      "count": 4,
+      "workers": 81,
+      "villages": 635,
       "verified": 0,
       "activities": {
         "water": 2,
         "livestock": 2,
-        "survey": 1,
+        "survey": 2,
         "scheme": 1,
-        "awareness": 2,
+        "awareness": 3,
         "relief": 2,
-        "livelihood": 0,
+        "livelihood": 1,
         "community": 1
       }
     },
@@ -339,17 +339,17 @@
     },
     {
       "name": "नागपूर",
-      "count": 2,
-      "workers": 30,
-      "villages": 50,
+      "count": 3,
+      "workers": 40,
+      "villages": 172,
       "verified": 0,
       "activities": {
         "water": 0,
         "livestock": 0,
         "survey": 2,
-        "scheme": 0,
-        "awareness": 1,
-        "relief": 0,
+        "scheme": 1,
+        "awareness": 2,
+        "relief": 1,
         "livelihood": 0,
         "community": 1
       }
@@ -594,19 +594,19 @@
     },
     {
       "name": "वाशिम",
-      "count": 1,
-      "workers": 10,
-      "villages": 100,
+      "count": 2,
+      "workers": 45,
+      "villages": 150,
       "verified": 0,
       "activities": {
-        "water": 0,
+        "water": 1,
         "livestock": 0,
         "survey": 0,
         "scheme": 0,
         "awareness": 1,
-        "relief": 0,
+        "relief": 1,
         "livelihood": 0,
-        "community": 0
+        "community": 1
       }
     },
     {
@@ -631,42 +631,42 @@
     {
       "key": "water",
       "label": "जलसंधारण व पाणी",
-      "count": 96
+      "count": 99
     },
     {
       "key": "livestock",
       "label": "चारा व पशुधन",
-      "count": 79
+      "count": 80
     },
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 77
+      "count": 78
     },
     {
       "key": "scheme",
       "label": "शासकीय योजना व समन्वय",
-      "count": 30
+      "count": 31
     },
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 66
+      "count": 70
     },
     {
       "key": "relief",
       "label": "मदत व साहित्य वितरण",
-      "count": 47
+      "count": 49
     },
     {
       "key": "livelihood",
       "label": "शेती व उपजीविका",
-      "count": 15
+      "count": 17
     },
     {
       "key": "community",
       "label": "समुदाय व सामाजिक आधार",
-      "count": 15
+      "count": 16
     }
   ],
   "dates": [
@@ -680,12 +680,12 @@
     },
     {
       "date": "2026-11-23",
-      "count": 15
+      "count": 21
     }
   ],
   "quality": {
-    "notYetVerified": 153,
-    "noMatchedCapacityCategory": 11,
-    "taggedCapacity": 142
+    "notYetVerified": 159,
+    "noMatchedCapacityCategory": 12,
+    "taggedCapacity": 147
   }
 }
