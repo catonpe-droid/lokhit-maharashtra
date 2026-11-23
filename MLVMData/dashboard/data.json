@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-23 10:20:04",
+  "snapshotAt": "2026-11-23 11:20:21",
   "generatedOn": "2026-11-23",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 149,
+    "organizations": 153,
     "districtsWithRegistrations": 23,
     "districtsTotal": 36,
-    "workers": 2363,
-    "villages": 9904,
+    "workers": 2404,
+    "villages": 10140,
     "verified": 0
   },
   "districts": [
@@ -288,17 +288,17 @@
     },
     {
       "name": "लातूर",
-      "count": 19,
-      "workers": 208,
-      "villages": 1563,
+      "count": 20,
+      "workers": 218,
+      "villages": 1623,
       "verified": 0,
       "activities": {
-        "water": 13,
-        "livestock": 11,
-        "survey": 9,
+        "water": 14,
+        "livestock": 12,
+        "survey": 10,
         "scheme": 8,
-        "awareness": 9,
-        "relief": 6,
+        "awareness": 10,
+        "relief": 7,
         "livelihood": 3,
         "community": 2
       }
@@ -356,14 +356,14 @@
     },
     {
       "name": "नांदेड",
-      "count": 17,
-      "workers": 245,
-      "villages": 941,
+      "count": 18,
+      "workers": 251,
+      "villages": 1026,
       "verified": 0,
       "activities": {
-        "water": 9,
+        "water": 10,
         "livestock": 7,
-        "survey": 7,
+        "survey": 8,
         "scheme": 2,
         "awareness": 6,
         "relief": 4,
@@ -424,9 +424,9 @@
     },
     {
       "name": "परभणी",
-      "count": 5,
-      "workers": 58,
-      "villages": 2169,
+      "count": 6,
+      "workers": 73,
+      "villages": 2245,
       "verified": 0,
       "activities": {
         "water": 4,
@@ -611,9 +611,9 @@
     },
     {
       "name": "यवतमाळ",
-      "count": 7,
-      "workers": 195,
-      "villages": 350,
+      "count": 8,
+      "workers": 205,
+      "villages": 365,
       "verified": 0,
       "activities": {
         "water": 3,
@@ -631,17 +631,17 @@
     {
       "key": "water",
       "label": "जलसंधारण व पाणी",
-      "count": 94
+      "count": 96
     },
     {
       "key": "livestock",
       "label": "चारा व पशुधन",
-      "count": 78
+      "count": 79
     },
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 75
+      "count": 77
     },
     {
       "key": "scheme",
@@ -651,12 +651,12 @@
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 65
+      "count": 66
     },
     {
       "key": "relief",
       "label": "मदत व साहित्य वितरण",
-      "count": 46
+      "count": 47
     },
     {
       "key": "livelihood",
@@ -680,12 +680,12 @@
     },
     {
       "date": "2026-11-23",
-      "count": 11
+      "count": 15
     }
   ],
   "quality": {
-    "notYetVerified": 149,
-    "noMatchedCapacityCategory": 9,
-    "taggedCapacity": 140
+    "notYetVerified": 153,
+    "noMatchedCapacityCategory": 11,
+    "taggedCapacity": 142
   }
 }
