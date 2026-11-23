@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-23 09:09:04",
+  "snapshotAt": "2026-11-23 10:20:04",
   "generatedOn": "2026-11-23",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 145,
+    "organizations": 149,
     "districtsWithRegistrations": 23,
     "districtsTotal": 36,
-    "workers": 2265,
-    "villages": 9744,
+    "workers": 2363,
+    "villages": 9904,
     "verified": 0
   },
   "districts": [
@@ -339,14 +339,14 @@
     },
     {
       "name": "नागपूर",
-      "count": 1,
-      "workers": 5,
-      "villages": 10,
+      "count": 2,
+      "workers": 30,
+      "villages": 50,
       "verified": 0,
       "activities": {
         "water": 0,
         "livestock": 0,
-        "survey": 1,
+        "survey": 2,
         "scheme": 0,
         "awareness": 1,
         "relief": 0,
@@ -356,16 +356,16 @@
     },
     {
       "name": "नांदेड",
-      "count": 16,
-      "workers": 238,
-      "villages": 925,
+      "count": 17,
+      "workers": 245,
+      "villages": 941,
       "verified": 0,
       "activities": {
         "water": 9,
         "livestock": 7,
         "survey": 7,
         "scheme": 2,
-        "awareness": 5,
+        "awareness": 6,
         "relief": 4,
         "livelihood": 1,
         "community": 1
@@ -441,17 +441,17 @@
     },
     {
       "name": "पुणे",
-      "count": 1,
-      "workers": 50,
-      "villages": 53,
+      "count": 2,
+      "workers": 71,
+      "villages": 67,
       "verified": 0,
       "activities": {
         "water": 1,
         "livestock": 0,
-        "survey": 0,
+        "survey": 1,
         "scheme": 0,
-        "awareness": 0,
-        "relief": 0,
+        "awareness": 1,
+        "relief": 1,
         "livelihood": 0,
         "community": 0
       }
@@ -492,13 +492,13 @@
     },
     {
       "name": "सांगली",
-      "count": 3,
-      "workers": 36,
-      "villages": 91,
+      "count": 4,
+      "workers": 81,
+      "villages": 181,
       "verified": 0,
       "activities": {
-        "water": 1,
-        "livestock": 0,
+        "water": 2,
+        "livestock": 1,
         "survey": 0,
         "scheme": 0,
         "awareness": 1,
@@ -631,17 +631,17 @@
     {
       "key": "water",
       "label": "जलसंधारण व पाणी",
-      "count": 93
+      "count": 94
     },
     {
       "key": "livestock",
       "label": "चारा व पशुधन",
-      "count": 77
+      "count": 78
     },
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 73
+      "count": 75
     },
     {
       "key": "scheme",
@@ -651,12 +651,12 @@
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 63
+      "count": 65
     },
     {
       "key": "relief",
       "label": "मदत व साहित्य वितरण",
-      "count": 45
+      "count": 46
     },
     {
       "key": "livelihood",
@@ -680,12 +680,12 @@
     },
     {
       "date": "2026-11-23",
-      "count": 7
+      "count": 11
     }
   ],
   "quality": {
-    "notYetVerified": 145,
+    "notYetVerified": 149,
     "noMatchedCapacityCategory": 9,
-    "taggedCapacity": 136
+    "taggedCapacity": 140
   }
 }
