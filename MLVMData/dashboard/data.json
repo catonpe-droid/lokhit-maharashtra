@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-23 15:11:57",
+  "snapshotAt": "2026-11-23 17:02:11",
   "generatedOn": "2026-11-23",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 164,
+    "organizations": 168,
     "districtsWithRegistrations": 24,
     "districtsTotal": 36,
-    "workers": 2585,
-    "villages": 11508,
+    "workers": 2618,
+    "villages": 11600,
     "verified": 0
   },
   "districts": [
@@ -152,16 +152,16 @@
     },
     {
       "name": "धाराशिव",
-      "count": 21,
-      "workers": 365,
-      "villages": 1405,
+      "count": 23,
+      "workers": 377,
+      "villages": 1437,
       "verified": 0,
       "activities": {
-        "water": 11,
-        "livestock": 16,
-        "survey": 15,
-        "scheme": 5,
-        "awareness": 4,
+        "water": 12,
+        "livestock": 17,
+        "survey": 17,
+        "scheme": 6,
+        "awareness": 6,
         "relief": 4,
         "livelihood": 4,
         "community": 2
@@ -186,17 +186,17 @@
     },
     {
       "name": "गडचिरोली",
-      "count": 4,
-      "workers": 81,
-      "villages": 635,
+      "count": 5,
+      "workers": 92,
+      "villages": 675,
       "verified": 0,
       "activities": {
-        "water": 2,
-        "livestock": 2,
-        "survey": 2,
-        "scheme": 1,
-        "awareness": 3,
-        "relief": 2,
+        "water": 3,
+        "livestock": 3,
+        "survey": 3,
+        "scheme": 2,
+        "awareness": 4,
+        "relief": 3,
         "livelihood": 1,
         "community": 1
       }
@@ -356,17 +356,17 @@
     },
     {
       "name": "नांदेड",
-      "count": 18,
-      "workers": 251,
-      "villages": 1026,
+      "count": 19,
+      "workers": 261,
+      "villages": 1046,
       "verified": 0,
       "activities": {
-        "water": 10,
-        "livestock": 7,
-        "survey": 8,
-        "scheme": 2,
+        "water": 11,
+        "livestock": 8,
+        "survey": 9,
+        "scheme": 3,
         "awareness": 6,
-        "relief": 4,
+        "relief": 5,
         "livelihood": 1,
         "community": 1
       }
@@ -631,32 +631,32 @@
     {
       "key": "water",
       "label": "जलसंधारण व पाणी",
-      "count": 102
+      "count": 105
     },
     {
       "key": "livestock",
       "label": "चारा व पशुधन",
-      "count": 80
+      "count": 83
     },
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 80
+      "count": 84
     },
     {
       "key": "scheme",
       "label": "शासकीय योजना व समन्वय",
-      "count": 31
+      "count": 34
     },
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 73
+      "count": 76
     },
     {
       "key": "relief",
       "label": "मदत व साहित्य वितरण",
-      "count": 49
+      "count": 51
     },
     {
       "key": "livelihood",
@@ -680,12 +680,12 @@
     },
     {
       "date": "2026-11-23",
-      "count": 26
+      "count": 30
     }
   ],
   "quality": {
-    "notYetVerified": 164,
+    "notYetVerified": 168,
     "noMatchedCapacityCategory": 13,
-    "taggedCapacity": 151
+    "taggedCapacity": 155
   }
 }
