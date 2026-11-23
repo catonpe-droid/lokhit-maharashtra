@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-23 12:25:13",
+  "snapshotAt": "2026-11-23 13:48:53",
   "generatedOn": "2026-11-23",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 159,
+    "organizations": 161,
     "districtsWithRegistrations": 23,
     "districtsTotal": 36,
-    "workers": 2495,
-    "villages": 10928,
+    "workers": 2545,
+    "villages": 11453,
     "verified": 0
   },
   "districts": [
@@ -101,14 +101,14 @@
     },
     {
       "name": "भंडारा",
-      "count": 3,
-      "workers": 41,
-      "villages": 95,
+      "count": 4,
+      "workers": 61,
+      "villages": 595,
       "verified": 0,
       "activities": {
         "water": 1,
         "livestock": 1,
-        "survey": 1,
+        "survey": 2,
         "scheme": 0,
         "awareness": 0,
         "relief": 0,
@@ -611,9 +611,9 @@
     },
     {
       "name": "यवतमाळ",
-      "count": 8,
-      "workers": 205,
-      "villages": 365,
+      "count": 9,
+      "workers": 235,
+      "villages": 390,
       "verified": 0,
       "activities": {
         "water": 3,
@@ -641,7 +641,7 @@
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 78
+      "count": 79
     },
     {
       "key": "scheme",
@@ -680,12 +680,12 @@
     },
     {
       "date": "2026-11-23",
-      "count": 21
+      "count": 23
     }
   ],
   "quality": {
-    "notYetVerified": 159,
-    "noMatchedCapacityCategory": 12,
-    "taggedCapacity": 147
+    "notYetVerified": 161,
+    "noMatchedCapacityCategory": 13,
+    "taggedCapacity": 148
   }
 }
