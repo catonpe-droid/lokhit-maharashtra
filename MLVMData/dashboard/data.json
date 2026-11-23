@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-23 08:12:07",
+  "snapshotAt": "2026-11-23 09:09:04",
   "generatedOn": "2026-11-23",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 142,
+    "organizations": 145,
     "districtsWithRegistrations": 23,
     "districtsTotal": 36,
-    "workers": 2211,
-    "villages": 9669,
+    "workers": 2265,
+    "villages": 9744,
     "verified": 0
   },
   "districts": [
@@ -84,9 +84,9 @@
     },
     {
       "name": "बीड",
-      "count": 11,
-      "workers": 196,
-      "villages": 318,
+      "count": 12,
+      "workers": 204,
+      "villages": 348,
       "verified": 0,
       "activities": {
         "water": 11,
@@ -220,19 +220,19 @@
     },
     {
       "name": "हिंगोली",
-      "count": 7,
-      "workers": 147,
-      "villages": 106,
+      "count": 9,
+      "workers": 193,
+      "villages": 151,
       "verified": 0,
       "activities": {
-        "water": 6,
-        "livestock": 4,
-        "survey": 3,
-        "scheme": 4,
-        "awareness": 5,
-        "relief": 4,
+        "water": 8,
+        "livestock": 6,
+        "survey": 4,
+        "scheme": 5,
+        "awareness": 6,
+        "relief": 5,
         "livelihood": 1,
-        "community": 1
+        "community": 2
       }
     },
     {
@@ -631,32 +631,32 @@
     {
       "key": "water",
       "label": "जलसंधारण व पाणी",
-      "count": 91
+      "count": 93
     },
     {
       "key": "livestock",
       "label": "चारा व पशुधन",
-      "count": 75
+      "count": 77
     },
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 72
+      "count": 73
     },
     {
       "key": "scheme",
       "label": "शासकीय योजना व समन्वय",
-      "count": 29
+      "count": 30
     },
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 62
+      "count": 63
     },
     {
       "key": "relief",
       "label": "मदत व साहित्य वितरण",
-      "count": 44
+      "count": 45
     },
     {
       "key": "livelihood",
@@ -666,7 +666,7 @@
     {
       "key": "community",
       "label": "समुदाय व सामाजिक आधार",
-      "count": 14
+      "count": 15
     }
   ],
   "dates": [
@@ -680,12 +680,12 @@
     },
     {
       "date": "2026-11-23",
-      "count": 4
+      "count": 7
     }
   ],
   "quality": {
-    "notYetVerified": 142,
-    "noMatchedCapacityCategory": 8,
-    "taggedCapacity": 134
+    "notYetVerified": 145,
+    "noMatchedCapacityCategory": 9,
+    "taggedCapacity": 136
   }
 }
