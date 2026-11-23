@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-23 05:56:42",
+  "snapshotAt": "2026-11-23 08:12:07",
   "generatedOn": "2026-11-23",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 139,
+    "organizations": 142,
     "districtsWithRegistrations": 23,
     "districtsTotal": 36,
-    "workers": 2191,
-    "villages": 9619,
+    "workers": 2211,
+    "villages": 9669,
     "verified": 0
   },
   "districts": [
@@ -356,19 +356,19 @@
     },
     {
       "name": "नांदेड",
-      "count": 13,
-      "workers": 218,
-      "villages": 875,
+      "count": 16,
+      "workers": 238,
+      "villages": 925,
       "verified": 0,
       "activities": {
-        "water": 7,
-        "livestock": 5,
-        "survey": 6,
-        "scheme": 1,
-        "awareness": 4,
+        "water": 9,
+        "livestock": 7,
+        "survey": 7,
+        "scheme": 2,
+        "awareness": 5,
         "relief": 4,
-        "livelihood": 0,
-        "community": 0
+        "livelihood": 1,
+        "community": 1
       }
     },
     {
@@ -631,27 +631,27 @@
     {
       "key": "water",
       "label": "जलसंधारण व पाणी",
-      "count": 89
+      "count": 91
     },
     {
       "key": "livestock",
       "label": "चारा व पशुधन",
-      "count": 73
+      "count": 75
     },
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 71
+      "count": 72
     },
     {
       "key": "scheme",
       "label": "शासकीय योजना व समन्वय",
-      "count": 28
+      "count": 29
     },
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 61
+      "count": 62
     },
     {
       "key": "relief",
@@ -661,12 +661,12 @@
     {
       "key": "livelihood",
       "label": "शेती व उपजीविका",
-      "count": 14
+      "count": 15
     },
     {
       "key": "community",
       "label": "समुदाय व सामाजिक आधार",
-      "count": 13
+      "count": 14
     }
   ],
   "dates": [
@@ -680,12 +680,12 @@
     },
     {
       "date": "2026-11-23",
-      "count": 1
+      "count": 4
     }
   ],
   "quality": {
-    "notYetVerified": 139,
+    "notYetVerified": 142,
     "noMatchedCapacityCategory": 8,
-    "taggedCapacity": 131
+    "taggedCapacity": 134
   }
 }
