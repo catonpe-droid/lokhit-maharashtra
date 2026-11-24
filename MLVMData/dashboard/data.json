@@ -1,32 +1,32 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-24 11:04:52",
+  "snapshotAt": "2026-11-24 11:57:38",
   "generatedOn": "2026-11-24",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 192,
+    "organizations": 194,
     "districtsWithRegistrations": 26,
     "districtsTotal": 36,
-    "workers": 3106,
-    "villages": 14147,
+    "workers": 3142,
+    "villages": 14325,
     "verified": 0
   },
   "districts": [
     {
       "name": "अहिल्यानगर",
-      "count": 2,
-      "workers": 10,
-      "villages": 142,
+      "count": 3,
+      "workers": 37,
+      "villages": 290,
       "verified": 0,
       "activities": {
-        "water": 1,
-        "livestock": 1,
-        "survey": 1,
-        "scheme": 1,
+        "water": 2,
+        "livestock": 2,
+        "survey": 2,
+        "scheme": 2,
         "awareness": 1,
-        "relief": 0,
+        "relief": 1,
         "livelihood": 0,
         "community": 0
       }
@@ -288,17 +288,17 @@
     },
     {
       "name": "लातूर",
-      "count": 22,
-      "workers": 248,
-      "villages": 2838,
+      "count": 23,
+      "workers": 257,
+      "villages": 2868,
       "verified": 0,
       "activities": {
-        "water": 15,
-        "livestock": 13,
-        "survey": 11,
-        "scheme": 10,
-        "awareness": 11,
-        "relief": 9,
+        "water": 16,
+        "livestock": 14,
+        "survey": 12,
+        "scheme": 11,
+        "awareness": 12,
+        "relief": 10,
         "livelihood": 5,
         "community": 2
       }
@@ -631,32 +631,32 @@
     {
       "key": "water",
       "label": "जलसंधारण व पाणी",
-      "count": 120
+      "count": 122
     },
     {
       "key": "livestock",
       "label": "चारा व पशुधन",
-      "count": 97
+      "count": 99
     },
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 100
+      "count": 102
     },
     {
       "key": "scheme",
       "label": "शासकीय योजना व समन्वय",
-      "count": 43
+      "count": 45
     },
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 94
+      "count": 95
     },
     {
       "key": "relief",
       "label": "मदत व साहित्य वितरण",
-      "count": 62
+      "count": 64
     },
     {
       "key": "livelihood",
@@ -684,12 +684,12 @@
     },
     {
       "date": "2026-11-24",
-      "count": 16
+      "count": 18
     }
   ],
   "quality": {
-    "notYetVerified": 192,
+    "notYetVerified": 194,
     "noMatchedCapacityCategory": 14,
-    "taggedCapacity": 178
+    "taggedCapacity": 180
   }
 }
