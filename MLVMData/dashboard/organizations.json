@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-23 22:29:31",
-  "count": 176,
+  "snapshotAt": "2026-11-24 07:43:19",
+  "count": 177,
   "organizations": [
     {
       "id": "MLVM-26-00001",
@@ -1585,6 +1585,15 @@
       "name": "Chintamani gramin vikas bahuudheshiy sanstha babhulgaon",
       "taluka": "वरोरा",
       "registration": "Mh829/F10883",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00177",
+      "date": "2026-11-24 07:43:19",
+      "district": "हिंगोली",
+      "name": "Balaji.B.Narwade Narwade सह्याद्री बहुउद्देशीय सेवाभावी संस्था कोठारी",
+      "taluka": "वसमत ' आणि औंढा",
+      "registration": "महा १९३/१३ . दि. ०६ एप्रिल २०१३ व एफ5341 दि . २४ जून २०१३",
       "status": "प्राप्त"
     }
   ]
