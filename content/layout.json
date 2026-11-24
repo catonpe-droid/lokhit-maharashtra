@@ -217,7 +217,7 @@
       "description": "पाणी, चारा, कर्ज, शेतकरी मदत व रोजगाराच्या बातम्या एकाच ठिकाणी"
     },
     "live_tv": {
-      "enabled": false
+      "enabled": true
     },
     "more": {
       "enabled": true,
