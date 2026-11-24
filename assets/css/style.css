@@ -914,3 +914,41 @@ body{background:#f5f6f8;color:#17273b}
 .article-body blockquote{border-left:5px solid #11608a;background:#f3f8fc;color:#17354c;border-radius:0 10px 10px 0;padding:16px 19px;margin:27px 0;line-height:1.7}
 .article-body blockquote strong{color:#0e3c64}
 @media(max-width:600px){.article-body .inline-news-photo:has(figcaption){margin:20px 0 24px;border-radius:9px}.article-body .inline-news-photo figcaption{font-size:12.5px;padding:9px 12px}.article-body blockquote{padding:12px 14px;margin:18px 0}}
+
+/* 2026-11-24: Dharashiv Today-style photo preservation.
+   Keep existing thumbnail frames, show the entire image without cropping or zoom. */
+.hero-main img,
+.hero-slider .hero-main img,
+.stack-card img,
+.news-card img,
+.article-figure img,
+.article-body img {
+  object-fit:contain!important;
+  object-position:center!important;
+  transform:none!important;
+}
+.hero-main img,
+.hero-slider .hero-main img {
+  background:var(--navy,#092045);
+}
+.stack-card img,
+.news-card img {
+  background:#f5f6f8;
+}
+.news-card img {
+  height:auto;
+}
+.article .article-figure > img,
+.article-figure img {
+  display:block;
+  width:auto!important;
+  max-width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  aspect-ratio:auto!important;
+  margin-inline:auto;
+}
+.article-body img {
+  max-width:100%;
+  height:auto;
+}
