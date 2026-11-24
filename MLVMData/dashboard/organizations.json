@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-24 13:42:57",
-  "count": 198,
+  "snapshotAt": "2026-11-24 22:33:19",
+  "count": 213,
   "organizations": [
     {
       "id": "MLVM-26-00001",
@@ -1783,6 +1783,141 @@
       "name": "विदर्भ ग्राम स्वराज शिक्षण संस्था काळिमाती",
       "taluka": "Sakoli, gondia",
       "registration": "135/2002 f-8493 भ",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00199",
+      "date": "2026-11-24 15:40:14",
+      "district": "छत्रपती संभाजीनगर",
+      "name": "Jyoti Bahuudeshiya Sevabhavi Sanstha",
+      "taluka": "Paithan. Kannad. सोयगाव",
+      "registration": "F-12159",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00200",
+      "date": "2026-11-24 16:08:07",
+      "district": "चंद्रपूर",
+      "name": "किसान मित्र ग्रामीण विकास संस्था नेरी ता. चिमूर जि. चंद्रपूर",
+      "taluka": "चिमूर, सिंदेवाही, भिवापूर",
+      "registration": "F-8985",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00201",
+      "date": "2026-11-24 16:44:30",
+      "district": "सोलापूर",
+      "name": "अमन फाउंडेशन मंगळवेढा",
+      "taluka": "मंगळवेढा",
+      "registration": "महा/४७७/२०१८",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00202",
+      "date": "2026-11-24 16:54:45",
+      "district": "सांगली",
+      "name": "यशस्वीता बहुउद्देशीय सेवाभावी संस्था सांगली",
+      "taluka": "जत",
+      "registration": "महा/516/2007",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00203",
+      "date": "2026-11-24 17:44:48",
+      "district": "छत्रपती संभाजीनगर",
+      "name": "Rajmata jijau bahuuddeshiya samajik va shaikshanik sanstha",
+      "taluka": "Gangapur",
+      "registration": "818/09 f-14929",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00204",
+      "date": "2026-11-24 19:08:53",
+      "district": "बीड",
+      "name": "घे भरारी सेवाभावी संस्था",
+      "taluka": "परळी, अंबाजोगाई",
+      "registration": "Pune/0001073/2024",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00205",
+      "date": "2026-11-24 19:22:31",
+      "district": "बुलढाणा",
+      "name": "Gangai multipurpose foundation buldana",
+      "taluka": "Buldana, Chikhali, Shegaon, Khamgaon, Mehkar",
+      "registration": "Maharashtra-708/2011F-13343",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00206",
+      "date": "2026-11-24 19:34:09",
+      "district": "परभणी",
+      "name": "अरुणोदय बहुउद्देशीय ग्रामीण व शहरी विकास संस्था",
+      "taluka": "पथारी",
+      "registration": "F 12078(Parbhani)",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00207",
+      "date": "2026-11-24 19:34:12",
+      "district": "हिंगोली",
+      "name": "मुक्ताई फाउंडेशन",
+      "taluka": "हिंगोली, सेनगाव, कळमनुरी, औढानागनाथ, वसमत",
+      "registration": "एफ 4937",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00208",
+      "date": "2026-11-24 19:38:27",
+      "district": "सोलापूर",
+      "name": "Utkarsh samajsevi sanstha",
+      "taluka": "Sangola",
+      "registration": "",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00209",
+      "date": "2026-11-24 20:10:55",
+      "district": "गोंदिया",
+      "name": "इंडियन सोशल वेलफेअर सोसायटी गोंदिया",
+      "taluka": "गोंदिया, गोरेगाव, आमगाव, तिरोडा, सालेकसा",
+      "registration": "102/96",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00210",
+      "date": "2026-11-24 22:16:26",
+      "district": "छत्रपती संभाजीनगर",
+      "name": "राजे एकलव्य बहुउद्देशीय सेवाभावी संस्था आघुर",
+      "taluka": "वैजापूर",
+      "registration": "F-22766",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00211",
+      "date": "2026-11-24 22:19:09",
+      "district": "जळगाव",
+      "name": "आधार बहुउद्देशीय संस्था",
+      "taluka": "अमळनेर",
+      "registration": "",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00212",
+      "date": "2026-11-24 22:32:40",
+      "district": "छत्रपती संभाजीनगर",
+      "name": "श्रृंकला नवनिर्माण संस्था",
+      "taluka": "गंगापूर तालुका",
+      "registration": "...",
+      "status": "प्राप्त"
+    },
+    {
+      "id": "MLVM-26-00213",
+      "date": "2026-11-24 22:33:19",
+      "district": "वाशिम",
+      "name": "विशाखा पशुसंवर्धन कृषी प्रक्रिया आदिवासी मागासवर्गीय महिला बहुउद्देशीय",
+      "taluka": "कारंजा लाड",
+      "registration": "30/2021",
       "status": "प्राप्त"
     }
   ]
