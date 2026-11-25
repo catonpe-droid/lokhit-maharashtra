@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-25 08:30:31",
+  "snapshotAt": "2026-11-25 17:48:18",
   "generatedOn": "2026-11-25",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 215,
+    "organizations": 222,
     "districtsWithRegistrations": 28,
     "districtsTotal": 36,
-    "workers": 3457,
-    "villages": 15773,
+    "workers": 3581,
+    "villages": 16007,
     "verified": 0
   },
   "districts": [
@@ -67,16 +67,16 @@
     },
     {
       "name": "छत्रपती संभाजीनगर",
-      "count": 25,
-      "workers": 293,
-      "villages": 1469,
+      "count": 26,
+      "workers": 333,
+      "villages": 1519,
       "verified": 0,
       "activities": {
-        "water": 14,
-        "livestock": 8,
-        "survey": 9,
-        "scheme": 2,
-        "awareness": 10,
+        "water": 15,
+        "livestock": 9,
+        "survey": 10,
+        "scheme": 3,
+        "awareness": 11,
         "relief": 7,
         "livelihood": 1,
         "community": 4
@@ -118,16 +118,16 @@
     },
     {
       "name": "बुलढाणा",
-      "count": 6,
-      "workers": 70,
-      "villages": 201,
+      "count": 7,
+      "workers": 90,
+      "villages": 251,
       "verified": 0,
       "activities": {
-        "water": 6,
+        "water": 7,
         "livestock": 2,
         "survey": 3,
         "scheme": 1,
-        "awareness": 5,
+        "awareness": 6,
         "relief": 0,
         "livelihood": 1,
         "community": 0
@@ -135,17 +135,17 @@
     },
     {
       "name": "चंद्रपूर",
-      "count": 5,
-      "workers": 163,
-      "villages": 475,
+      "count": 6,
+      "workers": 172,
+      "villages": 537,
       "verified": 0,
       "activities": {
         "water": 2,
-        "livestock": 1,
-        "survey": 3,
+        "livestock": 2,
+        "survey": 4,
         "scheme": 1,
-        "awareness": 4,
-        "relief": 2,
+        "awareness": 5,
+        "relief": 3,
         "livelihood": 0,
         "community": 0
       }
@@ -220,18 +220,18 @@
     },
     {
       "name": "हिंगोली",
-      "count": 20,
-      "workers": 273,
-      "villages": 406,
+      "count": 21,
+      "workers": 278,
+      "villages": 416,
       "verified": 0,
       "activities": {
-        "water": 15,
-        "livestock": 12,
+        "water": 16,
+        "livestock": 13,
         "survey": 12,
-        "scheme": 7,
+        "scheme": 8,
         "awareness": 12,
         "relief": 8,
-        "livelihood": 5,
+        "livelihood": 6,
         "community": 4
       }
     },
@@ -288,17 +288,17 @@
     },
     {
       "name": "लातूर",
-      "count": 23,
-      "workers": 257,
-      "villages": 2868,
+      "count": 24,
+      "workers": 267,
+      "villages": 2898,
       "verified": 0,
       "activities": {
-        "water": 16,
+        "water": 17,
         "livestock": 14,
-        "survey": 12,
-        "scheme": 11,
-        "awareness": 12,
-        "relief": 10,
+        "survey": 13,
+        "scheme": 12,
+        "awareness": 13,
+        "relief": 11,
         "livelihood": 5,
         "community": 2
       }
@@ -441,16 +441,16 @@
     },
     {
       "name": "पुणे",
-      "count": 2,
-      "workers": 71,
-      "villages": 67,
+      "count": 3,
+      "workers": 81,
+      "villages": 84,
       "verified": 0,
       "activities": {
-        "water": 1,
+        "water": 2,
         "livestock": 0,
         "survey": 1,
         "scheme": 0,
-        "awareness": 1,
+        "awareness": 2,
         "relief": 1,
         "livelihood": 0,
         "community": 0
@@ -611,17 +611,17 @@
     },
     {
       "name": "यवतमाळ",
-      "count": 9,
-      "workers": 235,
-      "villages": 390,
+      "count": 10,
+      "workers": 265,
+      "villages": 405,
       "verified": 0,
       "activities": {
         "water": 3,
         "livestock": 3,
-        "survey": 4,
+        "survey": 5,
         "scheme": 0,
         "awareness": 3,
-        "relief": 1,
+        "relief": 2,
         "livelihood": 1,
         "community": 0
       }
@@ -631,37 +631,37 @@
     {
       "key": "water",
       "label": "जलसंधारण व पाणी",
-      "count": 132
+      "count": 137
     },
     {
       "key": "livestock",
       "label": "चारा व पशुधन",
-      "count": 110
+      "count": 113
     },
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 113
+      "count": 117
     },
     {
       "key": "scheme",
       "label": "शासकीय योजना व समन्वय",
-      "count": 52
+      "count": 55
     },
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 106
+      "count": 111
     },
     {
       "key": "relief",
       "label": "मदत व साहित्य वितरण",
-      "count": 70
+      "count": 73
     },
     {
       "key": "livelihood",
       "label": "शेती व उपजीविका",
-      "count": 29
+      "count": 30
     },
     {
       "key": "community",
@@ -688,12 +688,12 @@
     },
     {
       "date": "2026-11-25",
-      "count": 2
+      "count": 9
     }
   ],
   "quality": {
-    "notYetVerified": 215,
+    "notYetVerified": 222,
     "noMatchedCapacityCategory": 16,
-    "taggedCapacity": 199
+    "taggedCapacity": 206
   }
 }
