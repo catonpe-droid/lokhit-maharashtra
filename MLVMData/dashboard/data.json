@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-26 03:17:44",
+  "snapshotAt": "2026-11-26 18:44:13",
   "generatedOn": "2026-11-26",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 223,
+    "organizations": 224,
     "districtsWithRegistrations": 28,
     "districtsTotal": 36,
-    "workers": 3586,
-    "villages": 16022,
+    "workers": 3592,
+    "villages": 16037,
     "verified": 0
   },
   "districts": [
@@ -424,17 +424,17 @@
     },
     {
       "name": "परभणी",
-      "count": 9,
-      "workers": 149,
-      "villages": 2257,
+      "count": 10,
+      "workers": 155,
+      "villages": 2272,
       "verified": 0,
       "activities": {
         "water": 7,
         "livestock": 7,
-        "survey": 4,
+        "survey": 5,
         "scheme": 2,
-        "awareness": 3,
-        "relief": 6,
+        "awareness": 4,
+        "relief": 7,
         "livelihood": 3,
         "community": 2
       }
@@ -641,7 +641,7 @@
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 117
+      "count": 118
     },
     {
       "key": "scheme",
@@ -651,12 +651,12 @@
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 111
+      "count": 112
     },
     {
       "key": "relief",
       "label": "मदत व साहित्य वितरण",
-      "count": 73
+      "count": 74
     },
     {
       "key": "livelihood",
@@ -689,11 +689,15 @@
     {
       "date": "2026-11-25",
       "count": 10
+    },
+    {
+      "date": "2026-11-26",
+      "count": 1
     }
   ],
   "quality": {
-    "notYetVerified": 223,
+    "notYetVerified": 224,
     "noMatchedCapacityCategory": 16,
-    "taggedCapacity": 207
+    "taggedCapacity": 208
   }
 }
