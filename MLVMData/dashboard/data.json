@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-26 18:44:13",
-  "generatedOn": "2026-11-26",
+  "snapshotAt": "2026-11-27 03:51:31",
+  "generatedOn": "2026-11-27",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 224,
+    "organizations": 225,
     "districtsWithRegistrations": 28,
     "districtsTotal": 36,
-    "workers": 3592,
-    "villages": 16037,
+    "workers": 3612,
+    "villages": 16187,
     "verified": 0
   },
   "districts": [
@@ -152,14 +152,14 @@
     },
     {
       "name": "धाराशिव",
-      "count": 25,
-      "workers": 412,
-      "villages": 1477,
+      "count": 26,
+      "workers": 432,
+      "villages": 1627,
       "verified": 0,
       "activities": {
-        "water": 14,
-        "livestock": 19,
-        "survey": 18,
+        "water": 15,
+        "livestock": 20,
+        "survey": 19,
         "scheme": 6,
         "awareness": 8,
         "relief": 5,
@@ -631,17 +631,17 @@
     {
       "key": "water",
       "label": "जलसंधारण व पाणी",
-      "count": 138
+      "count": 139
     },
     {
       "key": "livestock",
       "label": "चारा व पशुधन",
-      "count": 113
+      "count": 114
     },
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 118
+      "count": 119
     },
     {
       "key": "scheme",
@@ -692,12 +692,12 @@
     },
     {
       "date": "2026-11-26",
-      "count": 1
+      "count": 2
     }
   ],
   "quality": {
-    "notYetVerified": 224,
+    "notYetVerified": 225,
     "noMatchedCapacityCategory": 16,
-    "taggedCapacity": 208
+    "taggedCapacity": 209
   }
 }
