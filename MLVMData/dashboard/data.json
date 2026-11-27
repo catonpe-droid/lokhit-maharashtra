@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-27 03:51:31",
+  "snapshotAt": "2026-11-27 19:29:27",
   "generatedOn": "2026-11-27",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 225,
+    "organizations": 230,
     "districtsWithRegistrations": 28,
     "districtsTotal": 36,
-    "workers": 3612,
-    "villages": 16187,
+    "workers": 3666,
+    "villages": 16342,
     "verified": 0
   },
   "districts": [
@@ -50,17 +50,17 @@
     },
     {
       "name": "अमरावती",
-      "count": 1,
-      "workers": 5,
-      "villages": 10,
+      "count": 2,
+      "workers": 20,
+      "villages": 40,
       "verified": 0,
       "activities": {
-        "water": 0,
+        "water": 1,
         "livestock": 0,
         "survey": 1,
         "scheme": 0,
-        "awareness": 0,
-        "relief": 0,
+        "awareness": 1,
+        "relief": 1,
         "livelihood": 0,
         "community": 0
       }
@@ -152,17 +152,17 @@
     },
     {
       "name": "धाराशिव",
-      "count": 26,
-      "workers": 432,
-      "villages": 1627,
+      "count": 27,
+      "workers": 442,
+      "villages": 1652,
       "verified": 0,
       "activities": {
         "water": 15,
-        "livestock": 20,
-        "survey": 19,
+        "livestock": 21,
+        "survey": 20,
         "scheme": 6,
         "awareness": 8,
-        "relief": 5,
+        "relief": 6,
         "livelihood": 4,
         "community": 2
       }
@@ -356,17 +356,17 @@
     },
     {
       "name": "नांदेड",
-      "count": 22,
-      "workers": 277,
-      "villages": 1289,
+      "count": 24,
+      "workers": 293,
+      "villages": 1354,
       "verified": 0,
       "activities": {
         "water": 14,
         "livestock": 10,
-        "survey": 9,
+        "survey": 11,
         "scheme": 4,
-        "awareness": 7,
-        "relief": 5,
+        "awareness": 8,
+        "relief": 7,
         "livelihood": 1,
         "community": 1
       }
@@ -611,16 +611,16 @@
     },
     {
       "name": "यवतमाळ",
-      "count": 10,
-      "workers": 265,
-      "villages": 405,
+      "count": 11,
+      "workers": 278,
+      "villages": 440,
       "verified": 0,
       "activities": {
-        "water": 3,
-        "livestock": 3,
-        "survey": 5,
+        "water": 4,
+        "livestock": 4,
+        "survey": 6,
         "scheme": 0,
-        "awareness": 3,
+        "awareness": 4,
         "relief": 2,
         "livelihood": 1,
         "community": 0
@@ -631,17 +631,17 @@
     {
       "key": "water",
       "label": "जलसंधारण व पाणी",
-      "count": 139
+      "count": 141
     },
     {
       "key": "livestock",
       "label": "चारा व पशुधन",
-      "count": 114
+      "count": 116
     },
     {
       "key": "survey",
       "label": "सर्वेक्षण व लाभार्थी",
-      "count": 119
+      "count": 123
     },
     {
       "key": "scheme",
@@ -651,12 +651,12 @@
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 112
+      "count": 115
     },
     {
       "key": "relief",
       "label": "मदत व साहित्य वितरण",
-      "count": 74
+      "count": 78
     },
     {
       "key": "livelihood",
@@ -693,11 +693,15 @@
     {
       "date": "2026-11-26",
       "count": 2
+    },
+    {
+      "date": "2026-11-27",
+      "count": 5
     }
   ],
   "quality": {
-    "notYetVerified": 225,
+    "notYetVerified": 230,
     "noMatchedCapacityCategory": 16,
-    "taggedCapacity": 209
+    "taggedCapacity": 214
   }
 }
