@@ -57,3 +57,36 @@
  .directory-pagination{padding:12px 16px}.directory-note{padding:11px 16px 15px}
 }
 @media(max-width:420px){.directory-tools .btn{font-size:11px;padding:8px 10px}.directory-card-meta{grid-template-columns:1fr}.directory-heading h3{font-size:21px}}
+
+
+/* Detailed public NGO profile */
+.org-profile-hint{margin:0;padding:10px 24px;background:#fffaf3;color:#875557;font-size:13px;font-weight:700;border-bottom:1px solid #eee5db}
+.org-profile-row{cursor:pointer}
+.org-profile-id-btn,.org-profile-name-btn{font:inherit;font-weight:800;color:inherit;background:none;border:0;padding:0;text-align:left;cursor:pointer}
+.org-profile-name-btn{text-decoration:underline;text-decoration-color:#c2aaa4;text-underline-offset:4px}
+.org-profile-id-btn:hover,.org-profile-name-btn:hover{color:#a2444a;text-decoration:underline}
+.org-profile-id-btn:focus-visible,.org-profile-name-btn:focus-visible,.org-profile-view:focus-visible,.org-profile-close:focus-visible,.org-profile-done:focus-visible,.org-profile-link:focus-visible{outline:3px solid #d9a76d;outline-offset:3px}
+.org-profile-view{display:block;width:100%;margin-top:12px;padding:10px 12px;border:1px solid #e2d0bd;border-radius:9px;background:#faf3e9;color:#8d4548;font:inherit;font-weight:800;cursor:pointer}
+.org-profile{border:1px solid #e8ded2;border-radius:21px;width:min(820px,calc(100% - 28px));max-width:820px;max-height:88vh;max-height:88dvh;margin:auto;padding:0;background:#fff;color:#233e48;box-shadow:0 24px 90px #162d4166;overflow:auto;font-family:inherit}
+.org-profile::backdrop{background:#132f3b99;backdrop-filter:blur(3px)}
+.org-profile-head{padding:24px 30px 27px;background:linear-gradient(130deg,#263f48,#3c555a 65%,#84615d);color:#fff;border-bottom:4px solid #d6a366}
+.org-profile-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:17px}
+.org-profile-brand{display:flex;align-items:center;gap:10px;color:#f5e5d0;font-size:13px;font-weight:700}
+.org-profile-logo{width:43px;height:43px;object-fit:contain;background:white;border-radius:50%;padding:3px;flex:none}
+.org-profile-close{font:inherit;font-size:28px;line-height:1;width:39px;height:39px;flex:none;border:1px solid #ffffff66;border-radius:50%;background:#ffffff15;color:white;cursor:pointer}
+.org-profile-title{font-size:clamp(23px,4vw,34px);line-height:1.35;margin:0 0 15px;color:white;overflow-wrap:anywhere}
+.org-profile-tags{display:flex;gap:8px;flex-wrap:wrap}
+.org-profile-tags span{border:1px solid #ffffff44;background:#ffffff13;color:#fff;padding:4px 12px;border-radius:50px;font-size:13px;font-weight:700}
+.org-profile-body{padding:25px 30px 27px}
+.org-profile-section{margin-bottom:22px}
+.org-profile-section h3{font-size:20px;color:#8e4549;margin:0 0 12px;padding-left:10px;border-left:4px solid #d5a16c;font-weight:800}
+.org-profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0}
+.org-profile-field{border:1px solid #e5e9e7;background:#fcfdfd;border-radius:11px;padding:13px 15px;min-width:0}
+.org-profile-field dt{color:#637883;font-size:12px;font-weight:700;margin-bottom:4px}
+.org-profile-field dd{color:#263e49;font-size:16px;font-weight:700;line-height:1.6;overflow-wrap:anywhere;white-space:pre-wrap;margin:0}
+.org-profile-footer{display:flex;gap:10px;flex-wrap:wrap;align-items:center;border-top:1px solid #e7eae8;padding-top:17px}
+.org-profile-note{margin:0 0 14px;color:#73838b;font-size:12px;line-height:1.6}
+.org-profile-footer .org-profile-note{width:100%;margin:0 0 4px}
+.org-profile-link,.org-profile-done{border:1px solid #d5e0e2;padding:10px 18px;border-radius:9px;text-decoration:none;background:#f5f8f8;color:#294650;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.org-profile-done{background:#294650;color:white;margin-left:auto;border-color:#294650}
+@media(max-width:600px){.org-profile-hint{padding:10px 16px}.org-profile{width:calc(100% - 18px);border-radius:15px;max-height:94dvh}.org-profile-head{padding:17px 17px 21px}.org-profile-body{padding:18px 15px}.org-profile-grid{grid-template-columns:1fr;gap:8px}.org-profile-field{padding:11px 13px}.org-profile-brand{font-size:11px}.org-profile-logo{width:35px;height:35px}.org-profile-title{font-size:25px}}
