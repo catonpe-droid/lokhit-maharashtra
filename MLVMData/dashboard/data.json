@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-11-27 19:29:27",
-  "generatedOn": "2026-11-27",
+  "snapshotAt": "2026-11-28 04:00:23",
+  "generatedOn": "2026-11-28",
   "live": false,
   "sourceMode": "published_csv",
   "source": "महाराष्ट्र लोक विकास मंच — प्राप्त संस्था नोंदणी (स्वयंघोषित माहिती)",
   "totals": {
-    "organizations": 230,
+    "organizations": 231,
     "districtsWithRegistrations": 28,
     "districtsTotal": 36,
-    "workers": 3666,
-    "villages": 16342,
+    "workers": 3676,
+    "villages": 16392,
     "verified": 0
   },
   "districts": [
@@ -67,16 +67,16 @@
     },
     {
       "name": "छत्रपती संभाजीनगर",
-      "count": 26,
-      "workers": 333,
-      "villages": 1519,
+      "count": 27,
+      "workers": 343,
+      "villages": 1569,
       "verified": 0,
       "activities": {
         "water": 15,
         "livestock": 9,
         "survey": 10,
-        "scheme": 3,
-        "awareness": 11,
+        "scheme": 4,
+        "awareness": 12,
         "relief": 7,
         "livelihood": 1,
         "community": 4
@@ -646,12 +646,12 @@
     {
       "key": "scheme",
       "label": "शासकीय योजना व समन्वय",
-      "count": 55
+      "count": 56
     },
     {
       "key": "awareness",
       "label": "जनजागृती व प्रशिक्षण",
-      "count": 115
+      "count": 116
     },
     {
       "key": "relief",
@@ -696,12 +696,12 @@
     },
     {
       "date": "2026-11-27",
-      "count": 5
+      "count": 6
     }
   ],
   "quality": {
-    "notYetVerified": 230,
+    "notYetVerified": 231,
     "noMatchedCapacityCategory": 16,
-    "taggedCapacity": 214
+    "taggedCapacity": 215
   }
 }
